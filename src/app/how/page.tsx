@@ -713,7 +713,7 @@ export default function HowItWorksPage() {
                     </div>
                     <div>
                       <p className="font-display font-black text-gray-900 text-base mb-1">10% platform fee on completed projects</p>
-                      <p className="text-gray-600 text-sm font-display leading-relaxed">changeworker uses a flat 10% platform fee. We keep the pricing simple and avoid hidden subscription or listing charges.</p>
+                      <p className="text-gray-600 text-sm font-display leading-relaxed">changeworker uses a flat 10% fee. We keep the pricing simple and avoid hidden subscription or listing charges.</p>
                     </div>
                   </div>
                   <div className="flex gap-4 p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
@@ -730,8 +730,8 @@ export default function HowItWorksPage() {
                       <FiShield size={18} className="text-indigo-600"/>
                     </div>
                     <div>
-                      <p className="font-display font-black text-gray-900 text-base mb-1">The fee supports the core platform flow</p>
-                      <p className="text-gray-600 text-sm font-display leading-relaxed">The 10% supports matching, profile discovery, payment flows, workspace delivery, reviews, disputes, and ongoing platform support for both sides.</p>
+                      <p className="font-display font-black text-gray-900 text-base mb-1">The fee supports:</p>
+                      <p className="text-gray-600 text-sm font-display leading-relaxed">The fee supports our Skills For Impact training program which equips youths with skills for the social impact sector.</p>
                     </div>
                   </div>
                 </div>

@@ -196,7 +196,7 @@ const ALL_FAQS: CategoryFAQs[] = [
       },
       {
         q: "What is the platform commission?",
-        a: "changeworker uses a flat 10% platform fee. The fee supports matching, payments, workspace delivery flows, dispute handling, and ongoing support across the platform.",
+        a: "changeworker uses a flat 10% platform fee. The fee supports our Skills For Impact training program which equips youths with skills for the social impact sector.",
         tags: ["fees","commission"],
       },
       {
