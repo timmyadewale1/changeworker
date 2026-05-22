@@ -497,7 +497,7 @@ describe("Major client and talent UI flows", () => {
           hourlyRate: 12000,
           requiredSkills: ["React", "TypeScript"],
           sdgTags: ["No Poverty"],
-          category: { group: "Climate & Environment", item: "Climate Research" },
+          category: { group: "Programs", item: "Data collection and analysis" },
           status: "open",
           attachments: [],
         })

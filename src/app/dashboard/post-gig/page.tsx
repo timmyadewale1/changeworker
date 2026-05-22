@@ -18,7 +18,7 @@ import { nanoid } from "nanoid"
 import { storage } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
-import { hireCategories } from "@/data/navCategories"
+import { getCategoryDisplayTitle, hireCategories } from "@/data/navCategories"
 import { SDGS } from "@/data/sdgs"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -488,7 +488,7 @@ export default function PostGigPage() {
                           <SelectContent>
                             {hireCategories.map((c) => (
                               <SelectItem key={c.title} value={c.title}>
-                                {c.title}
+                                {getCategoryDisplayTitle(c, "nav")}
                               </SelectItem>
                             ))}
                           </SelectContent>

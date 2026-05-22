@@ -1,62 +1,108 @@
-export const hireCategories = [
+export type NavCategoryGroup = {
+  title: string
+  shortTitle?: string
+  items: string[]
+}
+
+export function getCategoryDisplayTitle(
+  category: NavCategoryGroup,
+  variant: "default" | "nav" = "default"
+) {
+  if (variant === "nav") return category.shortTitle || category.title
+  return category.title
+}
+
+export const hireCategories: NavCategoryGroup[] = [
   {
-    title: "Climate & Environment",
+    title: "Administrative and Operations",
+    shortTitle: "Admin and Operations",
     items: [
-      "Climate researchers",
-      "Carbon accounting experts",
-      "Sustainability consultants",
-      "Environmental data analysts",
-      "ESG reporting specialists",
+      "Data entry",
+      "Virtual assistance",
+      "Executive assistant",
+      "Report writing",
     ],
   },
   {
-    title: "Energy & Infrastructure",
+    title: "Programs",
     items: [
-      "Renewable energy engineers",
-      "Solar system designers",
-      "Mini-grid developers",
-      "Energy auditors",
-      "Power systems analysts",
+      "M&E",
+      "Proposal/grant writing",
+      "Project reporting",
+      "Data collection and analysis",
     ],
   },
   {
-    title: "Technology for Good",
+    title: "Communications",
     items: [
-      "AI for social good engineers",
-      "Civic tech developers",
-      "Data scientists",
-      "Automation engineers",
-      "Blockchain for impact specialists",
-    ],
-  },
-  {
-    title: "Design & Communications",
-    items: [
-      "Graphic designers",
-      "UX designers",
+      "Content writing",
+      "Social media management",
+      "Newsletter/email writing",
       "Impact storytellers",
-      "Motion designers",
-      "Brand strategists",
+      "Brand influencing",
+      "Advocacy",
     ],
   },
   {
-    title: "Research & Policy",
+    title: "Training and Facilitation",
     items: [
-      "Policy analysts",
-      "Monitoring & evaluation experts",
-      "Development researchers",
-      "Grant writers",
-      "Public sector consultants",
+      "Workshop facilitation",
+      "Curriculum development",
+      "Training material design",
     ],
   },
   {
-    title: "Operations, Legal & Administration",
+    title: "Finance",
     items: [
-      "Operations managers",
-      "Accountants & bookkeepers",
-      "Legal consultants",
-      "Administrative coordinators",
-      "Compliance specialists",
+      "Bookkeeping",
+      "Budget tracking",
+      "Financial reporting",
+      "Auditing",
+    ],
+  },
+  {
+    title: "Design",
+    items: [
+      "Graphic design",
+      "Presentation design",
+      "UI/UX design",
+      "Pitch deck design",
+    ],
+  },
+  {
+    title: "Translation and Language",
+    items: [
+      "Yoruba content translation",
+      "Igbo content translation",
+      "Hausa content translation",
+      "Transcription",
+      "Subtitling",
+    ],
+  },
+  {
+    title: "Research",
+    items: [
+      "Stakeholder mapping",
+      "Survey design",
+      "Fact-checking",
+      "Impact assessments",
+    ],
+  },
+  {
+    title: "Photography and Media",
+    items: [
+      "Event photography",
+      "Short video editing",
+      "Documentary support",
+      "Podcast editing",
+    ],
+  },
+  {
+    title: "Digital",
+    items: [
+      "Basic web updates",
+      "WhatsApp/email campaign management",
+      "CRM data entry",
     ],
   },
 ]

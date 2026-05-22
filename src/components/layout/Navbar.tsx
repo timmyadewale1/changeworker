@@ -12,6 +12,7 @@ import Button from "@/components/ui/Button"
 import {
   hireCategories,
   findWorkCategories,
+  getCategoryDisplayTitle,
   whyUsLinks,
 } from "@/data/navCategories"
 import { useSearch } from "@/context/SearchContext"
@@ -67,7 +68,7 @@ export default function Navbar() {
                     {hireCategories.map((cat) => (
                       <div key={cat.title}>
                         <h4 className="font-bold mb-4">
-                          {cat.title}
+                          {getCategoryDisplayTitle(cat, "nav")}
                         </h4>
                         <ul className="space-y-2">
                           {cat.items.map((item) => (
@@ -110,7 +111,7 @@ export default function Navbar() {
                     {findWorkCategories.map((cat) => (
                       <div key={cat.title}>
                         <h4 className="font-bold mb-4">
-                          {cat.title}
+                          {getCategoryDisplayTitle(cat, "nav")}
                         </h4>
                         <ul className="space-y-2">
                           {cat.items.map((item) => (
@@ -287,7 +288,7 @@ export default function Navbar() {
                     }
                     className="flex justify-between w-full text-sm font-semibold hover:text-[var(--primary)]"
                   >
-                    {cat.title}
+                    {getCategoryDisplayTitle(cat, "nav")}
                     {mobileSub === cat.title ? (
                       <ChevronUp />
                     ) : (
@@ -340,7 +341,7 @@ export default function Navbar() {
           }
           className="flex justify-between w-full text-sm font-semibold hover:text-[var(--primary)]"
         >
-          {cat.title}
+          {getCategoryDisplayTitle(cat, "nav")}
           {mobileSub === cat.title ? (
             <ChevronUp />
           ) : (

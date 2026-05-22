@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+import { hireCategories } from "@/data/navCategories"
 import { useEffect, useRef, useState, useCallback } from "react"
 import {
   FiArrowRight, FiCheck, FiCheckCircle, FiUsers, FiBriefcase,
@@ -31,13 +32,24 @@ const SDG_COLORS = [
   "#00689D","#19486A",
 ]
 
-const HIRE_CATEGORIES = [
-  { title: "Climate & Environment", items: ["Climate researchers","Carbon accounting experts","Sustainability consultants","Environmental data analysts","ESG reporting specialists"], color: "#3F7E44" },
-  { title: "Energy & Infrastructure", items: ["Renewable energy engineers","Solar system designers","Mini-grid developers","Energy auditors","Power systems analysts"], color: "#FCC30B" },
-  { title: "Technology for Good", items: ["AI for social good engineers","Civic tech developers","Data scientists","Automation engineers","Blockchain for impact specialists"], color: "#FD6925" },
-  { title: "Design & Communications", items: ["Graphic designers","UX designers","Impact storytellers","Motion designers","Brand strategists"], color: "#E5243B" },
-  { title: "Research & Policy", items: ["Policy analysts","Monitoring & evaluation experts","Development researchers","Grant writers","Public sector consultants"], color: "#0A97D9" },
+const CATEGORY_COLORS = [
+  "#F97316",
+  "#6366F1",
+  "#10B981",
+  "#EC4899",
+  "#F59E0B",
+  "#0A97D9",
+  "#8B5CF6",
+  "#14B8A6",
+  "#E11D48",
+  "#334155",
 ]
+
+const HIRE_CATEGORIES = hireCategories.map((category, index) => ({
+  title: category.title,
+  items: category.items,
+  color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+}))
 
 const CLIENT_STEPS = [
   {

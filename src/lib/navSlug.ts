@@ -1,4 +1,9 @@
-import { hireCategories, findWorkCategories, whyUsLinks } from "@/data/navCategories"
+import {
+  findWorkCategories,
+  getCategoryDisplayTitle,
+  hireCategories,
+  whyUsLinks,
+} from "@/data/navCategories"
 
 export function slugify(s: string) {
   return s.toLowerCase().trim().replace(/\s+/g, "-")
@@ -9,11 +14,23 @@ export function unslugify(slug: string) {
 }
 
 export function allHireItems() {
-  return hireCategories.flatMap((c) => c.items.map((item) => ({ item, slug: slugify(item), group: c.title })))
+  return hireCategories.flatMap((c) =>
+    c.items.map((item) => ({
+      item,
+      slug: slugify(item),
+      group: getCategoryDisplayTitle(c, "nav"),
+    }))
+  )
 }
 
 export function allJobItems() {
-  return findWorkCategories.flatMap((c) => c.items.map((item) => ({ item, slug: slugify(item), group: c.title })))
+  return findWorkCategories.flatMap((c) =>
+    c.items.map((item) => ({
+      item,
+      slug: slugify(item),
+      group: getCategoryDisplayTitle(c, "nav"),
+    }))
+  )
 }
 
 export function findHireBySlug(slug: string) {

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import PageShell from "@/components/marketing/PageShell"
-import { findWorkCategories } from "@/data/navCategories"
+import { findWorkCategories, getCategoryDisplayTitle } from "@/data/navCategories"
 import { slugify } from "@/lib/navSlug"
 
 export default function JobsLandingPage() {
@@ -21,7 +21,9 @@ export default function JobsLandingPage() {
                 key={cat.title}
                 className="rounded-2xl border bg-white p-6 hover:shadow-lg transition"
               >
-                <h2 className="font-extrabold text-lg text-gray-900 mb-2">{cat.title}</h2>
+                <h2 className="font-extrabold text-lg text-gray-900 mb-2">
+                  {getCategoryDisplayTitle(cat, "nav")}
+                </h2>
                 <p className="text-sm text-gray-600 mb-4">
                   {cat.items.length} specialist opportunities
                 </p>

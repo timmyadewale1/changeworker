@@ -63,7 +63,7 @@ function contentFor(slug: string) {
       sections: [
         {
           title: "1. Post Your Gig",
-          body: "Describe the work you need done. Browse curated categories across Climate, Energy, Technology for Good, Design, and Policy. Tag your gig to the relevant SDGs. Set your budget and timeline. Takes less than five minutes.",
+          body: "Describe the work you need done. Browse curated categories across Admin and Operations, Programs, Communications, Finance, Design, Research, and more. Tag your gig to the relevant SDGs. Set your budget and timeline. Takes less than five minutes.",
           badge: "Getting started",
           badgeColor: "#6366F1",
         },
