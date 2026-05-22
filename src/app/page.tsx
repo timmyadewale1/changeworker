@@ -96,7 +96,7 @@ const FEATURES = [
   { icon: HiCurrencyDollar,color:"#10B981", bg: "rgba(16,185,129,.08)", title: "Budget-first design",  body: "Projects from N50k to N400k+. Transparent pricing, payment support, and a flat 10% platform fee with no hidden charges." },
   { icon: FiRepeat,       color: "#EC4899", bg: "rgba(236,72,153,.08)",  title: "Save talent for later", body: "Shortlist strong profiles, save talent you want to revisit, and build repeat working relationships without starting from scratch." },
   { icon: TbTargetArrow,  color: "#F59E0B", bg: "rgba(245,158,11,.08)",  title: "Escrow protection",    body: "Funds held until deliverables are approved. Both sides protected, both sides confident - trust built into every transaction." },
-  { icon: HiGlobeAlt,     color: "#3B82F6", bg: "rgba(59,130,246,.08)",  title: "Built for Nigeria",    body: "Paystack integration, Naira-native pricing, and a community rooted in local NGO culture. Not a foreign product retrofitted for Africa." },
+  { icon: HiGlobeAlt,     color: "#3B82F6", bg: "rgba(59,130,246,.08)",  title: "Built for Nigeria",    body: "Paystack integration, Naira-native pricing, and and a solution for local social impact organizations and businesses." },
   { icon: FiFilter,       color: "#8B5CF6", bg: "rgba(139,92,246,.08)",  title: "Curated discovery",   body: "Use filters, public profiles, proposals, and messaging to narrow quickly to the right fit instead of sorting through generic marketplaces." },
   { icon: FiAward,        color: "#14B8A6", bg: "rgba(20,184,166,.08)",  title: "Structured delivery",  body: "Workspaces support milestones, final submissions, reviews, and dispute flows so delivery stays documented from start to finish." },
   { icon: RiTeamLine,     color: "#EF4444", bg: "rgba(239,68,68,.08)",   title: "Impact community",     body: "Access a growing network of professionals who chose purpose-driven careers. Referrals, collaborations, and peer learning built in." },
@@ -119,8 +119,8 @@ const PROFILES = [
 // ]
 
 const FAQS = [
-  { q: "How are freelancers vetted?",           a: "Talent profiles are built inside the platform, matched against gig requirements, and can complete identity verification and public-profile setup before working with clients." },
-  { q: "What does the 10% commission cover?",   a: "The fee supports platform operations including matching, payments, workspace delivery flows, reviews, disputes, and ongoing product support." },
+  { q: "How are freelancers vetted?",           a: "Graduates of our Skills For Impact skills development program and verified users sign up  as talents." },
+  { q: "What does the 10% commission cover?",   a: "The fee supports our Skills For Impact training program which equips youths with skills for the social impact sector." },
   { q: "How quickly will I get matched?",       a: "Matching starts as soon as a gig is posted. Clients can browse surfaced talent, receive proposals, and move into messaging and workspace setup inside the app." },
   { q: "What if I'm not satisfied?",            a: "Workspaces support milestone review, final approval, and dispute creation so both sides have a documented process if work needs clarification or resolution." },
   { q: "Can I hire the same freelancer again?", a: "Yes. You can save talent profiles and return to them later when you want to start a new conversation or project." },
@@ -842,14 +842,18 @@ export default function Home() {
                   <WordCycle/><br/>
                   <span className="font-serif italic font-normal opacity-80">talents.</span>
                 </h1>
-                <h2 className={`font-serif italic text-4xl lg:text-5xl text-white/50 leading-tight ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".36s"} as React.CSSProperties}>
-                  Meaningful work.
+                <h2 className={`font-serif italic text-3xl lg:text-4xl text-white/50 leading-tight ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".36s"} as React.CSSProperties}>
+                  The talent your mission needs. <br /> The flexibility your budget demands.
                 </h2>
               </div>
 
               <p className={`text-white/40 text-lg leading-relaxed max-w-md font-display font-light ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".5s"} as React.CSSProperties}>
-                Connecting skilled Nigerian professionals with nonprofits and social enterprises - at the price that actually works.
+                Nigerian nonprofits and social enterprises do critical work on tight resources. Changeworker gives you access to skilled, vetted professionals who understand the sector, without the overhead of a full-time hire. <br /> <span className="text-orange-400 font-bold">Pay for what you need. Get work that counts.</span>
               </p>
+
+              <h2 className={`font-serif italic text-4xl lg:text-5xl text-orange-400 leading-tight ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".36s"} as React.CSSProperties}>
+                  Built for impact. Built for Changemakers.
+                </h2>
 
               <div className={`flex flex-wrap gap-4 ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".62s"} as React.CSSProperties}>
                 <Link href="/hire">
@@ -990,14 +994,14 @@ export default function Home() {
           <p className={`font-mono text-xs text-orange-400 uppercase tracking-[.3em] mb-8 ${missionRef.inView?"reveal":"opacity-0"}`} style={{"--d":".0s"} as React.CSSProperties}>Our Mission</p>
           <div className={`${missionRef.inView?"reveal":"opacity-0"}`} style={{"--d":".12s"} as React.CSSProperties}>
             <p className="font-display font-black text-5xl lg:text-7xl text-white leading-[1.04] tracking-tight">
-              We're building <span className="font-serif italic font-normal text-white/45">Africa's</span>
+              We are building <span className="font-serif italic font-normal text-white/45">Africa's</span>
             </p>
             <p className="font-display font-black text-5xl lg:text-7xl text-white leading-[1.04] mt-1">
               workforce for <span className="shimmer">social impact.</span>
             </p>
           </div>
           <p className={`text-white/32 text-xl leading-relaxed max-w-2xl mx-auto mt-10 font-display font-light ${missionRef.inView?"reveal":"opacity-0"}`} style={{"--d":".38s"} as React.CSSProperties}>
-            Nonprofits shouldn't choose between mission and capability. Skilled professionals shouldn't choose between purpose and income. We built changeworker so nobody has to choose.
+            Social impact organizations shouldn't choose between mission and capability. Skilled professionals shouldn't choose between purpose and income. We built changeworker so nobody has to choose.
           </p>
           <div className={`grid grid-cols-3 gap-8 mt-16 max-w-xl mx-auto ${missionRef.inView?"reveal":"opacity-0"}`} style={{"--d":".52s"} as React.CSSProperties}>
             {[{I:TbBuildingCommunity,l:"Client Profiles",v:stats.clients,c:"#F97316"},{I:RiTeamLine,l:"Talent Profiles",v:stats.freelancers,c:"#6366F1"},{I:FiTrendingUp,l:"Published Gigs",v:stats.projects,c:"#10B981"}].map(({I,l,v,c})=>(
@@ -1044,8 +1048,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className={`text-center mb-16 ${featRef.inView?"reveal":"opacity-0"}`} style={{"--d":".0s"} as React.CSSProperties}>
             <span className="font-mono text-xs text-orange-500 uppercase tracking-[.25em] mb-4 block">Why changeworker</span>
-            <h2 className="font-display text-5xl font-black text-gray-900">Built for impact.<br/><span className="shimmer">Not retrofitted.</span></h2>
-            <p className="text-gray-400 mt-3 text-sm font-display font-normal">Hover each card to flip it</p>
+            <h2 className="font-display text-5xl font-black text-gray-900">Built for impact.<br/></h2>
+            <p className="text-gray-400 mt-3 text-sm font-display font-normal">Tap each card to flip it</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {FEATURES.map((f,i)=><FlipCard key={i} feat={f} idx={i} inView={featRef.inView}/>)}
@@ -1206,11 +1210,18 @@ export default function Home() {
                 <span className="font-mono text-xs text-orange-600 uppercase tracking-[.15em]">For Organizations</span>
               </div>
               <h2 className="font-display text-4xl font-black text-gray-900 leading-tight mb-5">
-                The skills your<br/>mission needs.<br/><span className="shimmer">At last.</span>
+                The skills your<br/>mission needs.<br/><span className="shimmer">When you need them.</span>
               </h2>
-              <p className="text-gray-600 leading-relaxed max-w-sm font-display font-normal mb-8 text-sm">
-                Stop turning down grants because you lack the staff. Access strong-fit specialists for exactly how long you need them.
+              <p className="text-gray-600 leading-relaxed max-w-sm font-display font-normal mb-5 text-sm">
+                Leading a growing nonprofit or social enterprise on a budget? You don’t have to do all the work alone.
               </p>
+
+              <p className="text-gray-600 leading-relaxed max-w-sm font-display font-normal mb-5 text-sm">
+                Changeworker gives you access to vetted specialists you can bring in for a project, a campaign or a crunch period, without adding to your payroll. No long-term salary commitments. No overhead. 
+              </p>
+              <h2 className="font-display text-3xl font-black text-gray-900 leading-tight mb-5">
+                Just the right person,<br/><span className="shimmer">for exactly as long as you need them.</span>
+              </h2>
               <ul className="space-y-3 mb-10">
                 {[{I:FiDollarSign,t:"Budget N50k-N400k+ per project"},{I:FiZap,t:"Matching, proposals and messaging in-app"},{I:FiShield,t:"Verified profiles and reviews"},{I:FiRepeat,t:"No long-term commitments"}].map(({I,t})=>(
                   <li key={t} className="flex items-center gap-3 text-sm text-gray-700">
@@ -1232,10 +1243,16 @@ export default function Home() {
                 <span className="font-mono text-xs text-orange-400 uppercase tracking-[.15em]">For Freelancers</span>
               </div>
               <h2 className="font-display text-4xl font-black text-white leading-tight mb-5">
-                Work that matters.<br/>Pay that doesn't<br/><span className="shimmer-indigo">insult you.</span>
+                Work that matters.
               </h2>
+              <p className="text-white/42 leading-relaxed max-w-sm font-display font-normal mb-3 text-sm">
+                Stop being invisible on platforms that weren’t built for the social impact sector.
+              </p>
+              <p className="text-white/42 leading-relaxed max-w-sm font-display font-normal mb-3 text-sm">
+                Changeworker puts your profile in front of the NGOs, social enterprises, social entrepreneurs and impact organizations actively looking for what you do.
+              </p>
               <p className="text-white/42 leading-relaxed max-w-sm font-display font-normal mb-8 text-sm">
-                The impact sector has always needed great talent. Now it can work with it more transparently. Join a growing community building Africa's social infrastructure.
+                Grow your skills through real impact work and join a community of young Africans who are building the continent’s social impact infrastructure, one project at a time.
               </p>
               <ul className="space-y-3 mb-10">
                 {[{I:FiTrendingUp,t:"Earn ₦50k–₦200k per project",c:"#6366F1"},{I:FiHeart,t:"Work with mission-aligned orgs",c:"#EC4899"},{I:FiFilter,t:"No cold-pitching or bidding wars",c:"#10B981"},{I:FiAward,t:"Build a portfolio that means something",c:"#F59E0B"}].map(({I,t,c})=>(
@@ -1257,11 +1274,11 @@ export default function Home() {
           §11  COMPARISON TABLE
       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ */}
       <section className="relative py-28 overflow-hidden bg-white">
-        <Orb cls="anim-o2 w-72 h-72 bg-indigo-50 right-0 top-0"/>
+        {/* <Orb cls="anim-o2 w-72 h-72 bg-indigo-50 right-0 top-0"/> */}
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-14">
-            <span className="font-mono text-xs text-orange-500 uppercase tracking-[.25em] mb-4 block">Why not just use Upwork?</span>
-            <h2 className="font-display text-4xl font-black text-gray-900">We're different by design</h2>
+            <span className="font-black text-xs text-orange-500 uppercase tracking-[.25em] mb-4 block">Why not just use Upwork?</span>
+            <h2 className="font-display text-4xl font-black text-gray-900">We are different by design and impact</h2>
           </div>
           <div className="rounded-2xl border border-gray-100 overflow-hidden shadow-xl">
             <div className="grid grid-cols-3 bg-gray-50 border-b border-gray-100">
@@ -1327,7 +1344,7 @@ export default function Home() {
             <h2 className="font-serif italic text-6xl lg:text-7xl text-white/55 mb-4 leading-[.94]">workforce for</h2>
             <h2 className="font-display text-6xl lg:text-7xl font-black leading-[.94] mb-10"><span className="shimmer">social impact.</span></h2>
             <p className="text-white/32 text-lg max-w-md mx-auto mb-12 font-display font-light leading-relaxed">
-              Join hundreds of nonprofits and skilled professionals already making it happen through changeworker.
+              Join hundreds of social impact organizations and skilled professionals already making it happen through changeworker.
             </p>
           </div>
 
