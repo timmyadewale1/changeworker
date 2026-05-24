@@ -53,10 +53,10 @@ export default function BlogIndex() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Instrument+Serif:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
         *,*::before,*::after{box-sizing:border-box}
-        .fd{font-family:'Sora',sans-serif}
-        .fs{font-family:'Instrument Serif',serif}
+        .fd{font-family:'Plus Jakarta Sans',sans-serif}
+        .fs{font-family:'DM Sans',sans-serif}
         .fm{font-family:'JetBrains Mono',monospace}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background:#F97316;border-radius:3px}
@@ -85,11 +85,11 @@ export default function BlogIndex() {
         .featured-card{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease}
         .featured-card:hover{transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,0,0,.12)}
 
-        .search-input{width:100%;background:#F9FAFB;border:1.5px solid #F3F4F6;border-radius:12px;padding:.8rem .8rem .8rem 2.8rem;font-family:'Sora',sans-serif;font-size:.875rem;color:#111827;outline:none;transition:border-color .2s,box-shadow .2s}
+        .search-input{width:100%;background:#F9FAFB;border:1.5px solid #F3F4F6;border-radius:12px;padding:.8rem .8rem .8rem 2.8rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;color:#111827;outline:none;transition:border-color .2s,box-shadow .2s}
         .search-input:focus{border-color:#F97316;background:white;box-shadow:0 0 0 4px rgba(249,115,22,.08)}
         .search-input::placeholder{color:#C4C9D4}
 
-        .cat-btn{font-family:'Sora',sans-serif;font-size:.75rem;font-weight:600;padding:.5rem 1.1rem;border-radius:999px;border:1.5px solid;transition:all .2s cubic-bezier(.22,1,.36,1)}
+        .cat-btn{font-family:'Plus Jakarta Sans',sans-serif;font-size:.75rem;font-weight:600;padding:.5rem 1.1rem;border-radius:999px;border:1.5px solid;transition:all .2s cubic-bezier(.22,1,.36,1)}
         .cat-btn:hover{transform:translateY(-1px)}
 
         .tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.2rem .6rem;border-radius:999px}

@@ -2,54 +2,85 @@
 
 import Link from "next/link"
 
+const columns = [
+  {
+    title: "Platform",
+    links: [
+      { label: "How it works", href: "/how" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Hire talent", href: "/hire" },
+      { label: "Find work", href: "/jobs" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+      { label: "Why us", href: "/why-us" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Terms", href: "/terms" },
+      { label: "Privacy", href: "/privacy" },
+    ],
+  },
+]
+
 export default function Footer() {
   return (
-    <footer className="bg-[#030508] border-t border-white/5 pt-20 pb-10">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-16">
-          <div className="col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <img src="/logo.png" alt="Changeworker" className="h-20 w-20" />
-              <p className="font-display font-black text-2xl text-white">changeworker</p>
+    <footer className="border-t border-white/5 bg-[#0A0A0A] pt-16 pb-10">
+      <div className="public-container">
+        <div className="mb-14 grid grid-cols-2 gap-10 md:grid-cols-5">
+          <div className="col-span-2 max-w-md">
+            <div className="mb-4 flex items-center gap-2.5">
+              <img src="/logo.png" alt="changeworker" className="h-8 w-8 object-contain" />
+              <span className="font-body text-xl font-black text-white">changeworker</span>
             </div>
-            <p className="text-white/22 text-sm font-display font-light leading-relaxed mb-6 max-w-xs">
-              Flexible talents. Meaningful work.<br/>The talent marketplace for social impact in Nigeria.
+
+            <p className="mb-4 max-w-xs text-sm leading-relaxed text-white/30">
+              Flexible talents. Meaningful work.
+              <br />
+              The talent marketplace for social impact in Nigeria.
             </p>
-            <p className="text-white/14 text-xs font-mono mb-5">A product of Impactpal Africa</p>
-            <div className="flex gap-2.5">
-              {[{l:"𝕏"},{l:"in"},{l:"ig"}].map(s=>(
-                <a key={s.l} href="#" className="w-9 h-9 rounded-lg bg-white/5 hover:bg-orange-500/20 border border-white/8 hover:border-orange-500/35 flex items-center justify-center text-white/32 hover:text-orange-400 text-xs font-bold transition-all duration-200">
-                  {s.l}
+            <p className="mb-5 text-xs text-white/15">A product of Impactpal Africa</p>
+
+            <div className="flex gap-2">
+              {["𝕏", "in", "ig"].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/5 text-xs font-bold text-white/30 transition-all hover:bg-white/12 hover:text-white"
+                >
+                  {item}
                 </a>
               ))}
             </div>
           </div>
-          {[
-            {title:"Platform",links:["How It Works","FAQ"]},
-            {title:"Company", links:["About Us","Blog","Contact"]},
-            {title:"Legal",   links:["Terms of Service","Privacy Policy"]},
-          ].map(col=>(
-            <div key={col.title}>
-              <p className="font-mono text-[10px] uppercase tracking-[.2em] text-white/22 mb-5">{col.title}</p>
+
+          {columns.map((column) => (
+            <div key={column.title}>
+              <p className="mb-5 font-body text-[10px] uppercase tracking-[0.2em] text-white/20">
+                {column.title}
+              </p>
               <ul className="space-y-3">
-                {col.links.map(l=>(
-                  <li key={l}><Link href={
-                    l === "Terms of Service" ? "/terms" :
-                    l === "Privacy Policy" ? "/privacy" :
-                    l === "Contact" ? "/contact" :
-                    l === "FAQ" ? "/faq" :
-                    l === "About Us" ? "/about" :
-                    l === "How It Works" ? "/how" :
-                    l === "Blog" ? "/blog" : "#"
-                  } className="text-white/32 hover:text-orange-400 text-sm font-display font-normal transition-colors duration-200 no-underline">{l}</Link></li>
+                {column.links.map((link) => (
+                  <li key={link.label}>
+                    <Link href={link.href} className="text-sm text-white/35 transition-colors hover:text-white">
+                      {link.label}
+                    </Link>
+                  </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/14 text-xs font-mono">© {new Date().getFullYear()} changeworker · Impactpal Africa · All rights reserved</p>
-          <p className="text-white/10 text-xs font-mono">Building Africa's workforce for social impact</p>
+
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/5 pt-8 sm:flex-row">
+          <p className="text-xs text-white/15">© {new Date().getFullYear()} changeworker · Impactpal Africa</p>
+          <p className="text-xs text-white/10">Building Africa&apos;s workforce for social impact</p>
         </div>
       </div>
     </footer>

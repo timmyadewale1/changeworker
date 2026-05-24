@@ -158,19 +158,18 @@ function SHead({ id, number, icon: Icon, title }: { id: string; number: string; 
   return (
     <div id={id} className="flex items-start gap-4 mb-6 pt-2 scroll-mt-28">
       <div className="flex flex-col items-center gap-2 shrink-0 pt-1">
-        <div className="w-10 h-10 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center">
-          <Icon size={18} className="text-violet-500" />
+        <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center">
+          <Icon size={18} className="text-orange-500" />
         </div>
-        <span className="font-mono text-[10px] text-violet-300 font-bold">{number}</span>
+        <span className="font-mono text-[10px] text-orange-300 font-bold">{number}</span>
       </div>
       <h2 className="font-display font-black text-2xl text-gray-900 leading-tight pt-1.5">{title}</h2>
     </div>
   )
 }
 
-function Highlight({ color = "violet", children }: { color?: "violet"|"orange"|"emerald"|"amber"|"red"|"indigo"; children: React.ReactNode }) {
+function Highlight({ color = "orange", children }: { color?: "orange"|"emerald"|"amber"|"red"|"indigo"; children: React.ReactNode }) {
   const map = {
-    violet:  { bg: "bg-violet-50",  border: "border-violet-200",  text: "text-violet-800",  dot: "bg-violet-400"  },
     orange:  { bg: "bg-orange-50",  border: "border-orange-200",  text: "text-orange-800",  dot: "bg-orange-400"  },
     indigo:  { bg: "bg-indigo-50",  border: "border-indigo-200",  text: "text-indigo-800",  dot: "bg-indigo-400"  },
     emerald: { bg: "bg-emerald-50", border: "border-emerald-200", text: "text-emerald-800", dot: "bg-emerald-400" },
@@ -191,8 +190,8 @@ function ClauseList({ items }: { items: string[] }) {
     <ul className="space-y-2.5 my-4">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed font-display font-normal">
-          <span className="w-5 h-5 rounded-full bg-violet-50 flex items-center justify-center shrink-0 mt-0.5">
-            <FiChevronRight size={10} className="text-violet-500" />
+          <span className="w-5 h-5 rounded-full bg-orange-50 flex items-center justify-center shrink-0 mt-0.5">
+            <FiChevronRight size={10} className="text-orange-500" />
           </span>
           {item}
         </li>
@@ -202,7 +201,7 @@ function ClauseList({ items }: { items: string[] }) {
 }
 
 function Divider() {
-  return <div className="my-10 h-px bg-gradient-to-r from-transparent via-violet-100 to-transparent" />
+  return <div className="my-10 h-px bg-gradient-to-r from-transparent via-orange-100 to-transparent" />
 }
 
 function P({ children, className = "" }: { children: React.ReactNode; className?: string }) {
@@ -217,7 +216,7 @@ function CopyBtn({ text }: { text: string }) {
   const [copied, setCopied] = useState(false)
   return (
     <button onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1800) }}
-      className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-violet-500 transition-colors font-mono">
+      className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-orange-500 transition-colors font-mono">
       {copied ? <FiCheckCircle size={11} className="text-emerald-500" /> : <FiCopy size={11} />}
       {copied ? "Copied" : "Copy link"}
     </button>
@@ -227,7 +226,7 @@ function CopyBtn({ text }: { text: string }) {
 function BackToTop({ visible }: { visible: boolean }) {
   return (
     <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed bottom-8 right-8 z-50 w-11 h-11 rounded-full bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center shadow-lg shadow-violet-200 transition-all duration-300"
+      className="fixed bottom-8 right-8 z-50 w-11 h-11 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center shadow-lg shadow-orange-200 transition-all duration-300"
       style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0) scale(1)" : "translateY(16px) scale(.8)", pointerEvents: visible ? "auto" : "none" }}>
       <FiArrowUp size={16} />
     </button>
@@ -254,15 +253,15 @@ export default function PrivacyPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
-        .font-display { font-family: 'Sora', sans-serif; }
-        .font-serif   { font-family: 'Instrument Serif', serif; }
+        .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-serif   { font-family: 'DM Sans', sans-serif; }
         .font-mono    { font-family: 'JetBrains Mono', monospace; }
 
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #f9fafb; }
-        ::-webkit-scrollbar-thumb { background: #7C3AED; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #F97316; border-radius: 3px; }
 
         @keyframes fadeUp    { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
         @keyframes shimViolet{ 0%{background-position:-700px 0} 100%{background-position:700px 0} }
@@ -276,7 +275,7 @@ export default function PrivacyPage() {
 
         .entry { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) both; }
         .shimmer-violet {
-          background: linear-gradient(90deg,#7C3AED 0%,#6D28D9 15%,#8B5CF6 35%,#A78BFA 50%,#8B5CF6 65%,#6D28D9 85%,#7C3AED 100%);
+          background: linear-gradient(90deg,#F97316 0%,#EA580C 15%,#FB923C 35%,#FCD34D 50%,#FB923C 65%,#EA580C 85%,#F97316 100%);
           background-size: 700px 100%;
           -webkit-background-clip: text; background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -289,15 +288,15 @@ export default function PrivacyPage() {
           -webkit-text-fill-color: transparent;
           animation: shimViolet 3s linear infinite;
         }
-        .grid-violet { background-image: linear-gradient(rgba(124,58,237,.05) 1px,transparent 1px), linear-gradient(90deg,rgba(124,58,237,.05) 1px,transparent 1px); background-size: 56px 56px; }
-        .dot-bg-v    { background-image: radial-gradient(rgba(124,58,237,.12) 1.5px, transparent 1.5px); background-size: 26px 26px; }
+        .grid-violet { background-image: linear-gradient(rgba(249,115,22,.05) 1px,transparent 1px), linear-gradient(90deg,rgba(249,115,22,.05) 1px,transparent 1px); background-size: 56px 56px; }
+        .dot-bg-v    { background-image: radial-gradient(rgba(249,115,22,.12) 1.5px, transparent 1.5px); background-size: 26px 26px; }
         .anim-o1     { animation: orbDrift1 14s ease-in-out infinite; }
         .anim-o2     { animation: orbDrift2 18s ease-in-out infinite; }
         strong { font-weight: 700; color: #111827; }
 
-        .nav-active { background: rgba(124,58,237,.08); border-color: rgba(124,58,237,.25); }
-        .nav-active .ndot { background: #7C3AED; box-shadow: 0 0 8px rgba(124,58,237,.6); }
-        .nav-active span  { color: #5B21B6; }
+        .nav-active { background: rgba(249,115,22,.08); border-color: rgba(249,115,22,.25); }
+        .nav-active .ndot { background: #F97316; box-shadow: 0 0 8px rgba(249,115,22,.6); }
+        .nav-active span  { color: #EA580C; }
 
         .data-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.08), 0 4px 12px rgba(124,58,237,.06); }
         .data-card { transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease; }
@@ -313,26 +312,26 @@ export default function PrivacyPage() {
 
       {/* ── READING PROGRESS BAR ── */}
       <div className="fixed top-0 left-0 right-0 z-[9999] h-0.5 bg-gray-100">
-        <div className="h-full bg-gradient-to-r from-violet-600 via-purple-400 to-violet-600 transition-all duration-150"
+        <div className="h-full bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 transition-all duration-150"
           style={{ width: `${progress}%`, backgroundSize: "200%", animation: "gradShift 4s ease infinite" }} />
       </div>
 
-      <div className="font-display bg-white text-gray-900 overflow-x-hidden selection:bg-violet-100 selection:text-violet-900 min-h-screen">
+      <div className="font-display bg-white text-gray-900 overflow-x-hidden selection:bg-orange-100 selection:text-orange-900 min-h-screen">
         <Navbar />
 
         {/* ── HERO ── */}
-        <div className="relative overflow-hidden bg-[#0A0614] pt-28 pb-20">
+        <div className="relative overflow-hidden border-b border-orange-100 bg-[linear-gradient(180deg,#fffdfa_0%,#ffffff_100%)] pt-28 pb-20">
           <div className="absolute inset-0 grid-violet opacity-70" />
-          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 65% at 50% 50%, rgba(124,58,237,.14) 0%, transparent 70%)" }} />
-          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 40% 40% at 15% 80%, rgba(249,115,22,.07) 0%, transparent 55%)" }} />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 65% at 50% 50%, rgba(249,115,22,.09) 0%, transparent 70%)" }} />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 40% 40% at 15% 80%, rgba(249,115,22,.06) 0%, transparent 55%)" }} />
 
           {/* orbs */}
-          <div className="absolute anim-o1 w-[600px] h-[600px] rounded-full bg-violet-500/8 blur-3xl -top-40 right-0 pointer-events-none" />
+          <div className="absolute anim-o1 w-[600px] h-[600px] rounded-full bg-orange-500/8 blur-3xl -top-40 right-0 pointer-events-none" />
           <div className="absolute anim-o2 w-[400px] h-[400px] rounded-full bg-orange-500/6 blur-3xl bottom-0 -left-20 pointer-events-none" />
 
           {/* floating data nodes */}
           {[[8,18],[90,12],[94,65],[4,72],[52,88],[28,42],[80,48],[65,22],[18,60]].map(([x,y],i)=>(
-            <div key={i} className="absolute rounded-full bg-violet-400 opacity-20"
+            <div key={i} className="absolute rounded-full bg-orange-400 opacity-20"
               style={{left:`${x}%`,top:`${y}%`,width:`${3+i%3*3}px`,height:`${3+i%3*3}px`,animation:`dotDrift ${5+i}s ease-in-out ${i*.4}s infinite`}} />
           ))}
 
@@ -341,14 +340,14 @@ export default function PrivacyPage() {
 
           <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
             {/* shield icon */}
-            <div className="entry inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-500/15 border border-violet-500/25 mb-8" style={{animationDelay:".05s"}}>
-              <HiShieldCheck size={30} className="text-violet-400" />
+            <div className="entry inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-orange-100 border border-orange-200 mb-8" style={{animationDelay:".05s"}}>
+              <HiShieldCheck size={30} className="text-orange-500" />
             </div>
 
-            <h1 className="entry font-display font-black text-5xl lg:text-6xl text-white leading-[.95] tracking-tight mb-4" style={{animationDelay:".15s"}}>
+            <h1 className="entry font-display font-black text-5xl lg:text-6xl text-[var(--public-ink)] leading-[.95] tracking-tight mb-4" style={{animationDelay:".15s"}}>
               Privacy<br /><span className="shimmer-violet">Policy</span>
             </h1>
-            <p className="entry font-serif italic text-2xl text-white/38 mb-10" style={{animationDelay:".28s"}}>
+            <p className="entry font-serif italic text-2xl text-[var(--public-soft-ink)] mb-10" style={{animationDelay:".28s"}}>
               how changeworker handles your data
             </p>
 
@@ -360,23 +359,22 @@ export default function PrivacyPage() {
                 { label: "Framework",    value: "NDPA 2023 Compliant",    icon: RiShieldCheckLine },
                 { label: "Version",      value: "1.1",                    icon: FiFileText    },
               ].map(({ label, value, icon: Icon }) => (
-                <div key={label} className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 backdrop-blur-sm">
-                  <Icon size={12} className="text-violet-400" />
-                  <span className="text-white/30 text-xs font-mono">{label}:</span>
-                  <span className="text-white/65 text-xs font-semibold font-display">{value}</span>
+                <div key={label} className="flex items-center gap-2.5 bg-white border border-orange-100 rounded-xl px-4 py-2.5 shadow-sm">
+                  <Icon size={12} className="text-orange-400" />
+                  <span className="text-gray-500 text-xs font-mono">{label}:</span>
+                  <span className="text-[var(--public-ink)] text-xs font-semibold font-display">{value}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none" />
         </div>
 
         {/* ── SUMMARY BANNER ── */}
-        <div className="bg-violet-50 border-b border-violet-100">
+        <div className="bg-orange-50 border-b border-orange-100">
           <div className="max-w-4xl mx-auto px-6 py-6">
             <div className="flex items-start gap-4">
-              <div className="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center shrink-0 mt-0.5">
-                <HiSparkles size={16} className="text-violet-500" />
+              <div className="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center shrink-0 mt-0.5">
+                <HiSparkles size={16} className="text-orange-500" />
               </div>
               <div>
                 <p className="font-display font-bold text-gray-900 text-sm mb-1">The short version</p>
@@ -391,24 +389,24 @@ export default function PrivacyPage() {
         {/* ── BODY ── */}
         <div className="max-w-7xl mx-auto px-4 lg:px-8 py-16">
           <div className="sticky top-20 z-30 mb-6 lg:hidden">
-            <div className="rounded-2xl border border-violet-100 bg-white/95 p-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/85">
+            <div className="rounded-2xl border border-orange-100 bg-white/95 p-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/85">
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[.22em] text-gray-400">Reading progress</p>
                   <div className="mt-2 flex items-center gap-2">
                     <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-violet-600 to-purple-400 transition-all duration-200"
+                        className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-200"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
-                    <span className="font-mono text-[10px] font-bold text-violet-600">{Math.round(progress)}%</span>
+                    <span className="font-mono text-[10px] font-bold text-orange-600">{Math.round(progress)}%</span>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSidebarOpen((open) => !open)}
-                  className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-xs font-semibold text-violet-700"
+                  className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-xs font-semibold text-orange-700"
                 >
                   Contents
                   {sidebarOpen ? <FiChevronUp size={12} /> : <FiChevronDown size={12} />}
@@ -416,7 +414,7 @@ export default function PrivacyPage() {
               </div>
 
               {sidebarOpen ? (
-                <div className="mt-4 border-t border-violet-100 pt-4">
+                <div className="mt-4 border-t border-orange-100 pt-4">
                   <nav className="flex flex-col gap-1">
                     {SECTIONS.map(({ id, label, icon: Icon }) => {
                       const isActive = active === id
@@ -426,13 +424,13 @@ export default function PrivacyPage() {
                           onClick={() => scrollTo(id)}
                           className={`group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all duration-200 ${
                             isActive
-                              ? "nav-active border-violet-200 bg-violet-50"
+                              ? "nav-active border-orange-200 bg-orange-50"
                               : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                           }`}
                         >
-                          <span className={`ndot h-1.5 w-1.5 shrink-0 rounded-full transition-all duration-200 ${isActive ? "bg-violet-500" : "bg-gray-300 group-hover:bg-violet-300"}`} />
-                          <Icon size={13} className={`shrink-0 transition-colors ${isActive ? "text-violet-500" : "text-gray-400 group-hover:text-gray-600"}`} />
-                          <span className={`text-xs font-display font-medium transition-colors ${isActive ? "text-violet-700" : ""}`}>{label}</span>
+                          <span className={`ndot h-1.5 w-1.5 shrink-0 rounded-full transition-all duration-200 ${isActive ? "bg-orange-500" : "bg-gray-300 group-hover:bg-orange-300"}`} />
+                          <Icon size={13} className={`shrink-0 transition-colors ${isActive ? "text-orange-500" : "text-gray-400 group-hover:text-gray-600"}`} />
+                          <span className={`text-xs font-display font-medium transition-colors ${isActive ? "text-orange-700" : ""}`}>{label}</span>
                         </button>
                       )
                     })}
@@ -454,11 +452,11 @@ export default function PrivacyPage() {
                     return (
                       <button key={id} onClick={() => scrollTo(id)}
                         className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl border text-left transition-all duration-200 ${
-                          isActive ? "nav-active border-violet-200 bg-violet-50" : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                          isActive ? "nav-active border-orange-200 bg-orange-50" : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                         }`}>
-                        <span className={`ndot w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200 ${isActive ? "bg-violet-500" : "bg-gray-300 group-hover:bg-violet-300"}`} />
-                        <Icon size={13} className={`shrink-0 transition-colors ${isActive ? "text-violet-500" : "text-gray-400 group-hover:text-gray-600"}`} />
-                        <span className={`text-xs font-display font-medium transition-colors ${isActive ? "text-violet-700" : ""}`}>{label}</span>
+                        <span className={`ndot w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200 ${isActive ? "bg-orange-500" : "bg-gray-300 group-hover:bg-orange-300"}`} />
+                        <Icon size={13} className={`shrink-0 transition-colors ${isActive ? "text-orange-500" : "text-gray-400 group-hover:text-gray-600"}`} />
+                        <span className={`text-xs font-display font-medium transition-colors ${isActive ? "text-orange-700" : ""}`}>{label}</span>
                       </button>
                     )
                   })}
@@ -468,16 +466,16 @@ export default function PrivacyPage() {
                 <div className="mt-8 px-2">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-mono text-[10px] text-gray-400 uppercase tracking-wider">Reading progress</span>
-                    <span className="font-mono text-[10px] text-violet-500 font-bold">{Math.round(progress)}%</span>
+                    <span className="font-mono text-[10px] text-orange-500 font-bold">{Math.round(progress)}%</span>
                   </div>
                   <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-violet-600 to-purple-400 rounded-full transition-all duration-200" style={{ width: `${progress}%` }} />
+                    <div className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-200" style={{ width: `${progress}%` }} />
                   </div>
                 </div>
 
                 <div className="mt-8 px-2 space-y-2.5">
-                  <a href="mailto:privacy@changeworker.ng" className="flex items-center gap-2 text-xs text-gray-500 hover:text-violet-600 transition-colors font-display group">
-                    <FiMail size={12} className="text-gray-300 group-hover:text-violet-400 transition-colors" />
+                  <a href="mailto:privacy@changeworker.ng" className="flex items-center gap-2 text-xs text-gray-500 hover:text-orange-600 transition-colors font-display group">
+                    <FiMail size={12} className="text-gray-300 group-hover:text-orange-400 transition-colors" />
                     privacy@changeworker.ng
                   </a>
                   <CopyBtn text={typeof window !== "undefined" ? window.location.href : "https://changeworker.ng/privacy"} />
@@ -493,7 +491,7 @@ export default function PrivacyPage() {
                 <SHead id="overview" number="01" icon={MdOutlinePolicy} title="Overview & Commitment" />
                 <P>This Privacy Policy explains how <strong>Impactpal Africa</strong> ("we", "us", "our"), operator of the changeworker platform, collects, uses, stores, shares, and protects your personal data when you use our services at changeworker.ng.</P>
                 <P>We are committed to your privacy and to responsible data stewardship. This Policy is written in plain language wherever possible, and we encourage you to read it in full. It applies to all users of the platform - organizations, freelancers, and visitors.</P>
-                <Highlight color="violet">
+                <Highlight color="orange">
                   changeworker is compliant with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong> and the regulations issued by the Nigeria Data Protection Commission (NDPC). Where you are located in another jurisdiction, we apply equivalent or higher standards.
                 </Highlight>
                 <P>By using changeworker, you acknowledge that you have read and understood this Privacy Policy. If you do not agree with our practices, please discontinue use of the platform and contact us to request data deletion.</P>
@@ -785,7 +783,7 @@ export default function PrivacyPage() {
                 ]} />
                 <P>We will acknowledge your request within <strong>2 business days</strong> and respond fully within <strong>30 days</strong> (extendable to 90 days for complex requests with notice). We will not charge a fee for reasonable requests.</P>
 
-                <Highlight color="violet">
+                <Highlight color="orange">
                   If you believe we have failed to address your rights request adequately, you may lodge a complaint with the <strong>Nigeria Data Protection Commission (NDPC)</strong> at ndpb.gov.ng or by email at info@ndpb.gov.ng.
                 </Highlight>
               </section>
@@ -866,7 +864,7 @@ export default function PrivacyPage() {
                       </div>
                       <div>
                         <p className="font-mono text-[10px] text-gray-400 uppercase tracking-wider">{label}</p>
-                        <a href={`mailto:${value}`} className="font-display font-semibold text-sm text-gray-800 hover:text-violet-600 transition-colors block">{value}</a>
+                        <a href={`mailto:${value}`} className="font-display font-semibold text-sm text-gray-800 hover:text-orange-600 transition-colors block">{value}</a>
                         <p className="text-gray-400 text-xs mt-0.5">{desc}</p>
                       </div>
                     </div>
@@ -887,11 +885,11 @@ export default function PrivacyPage() {
                 <P>If you are not satisfied with our response, you have the right to complain to the <strong>Nigeria Data Protection Commission (NDPC)</strong>:</P>
                 <div className="flex items-center gap-3 mt-3">
                   <a href="https://ndpb.gov.ng" target="_blank" rel="noopener"
-                    className="inline-flex items-center gap-2 text-xs font-display font-semibold text-violet-600 hover:text-violet-700 transition-colors">
+                    className="inline-flex items-center gap-2 text-xs font-display font-semibold text-orange-600 hover:text-orange-700 transition-colors">
                     <FiExternalLink size={12} /> ndpb.gov.ng
                   </a>
                   <span className="text-gray-200">·</span>
-                  <a href="mailto:info@ndpb.gov.ng" className="text-xs font-mono text-gray-400 hover:text-violet-600 transition-colors">
+                  <a href="mailto:info@ndpb.gov.ng" className="text-xs font-mono text-gray-400 hover:text-orange-600 transition-colors">
                     info@ndpb.gov.ng
                   </a>
                 </div>
@@ -904,13 +902,13 @@ export default function PrivacyPage() {
                 <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(124,58,237,.12) 0%, transparent 70%)" }} />
                 <div className="scan-line" />
                 <div className="relative z-10">
-                  <p className="font-mono text-xs text-violet-400 uppercase tracking-[.2em] mb-3">Your agreement</p>
+                  <p className="font-mono text-xs text-orange-400 uppercase tracking-[.2em] mb-3">Your agreement</p>
                   <p className="font-display font-bold text-white text-lg mb-2">By using changeworker, you accept this Privacy Policy.</p>
                   <p className="text-white/38 text-sm font-display font-normal leading-relaxed mb-6 max-w-xl">
                     This Policy, together with our Terms & Conditions, constitutes the complete agreement regarding how we handle your personal data.
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    <a href="/terms" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-display font-bold text-sm px-6 py-3 rounded-xl transition-colors duration-200">
+                    <a href="/terms" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-display font-bold text-sm px-6 py-3 rounded-xl transition-colors duration-200">
                       Terms & Conditions <FiExternalLink size={13} />
                     </a>
                     <a href="mailto:privacy@changeworker.ng" className="inline-flex items-center gap-2 border border-white/12 hover:border-white/25 text-white/55 hover:text-white font-display font-bold text-sm px-6 py-3 rounded-xl transition-all duration-200">

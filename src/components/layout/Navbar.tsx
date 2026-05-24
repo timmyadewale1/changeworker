@@ -63,21 +63,21 @@ export default function Navbar() {
               </button>
 
               {desktopMenu === "hire" && (
-                <div className="absolute left-0 top-full mt-3 bg-white border shadow-xl w-[820px] p-8 z-50">
-                  <div className="grid grid-cols-3 gap-8">
+                <div className="absolute left-0 top-full mt-3 z-50 w-[min(1080px,calc(100vw-2rem))] rounded-[1.25rem] border bg-white p-6 shadow-xl">
+                  <div className="grid grid-cols-4 gap-x-6 gap-y-7">
                     {hireCategories.map((cat) => (
                       <div key={cat.title}>
-                        <h4 className="font-bold mb-4">
+                        <h4 className="mb-3 text-[15px] font-bold leading-snug">
                           {getCategoryDisplayTitle(cat, "nav")}
                         </h4>
-                        <ul className="space-y-2">
+                        <ul className="space-y-1.5">
                           {cat.items.map((item) => (
                             <li key={item}>
                               <Link
                                 href={`/hire/${item
                                   .toLowerCase()
                                   .replace(/\s+/g, "-")}`}
-                                className="text-sm text-gray-600 hover:text-[var(--primary)]"
+                                className="text-[13px] leading-5 text-gray-600 hover:text-[var(--primary)]"
                               >
                                 {item}
                               </Link>
@@ -106,21 +106,21 @@ export default function Navbar() {
               </button>
 
               {desktopMenu === "find" && (
-                <div className="absolute left-0 top-full mt-3 bg-white border shadow-xl w-[820px] p-8 z-50">
-                  <div className="grid grid-cols-3 gap-8">
+                <div className="absolute left-0 top-full mt-3 z-50 w-[min(1080px,calc(100vw-2rem))] rounded-[1.25rem] border bg-white p-6 shadow-xl">
+                  <div className="grid grid-cols-4 gap-x-6 gap-y-7">
                     {findWorkCategories.map((cat) => (
                       <div key={cat.title}>
-                        <h4 className="font-bold mb-4">
+                        <h4 className="mb-3 text-[15px] font-bold leading-snug">
                           {getCategoryDisplayTitle(cat, "nav")}
                         </h4>
-                        <ul className="space-y-2">
+                        <ul className="space-y-1.5">
                           {cat.items.map((item) => (
                             <li key={item}>
                               <Link
                                 href={`/jobs/${item
                                   .toLowerCase()
                                   .replace(/\s+/g, "-")}`}
-                                className="text-sm text-gray-600 hover:text-[var(--primary)]"
+                                className="text-[13px] leading-5 text-gray-600 hover:text-[var(--primary)]"
                               >
                                 {item}
                               </Link>

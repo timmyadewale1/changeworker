@@ -10,6 +10,7 @@ import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt"
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-body",
 })
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${jakarta.className} min-h-screen bg-white text-gray-900`}>
+      <body className={`${jakarta.className} ${jakarta.variable} min-h-screen bg-white text-gray-900`}>
         <Toaster
           position="top-right"
           toastOptions={{

@@ -180,10 +180,10 @@ export default function TermsPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
-        .font-display { font-family: 'Sora', sans-serif; }
-        .font-serif   { font-family: 'Instrument Serif', serif; }
+        .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-serif   { font-family: 'DM Sans', sans-serif; }
         .font-mono    { font-family: 'JetBrains Mono', monospace; }
 
         ::-webkit-scrollbar { width: 5px; }
@@ -226,7 +226,7 @@ export default function TermsPage() {
         <Navbar />
 
         {/* ── HERO HEADER ── */}
-        <div className="relative overflow-hidden bg-[#060912] pt-28 pb-20">
+        <div className="relative overflow-hidden border-b border-orange-100 bg-[linear-gradient(180deg,#fffdfa_0%,#ffffff_100%)] pt-28 pb-20">
           <div className="absolute inset-0 grid-light opacity-60" />
           <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(249,115,22,.1) 0%, transparent 70%)" }} />
           {/* dots */}
@@ -236,15 +236,15 @@ export default function TermsPage() {
           ))}
 
           <div className="relative max-w-4xl mx-auto px-6 text-center">
-            <div className="entry inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8" style={{animationDelay:".05s"}}>
+            <div className="entry inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 mb-8" style={{animationDelay:".05s"}}>
               <TbScale size={13} className="text-orange-400" />
-              <span className="font-mono text-xs text-white/55 uppercase tracking-[.2em]">Legal Document</span>
+              <span className="font-mono text-xs text-orange-700 uppercase tracking-[.2em]">Legal Document</span>
             </div>
 
-            <h1 className="entry font-display font-black text-5xl lg:text-6xl text-white leading-[.95] tracking-tight mb-4" style={{animationDelay:".15s"}}>
+            <h1 className="entry font-display font-black text-5xl lg:text-6xl text-[var(--public-ink)] leading-[.95] tracking-tight mb-4" style={{animationDelay:".15s"}}>
               Terms &<br /><span className="shimmer">Conditions</span>
             </h1>
-            <p className="entry font-serif italic text-2xl text-white/40 mb-10" style={{animationDelay:".28s"}}>
+            <p className="entry font-serif italic text-2xl text-[var(--public-soft-ink)] mb-10" style={{animationDelay:".28s"}}>
               changeworker platform agreement
             </p>
 
@@ -256,15 +256,14 @@ export default function TermsPage() {
                 { label: "Jurisdiction", value: "Federal Republic of Nigeria", icon: FiGlobe },
                 { label: "Version", value: "1.2", icon: FiFileText },
               ].map(({ label, value, icon: Icon }) => (
-                <div key={label} className="flex items-center gap-2.5 bg-white/6 border border-white/10 rounded-xl px-4 py-2.5 backdrop-blur-sm">
+                <div key={label} className="flex items-center gap-2.5 bg-white border border-orange-100 rounded-xl px-4 py-2.5 shadow-sm">
                   <Icon size={12} className="text-orange-400" />
-                  <span className="text-white/35 text-xs font-mono">{label}:</span>
-                  <span className="text-white/70 text-xs font-semibold font-display">{value}</span>
+                  <span className="text-gray-500 text-xs font-mono">{label}:</span>
+                  <span className="text-[var(--public-ink)] text-xs font-semibold font-display">{value}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none" />
         </div>
 
         {/* ── QUICK SUMMARY BANNER ── */}
@@ -277,7 +276,7 @@ export default function TermsPage() {
               <div>
                 <p className="font-display font-bold text-gray-900 text-sm mb-1">Plain-English Summary</p>
                 <p className="text-gray-600 text-sm leading-relaxed font-display font-normal">
-                  changeworker connects nonprofits and social enterprises with freelance professionals through profile discovery, proposals, messaging, workspaces, and payment flows. We charge a <strong>10% platform fee</strong> on completed projects. Both parties must behave professionally. Nigerian law governs this agreement. If something goes wrong, reach us at <strong>legal@changeworker.ng</strong>.
+                  changeworker connects Social impact organizations and social enterprises with freelance professionals through profile discovery, proposals, messaging, workspaces, and payment flows. We charge a <strong>10% platform fee</strong> on completed projects. Both parties must behave professionally. Nigerian law governs this agreement. If something goes wrong, reach us at <strong>legal@changeworker.ng</strong>.
                 </p>
               </div>
             </div>
@@ -718,19 +717,18 @@ export default function TermsPage() {
               <Divider />
 
               {/* ── ACCEPTANCE FOOTER ── */}
-              <div className="rounded-2xl bg-[#060912] p-8 mt-4 relative overflow-hidden">
-                <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(249,115,22,.1) 0%, transparent 70%)" }} />
+              <div className="rounded-2xl border border-orange-100 bg-[linear-gradient(135deg,#fffaf5_0%,#ffffff_45%,#fff3e8_100%)] p-8 mt-4 relative overflow-hidden">
                 <div className="relative">
                   <p className="font-mono text-xs text-orange-400 uppercase tracking-[.2em] mb-3">Your agreement</p>
-                  <p className="font-display font-bold text-white text-lg mb-2">By using changeworker, you agree to these Terms.</p>
-                  <p className="text-white/40 text-sm font-display font-normal leading-relaxed mb-6 max-w-xl">
+                  <p className="font-display font-bold text-[var(--public-ink)] text-lg mb-2">By using changeworker, you agree to these Terms.</p>
+                  <p className="text-[var(--public-soft-ink)] text-sm font-display font-normal leading-relaxed mb-6 max-w-xl">
                     These Terms, together with our Privacy Policy, constitute the entire agreement between you and Impactpal Africa with respect to your use of the changeworker platform.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <a href="/signup" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-display font-bold text-sm px-6 py-3 rounded-xl transition-colors duration-200">
                       Create Account <FiArrowLeft size={13} className="rotate-180" />
                     </a>
-                    <a href="/privacy" className="inline-flex items-center gap-2 border border-white/15 hover:border-white/30 text-white/60 hover:text-white font-display font-bold text-sm px-6 py-3 rounded-xl transition-all duration-200">
+                    <a href="/privacy" className="inline-flex items-center gap-2 border border-orange-200 hover:border-orange-300 text-[var(--public-soft-ink)] hover:text-[var(--primary-dark)] font-display font-bold text-sm px-6 py-3 rounded-xl transition-all duration-200">
                       Privacy Policy <FiExternalLink size={13} />
                     </a>
                   </div>
