@@ -8,7 +8,6 @@ import {
   MessageCircle,
   Paperclip,
   Send,
-  Sparkles,
   X,
   FileText,
   ImageIcon,
@@ -223,7 +222,7 @@ export default function DashboardHelpAssistant({ role }: Props) {
           type="button"
           className="fixed bottom-6 left-6 z-40 inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-extrabold text-white shadow-lg shadow-orange-200 transition hover:opacity-95"
         >
-          <Sparkles size={16} />
+          <HelpCircle size={16} />
           Help?
         </button>
       </DialogTrigger>
@@ -233,7 +232,7 @@ export default function DashboardHelpAssistant({ role }: Props) {
           <div className="flex items-start justify-between gap-4 pr-8">
             <div>
               <DialogTitle className="flex items-center gap-2 text-xl font-extrabold text-gray-900">
-                <Sparkles size={18} className="text-[var(--primary)]" />
+                <MessageCircle size={18} className="text-[var(--primary)]" />
                 Dashboard help assistant
               </DialogTitle>
               <DialogDescription className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">

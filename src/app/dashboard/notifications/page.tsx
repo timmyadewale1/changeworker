@@ -7,10 +7,10 @@ import NotificationsFeed from "@/components/notifications/NotificationsFeed"
 export default function NotificationsPage() {
   return (
     <RequireAuth>
-      <div className="min-h-screen bg-[var(--secondary)]">
+      <div className="dashboard-page min-h-screen bg-[var(--secondary)]">
         <AuthNavbar />
-        <div className="mx-auto max-w-5xl px-4 py-8">
-          <div className="mb-6 rounded-[2rem] bg-white p-6 shadow-sm">
+        <div className="dashboard-page-shell mx-auto max-w-5xl px-4 py-8">
+          <div className="dashboard-page-header mb-6 rounded-[2rem] bg-white p-6 shadow-sm">
             <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--primary)]">
               Notification center
             </div>

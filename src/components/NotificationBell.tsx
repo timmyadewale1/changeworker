@@ -76,7 +76,7 @@ export default function NotificationBell() {
       </motion.button>
 
       {dropdownOpen ? (
-        <div className="fixed sm:absolute left-0 right-0 top-auto sm:left-auto sm:right-0 z-50 m-2 sm:m-0 sm:mt-2 w-[calc(100%-1rem)] sm:w-96 overflow-y-auto rounded-[1.5rem] border bg-white shadow-xl" style={{ maxHeight: '80vh' }}>
+        <div className="fixed right-2 left-auto top-[68px] z-50 w-[min(24rem,calc(100vw-1rem))] overflow-y-auto rounded-[1.5rem] border bg-white shadow-xl sm:absolute sm:top-full sm:mt-2 sm:w-96" style={{ maxHeight: '80vh' }}>
           <div className="sticky top-0 border-b bg-white px-5 py-4">
             <div className="flex items-center justify-between gap-3">
               <div>

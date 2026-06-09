@@ -166,9 +166,9 @@ export default function TalentProposalsHubPage() {
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div>
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell max-w-7xl mx-auto px-4 py-6">
+          <div className="dashboard-page-header rounded-2xl p-4 md:p-5">
             <h1 className="text-2xl md:text-3xl font-extrabold">Your proposals</h1>
             <p className="text-sm text-gray-600 mt-1">
               Track proposals - edits lock once the client views your proposal.

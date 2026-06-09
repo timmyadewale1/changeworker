@@ -33,9 +33,9 @@ import { Separator } from "@/components/ui/separator"
 import {
   ArrowLeft,
   Send,
-  Sparkles,
   CheckCircle2,
   XCircle,
+  MessageSquare,
   FileSignature,
   Briefcase,
   Download,
@@ -1017,7 +1017,7 @@ export default function ThreadPage() {
             </div>
 
             <div className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-full border bg-white">
-              <Sparkles size={16} className="text-[var(--primary)]" />
+              <MessageSquare size={16} className="text-[var(--primary)]" />
               <span className="text-gray-700">In-app messaging</span>
             </div>
           </div>
@@ -1032,10 +1032,7 @@ export default function ThreadPage() {
                     ref={scrollerRef}
                     className="h-[55vh] overflow-y-auto p-5 space-y-3 relative"
                     style={{
-  backgroundImage: `
-    linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)),
-    url("/chat-doodles.png")
-  `,
+  backgroundImage: `url("/chat-doodles.png")`,
   backgroundRepeat: "repeat, repeat",
   backgroundSize: "auto, 260px 260px",
   backgroundPosition: "0 0, 0 0",

@@ -20,11 +20,10 @@ import { auth, db } from "@/lib/firebase"
 import Button from "@/components/ui/Button"
 import { useAuth } from "@/context/AuthContext"
 import { useUserRole } from "@/hooks/useUserRole"
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore"
+import { doc, getDoc } from "firebase/firestore"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import AvatarUploader from "@/components/profile/parts/AvatarUploader"
 import NotificationBell from "@/components/NotificationBell"
-import { clearAuthSession } from "@/lib/authSession"
+import { cacheAuthProfile, clearAuthSession, getCachedAuthProfile } from "@/lib/authSession"
 
 
 type Role = "talent" | "client" | null
@@ -35,16 +34,9 @@ export default function AuthNavbar() {
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const [fullName, setFullName] = useState<string>("")
-  const [photoUrl, setPhotoUrl] = useState<string>("")
-   const savePartial = async (patch: any) => {
-      if (!user?.uid) return
-      await setDoc(
-        doc(db, "users", user.uid),
-        { ...patch, updatedAt: serverTimestamp() },
-        { merge: true }
-      )
-    }
+  const cachedProfile = typeof window !== "undefined" ? getCachedAuthProfile() : { fullName: "", photoUrl: "" }
+  const [fullName, setFullName] = useState<string>(cachedProfile.fullName)
+  const [photoUrl, setPhotoUrl] = useState<string>(cachedProfile.photoUrl)
 
   useEffect(() => {
     let alive = true
@@ -55,8 +47,11 @@ export default function AuthNavbar() {
         const snap = await getDoc(doc(db, "users", user.uid))
         const data = snap.data() as any
         if (!alive) return
-        setFullName(String(data?.fullName || ""))
-        setPhotoUrl(String(data?.photoUrl || "")) // we’ll set later on profile page
+        const nextName = String(data?.fullName || data?.client?.orgName || user?.displayName || user?.email || "")
+        const nextPhoto = String(data?.photoUrl || "")
+        setFullName(nextName)
+        setPhotoUrl(nextPhoto) // we’ll set later on profile page
+        cacheAuthProfile({ fullName: nextName, photoUrl: nextPhoto })
       }  catch (e) {
   console.error("AuthNavbar users/{uid} read failed:", e)
 }
@@ -78,7 +73,8 @@ export default function AuthNavbar() {
       clearAuthSession()
       window.localStorage.removeItem("sm_role")
       toast.success("Logged out")
-      router.push("/")
+      router.replace("/login")
+      router.refresh()
     } catch {
       toast.error("Logout failed")
     }
@@ -87,14 +83,12 @@ export default function AuthNavbar() {
   const links = useMemo(() => {
     if (loadingRole || !role) {
       return [
-        { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
         { href: "/dashboard/workspaces", label: "Workspaces", icon: Briefcase },
       ]
     }
 
     if (role === "talent") {
       return [
-        { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
         { href: "/dashboard/find-work", label: "Find Work", icon: Briefcase },
         { href: "/dashboard/proposals", label: "Proposals", icon: PlusCircle },
         { href: "/dashboard/workspaces", label: "Workspaces", icon: Briefcase },
@@ -102,7 +96,6 @@ export default function AuthNavbar() {
     }
 
     return [
-      { href: "/dashboard", label: "Dashboard", icon: LayoutGrid },
       { href: "/dashboard/find-talent", label: "Hire Talent", icon: Users },
       { href: "/dashboard/post-gig", label: "Post a Gig", icon: PlusCircle },
       { href: "/dashboard/gigs", label: "Gigs", icon: Briefcase },
@@ -134,10 +127,11 @@ export default function AuthNavbar() {
   }, [fullName, user?.email])
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
+    <>
+    <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-3 px-4 py-3">
         {/* LEFT */}
-        <div className="flex min-w-0 items-center gap-6">
+        <div className="flex min-w-0 items-center gap-4 md:gap-6">
           <Link
             href="/dashboard"
             className="flex items-center gap-2 text-xl font-extrabold text-[var(--primary)]"
@@ -146,9 +140,9 @@ export default function AuthNavbar() {
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden xl:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6 min-w-0">
             {links.map((l) => (
-              <Link key={l.href} href={l.href} className={navItem}>
+              <Link key={l.href} href={l.href} className={`${navItem} whitespace-nowrap`}>
                 {l.label}
               </Link>
             ))}
@@ -156,7 +150,7 @@ export default function AuthNavbar() {
         </div>
 
         {/* RIGHT (DESKTOP) */}
-        <div className="ml-auto hidden min-w-0 items-center gap-3 md:flex">
+        <div className="hidden min-w-0 items-center gap-3 md:flex">
           <form
             onSubmit={(e) => {
               e.preventDefault()
@@ -165,16 +159,16 @@ export default function AuthNavbar() {
               if (!q) return
               router.push(`/search?type=${searchType}&q=${encodeURIComponent(q)}`)
             }}
-            className="hidden items-center overflow-hidden rounded-xl border bg-white lg:flex"
+            className="hidden items-center overflow-hidden rounded-xl border bg-white md:flex lg:w-[clamp(170px,18vw,260px)]"
           >
             <div className="px-3 text-gray-500">
               <Search size={16} />
             </div>
-            <input
-              name="q"
-              placeholder={searchPlaceholder}
-              className="w-72 bg-transparent px-2 py-2 text-sm outline-none xl:w-80"
-            />
+              <input
+                name="q"
+                placeholder={searchPlaceholder}
+                className="w-[clamp(170px,18vw,260px)] min-w-0 bg-transparent px-2 py-2 text-sm outline-none"
+              />
           </form>
 
           <div className="flex items-center gap-1">
@@ -196,36 +190,27 @@ export default function AuthNavbar() {
 
           <NotificationBell />
 
-          <Link href="/dashboard/profile" className="flex items-center gap-2">
-            {/* <Avatar className="h-9 w-9">
+          <Link href="/dashboard/profile" className="hidden items-center gap-2 xl:flex">
+            <Avatar className="h-9 w-9">
               {photoUrl ? (
                 <AvatarImage src={photoUrl} alt="Profile" />
               ) : (
                 <AvatarFallback>{initials}</AvatarFallback>
               )}
-            </Avatar> */}
-            <AvatarUploader
-                          uid={user!.uid}
-                          currentUrl={photoUrl}
-                          displayName={fullName}
-                          onUploaded={async (url) => {
-                            setPhotoUrl(url)
-                            await savePartial({ photoUrl: url })
-                          }}
-                        />
+            </Avatar>
             <span className={navItem}>
               {fullName ? fullName.split(" ")[0] : "Account"}
             </span>
           </Link>
 
-          <button onClick={handleLogout} className={navItem}>
+          <button onClick={handleLogout} className={`${navItem} whitespace-nowrap`}>
             Logout
           </button>
         </div>
 
         {/* MOBILE TOGGLE */}
         <button
-          className="md:hidden"
+          className="md:hidden shrink-0"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle menu"
         >
@@ -311,5 +296,7 @@ export default function AuthNavbar() {
         </div>
       )}
     </header>
+    <div aria-hidden className="h-[73px]" />
+    </>
   )
 }

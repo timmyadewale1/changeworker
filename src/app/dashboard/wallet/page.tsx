@@ -11,6 +11,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import FancyLoader from "@/components/ui/FancyLoader"
 import { Wallet, Landmark, ArrowDownToLine, Edit2 } from "lucide-react"
 import {
   Select,
@@ -28,6 +29,7 @@ type WalletDoc = {
   totalEarned?: number
   totalWithdrawn?: number
   totalSpent?: number
+  totalLoaded?: number
   bank?: {
     accountNumber: string
     bankCode: string
@@ -43,6 +45,7 @@ type Tx = {
   reason: string
   amount: number
   status: string
+  settlementStatus?: string
   createdAt?: any
   meta?: any
 }
@@ -71,10 +74,15 @@ export default function WalletPage() {
   const [withdrawAmount, setWithdrawAmount] = useState("")
   const [withdrawing, setWithdrawing] = useState(false)
 
+  const [topupAmount, setTopupAmount] = useState("")
+  const [toppingUp, setToppingUp] = useState(false)
+
   const isTalent = wallet?.role === "talent"
   const isClient = wallet?.role === "client"
+  const clientAvailableBalance = Number(wallet?.availableBalance || 0)
+  const clientTotalLoaded = Number(wallet?.totalLoaded || 0)
   const clientEscrowFunded = txs
-    .filter((tx) => tx.reason === "workspace_funding" && tx.status === "completed")
+    .filter((tx) => tx.reason === "workspace_funding" && ["completed", "paid", "success"].includes(String(tx.status || "").toLowerCase()))
     .reduce((sum, tx) => sum + Number(tx.amount || 0), 0)
   const filteredBanks = banks.filter((bank) => {
     const query = bankSearch.trim().toLowerCase()
@@ -265,13 +273,45 @@ export default function WalletPage() {
     }
   }
 
+  const txStatusLabel = (status: string, settlementStatus?: string) => {
+    const normalized = String(settlementStatus || status || "").toLowerCase()
+    if (["paid", "completed", "success", "successful"].includes(normalized)) return "paid"
+    if (["failed", "declined", "reversed"].includes(normalized)) return "failed"
+    if (["processing", "requested", "pending", "initiated"].includes(normalized)) return "pending"
+    return normalized || "recorded"
+  }
+
+
+  const topUpWallet = async () => {
+    const amount = Number(topupAmount || 0)
+    if (!amount || amount < 1000) return toast.error("Minimum top-up is NGN 1,000")
+
+    setToppingUp(true)
+    try {
+      const token = await tokenGetter()
+      const resp = await fetch("/api/paystack/wallet-topup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ amount }),
+      })
+      const json = await resp.json()
+      if (!resp.ok) throw new Error(json?.error || "Failed to initialize top up")
+      window.location.href = json.authorizationUrl
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error?.message || "Failed to top up wallet")
+    } finally {
+      setToppingUp(false)
+    }
+  }
+
   return (
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="mx-auto max-w-5xl space-y-4 px-4 py-6">
-          <Card className="rounded-2xl">
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell mx-auto max-w-5xl space-y-4 px-4 py-6">
+          <Card className="dashboard-card-accent rounded-2xl">
             <CardHeader>
               <CardTitle className="inline-flex items-center gap-2 text-base font-extrabold">
                 <Wallet className="h-5 w-5 text-[var(--primary)]" />
@@ -306,15 +346,17 @@ export default function WalletPage() {
                     </>
                   ) : (
                     <>
-                      <div className="rounded-2xl border bg-white p-4 md:col-span-2">
-                        <div className="font-semibold text-gray-600">Total funded</div>
-                        <div className="text-2xl font-extrabold">{money(wallet.totalSpent || clientEscrowFunded)}</div>
-                        <div className="mt-1 text-xs font-semibold text-gray-500">Confirmed workspace funding history</div>
+                      <div className="rounded-2xl border border-orange-100 bg-white p-4 md:col-span-2">
+                        <div className="font-semibold text-gray-600">Wallet balance</div>
+                        <div className="text-2xl font-extrabold">{money(clientAvailableBalance)}</div>
+                        <div className="mt-1 text-xs font-semibold text-gray-500">
+                          Funds available for workspace funding
+                        </div>
                       </div>
-                      <div className="rounded-2xl border bg-white p-4">
-                        <div className="font-semibold text-gray-600">Escrow funded</div>
-                        <div className="text-xl font-extrabold">{money(clientEscrowFunded)}</div>
-                        <div className="mt-1 text-xs font-semibold text-gray-500">Funding transaction volume</div>
+                      <div className="rounded-2xl border border-orange-100 bg-white p-4">
+                        <div className="font-semibold text-gray-600">Total funded</div>
+                        <div className="text-xl font-extrabold">{money(clientTotalLoaded || clientEscrowFunded)}</div>
+                        <div className="mt-1 text-xs font-semibold text-gray-500">Confirmed wallet top-ups</div>
                       </div>
                     </>
                   )}
@@ -325,7 +367,7 @@ export default function WalletPage() {
 
           {wallet ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Card className="rounded-2xl">
+              <Card className="dashboard-card-accent rounded-2xl">
                 <CardHeader>
                   <CardTitle className="inline-flex w-full items-center justify-between gap-2 text-base font-extrabold">
                     <span className="inline-flex items-center gap-2">
@@ -346,7 +388,7 @@ export default function WalletPage() {
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm">
                   {wallet.bank?.recipientCode && !editMode ? (
-                    <div className="rounded-2xl border bg-white p-4">
+                      <div className="rounded-2xl border border-orange-100 bg-white p-4">
                       <div className="font-extrabold">{wallet.bank.accountName}</div>
                       <div className="mt-1 text-gray-600">
                         {wallet.bank.accountNumber} • {wallet.bank.bankName}
@@ -369,7 +411,7 @@ export default function WalletPage() {
                       </div>
 
                       {banksLoading ? (
-                        <div className="rounded-2xl border px-3 py-2 text-sm text-gray-600">Loading banks...</div>
+                        <FancyLoader label="Loading banks..." compact />
                       ) : banks.length === 0 ? (
                         <div className="rounded-2xl border px-3 py-2 text-sm text-gray-600">
                           Failed to load banks. Please refresh.
@@ -457,7 +499,7 @@ export default function WalletPage() {
               </Card>
 
               {isTalent ? (
-                <Card className="rounded-2xl">
+                <Card className="dashboard-card-accent rounded-2xl">
                   <CardHeader>
                     <CardTitle className="inline-flex items-center gap-2 text-base font-extrabold">
                       <ArrowDownToLine className="h-5 w-5 text-[var(--primary)]" />
@@ -501,7 +543,7 @@ export default function WalletPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
-                    <div className="rounded-2xl border bg-white p-4">
+                      <div className="rounded-2xl border border-orange-100 bg-white p-4">
                       <div className="font-semibold text-gray-600">Funding transactions</div>
                       <div className="text-xl font-extrabold">
                         {txs.filter((tx) => tx.reason === "workspace_funding").length}
@@ -510,7 +552,7 @@ export default function WalletPage() {
                         Workspace funding records captured so far
                       </div>
                     </div>
-                    <div className="rounded-2xl border bg-white p-4">
+                      <div className="rounded-2xl border border-orange-100 bg-white p-4">
                       <div className="font-semibold text-gray-600">Bank setup</div>
                       <div className="text-base font-extrabold">
                         {wallet.bank?.recipientCode ? "Ready" : "Not added yet"}
@@ -518,6 +560,28 @@ export default function WalletPage() {
                       <div className="mt-1 text-xs font-semibold text-gray-500">
                         Keep a verified bank account on file for account support.
                       </div>
+                    </div>
+                    <div className="rounded-2xl border bg-white p-4 space-y-3">
+                      <div>
+                        <div className="font-semibold text-gray-600">Top up wallet</div>
+                        <div className="mt-1 text-xs font-semibold text-gray-500">
+                          Add funds once and reuse them when you want to fund a workspace.
+                        </div>
+                      </div>
+                      <Input
+                        value={topupAmount}
+                        onChange={(e) => setTopupAmount(e.target.value)}
+                        placeholder="Amount to add (NGN)"
+                        className="rounded-2xl"
+                      />
+                      <button
+                        type="button"
+                        onClick={topUpWallet}
+                        disabled={toppingUp || !topupAmount}
+                        className="w-full rounded-2xl bg-[var(--primary)] py-2 font-extrabold text-white disabled:opacity-60"
+                      >
+                        {toppingUp ? "Redirecting..." : "Top up with Paystack"}
+                      </button>
                     </div>
                   </CardContent>
                 </Card>
@@ -536,17 +600,19 @@ export default function WalletPage() {
                 txs.map((tx) => (
                   <div
                     key={tx.id}
-                    className="flex items-center justify-between gap-3 rounded-2xl border bg-white p-4"
+                    className="flex items-start justify-between gap-3 rounded-2xl border bg-white p-4 min-w-0"
                   >
-                    <div className="min-w-0">
-                      <div className="truncate font-extrabold">{tx.reason}</div>
-                      <div className="text-xs font-semibold text-gray-500">{tx.id}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="break-words font-extrabold">{tx.reason}</div>
+                      <div className="break-all text-xs font-semibold text-gray-500">{tx.id}</div>
                     </div>
-                    <div className="text-right">
+                    <div className="shrink-0 text-right">
                       <div className={`font-extrabold ${tx.type === "credit" ? "text-green-700" : "text-gray-900"}`}>
                         {tx.type === "credit" ? "+" : "-"} {money(tx.amount)}
                       </div>
-                      <Badge className="rounded-full border bg-gray-100 text-gray-700">{tx.status}</Badge>
+                      <Badge className="rounded-full border bg-gray-100 text-gray-700">
+                        {txStatusLabel(tx.status, tx.settlementStatus)}
+                      </Badge>
                     </div>
                   </div>
                 ))
@@ -562,3 +628,4 @@ export default function WalletPage() {
     </RequireAuth>
   )
 }
+

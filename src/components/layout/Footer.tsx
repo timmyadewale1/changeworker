@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 
 const columns = [
   {
@@ -17,7 +18,7 @@ const columns = [
     links: [
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
-      { label: "Why us", href: "/why-us" },
+      // { label: "Why us", href: "/why-us" },
     ],
   },
   {
@@ -48,13 +49,19 @@ export default function Footer() {
             <p className="mb-5 text-xs text-white/15">A product of Impactpal Africa</p>
 
             <div className="flex gap-2">
-              {["𝕏", "in", "ig"].map((item) => (
+              {[
+                { icon: FaXTwitter, label: "X" },
+                { icon: FaLinkedinIn, label: "LinkedIn" },
+                { icon: FaInstagram, label: "Instagram" },
+                { icon: FaFacebookF, label: "Facebook" },
+              ].map(({ icon: Icon, label }) => (
                 <a
-                  key={item}
+                  key={label}
                   href="#"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/5 text-xs font-bold text-white/30 transition-all hover:bg-white/12 hover:text-white"
+                  aria-label={label}
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/5 text-white/35 transition-all hover:bg-white/12 hover:text-white"
                 >
-                  {item}
+                  <Icon size={14} />
                 </a>
               ))}
             </div>

@@ -43,6 +43,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    const allowedActions = new Set(["release_talent", "refund_client", "partial_refund", "close_case"])
+    if (!allowedActions.has(action)) {
+      return NextResponse.json({ error: "Invalid dispute action" }, { status: 400 })
+    }
+
     const disputeRef = adminDb.collection("disputes").doc(disputeId)
     const disputeSnap = await disputeRef.get()
     const dispute = disputeSnap.data() as any
@@ -72,6 +77,8 @@ export async function POST(req: Request) {
       }
     }
 
+    const notes = String(adminNotes || "").slice(0, 5000)
+
     const clientWalletRef = clientUid ? adminDb.collection("wallets").doc(clientUid) : null
     const talentWalletRef = talentUid ? adminDb.collection("wallets").doc(talentUid) : null
     const payoutRevenueRef = adminDb.collection("payoutRevenue").doc()
@@ -96,7 +103,15 @@ export async function POST(req: Request) {
         talentNetAmount,
         platformFee,
         resolvedBy: userId,
-        adminNotes: String(adminNotes || ""),
+        adminNotes: notes,
+        settlementStatus:
+          action === "close_case"
+            ? "closed"
+            : action === "refund_client"
+              ? "refunded"
+              : action === "partial_refund"
+                ? "split_settlement"
+                : "released",
         resolvedAt: FieldValue.serverTimestamp(),
       }
 
@@ -249,24 +264,24 @@ export async function POST(req: Request) {
         throw new Error("Invalid action")
       }
 
-      tx.update(disputeRef, {
-        status: action === "close_case" ? "closed" : `resolved_${action}`,
-        stage: "resolved",
-        resolvedAt: FieldValue.serverTimestamp(),
-        resolution: action,
-        adminNotes: String(adminNotes || ""),
-        resolutionSummary,
-        resolutionHistory: FieldValue.arrayUnion({
-          action,
-          clientRefundAmount,
-          talentGrossAmount,
-          talentNetAmount,
-          platformFee,
-          resolvedBy: userId,
-          adminNotes: String(adminNotes || ""),
-          at: new Date().toISOString(),
-        }),
-      })
+        tx.update(disputeRef, {
+          status: action === "close_case" ? "closed" : `resolved_${action}`,
+          stage: "resolved",
+          resolvedAt: FieldValue.serverTimestamp(),
+          resolution: action,
+          adminNotes: notes,
+          resolutionSummary,
+          resolutionHistory: FieldValue.arrayUnion({
+            action,
+            clientRefundAmount,
+            talentGrossAmount,
+            talentNetAmount,
+            platformFee,
+            resolvedBy: userId,
+            adminNotes: notes,
+            at: new Date().toISOString(),
+          }),
+        })
 
       tx.set(
         workspaceRef,
@@ -276,13 +291,37 @@ export async function POST(req: Request) {
           payment: {
             ...(workspace.payment || {}),
             escrow: action === "close_case" ? workspace?.payment?.escrow !== false : false,
+            status:
+              action === "refund_client"
+                ? "refunded"
+                : action === "partial_refund"
+                  ? "partially_refunded"
+                  : action === "release_talent"
+                    ? "released"
+                    : workspace?.payment?.status || "settled",
             disputeResolution: {
               action,
               clientRefundAmount,
               talentGrossAmount,
               talentNetAmount,
               platformFee,
+              settlementStatus:
+                action === "close_case"
+                  ? "closed"
+                  : action === "refund_client"
+                    ? "refunded"
+                    : action === "partial_refund"
+                      ? "split_settlement"
+                      : "released",
             },
+            settlementStatus:
+              action === "close_case"
+                ? "closed"
+                : action === "refund_client"
+                  ? "refunded"
+                  : action === "partial_refund"
+                    ? "split_settlement"
+                    : "released",
           },
         },
         { merge: true }

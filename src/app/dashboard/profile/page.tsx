@@ -13,16 +13,22 @@ export default function ProfilePage() {
 
   return (
     <RequireAuth>
-      <AuthNavbar />
-      {loadingRole ? (
-        <div className="bg-[var(--secondary)] min-h-[calc(100vh-64px)] flex items-center justify-center">
-          <div className="text-sm text-gray-600">Loading profile…</div>
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <AuthNavbar />
+        <div className="dashboard-page-shell">
+          {loadingRole ? (
+            <div className="flex min-h-[calc(100vh-132px)] items-center justify-center">
+              <div className="rounded-full border bg-white px-5 py-3 text-sm text-gray-600 shadow-sm">
+                Loading profile...
+              </div>
+            </div>
+          ) : role === "client" ? (
+            <ClientProfilePage />
+          ) : (
+            <TalentProfilePage />
+          )}
         </div>
-      ) : role === "client" ? (
-        <ClientProfilePage />
-      ) : (
-        <TalentProfilePage />
-      )}
+      </div>
     </RequireAuth>
   )
 }

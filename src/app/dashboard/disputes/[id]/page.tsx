@@ -20,6 +20,8 @@ import {
 import { motion } from "framer-motion"
 import Link from "next/link"
 import toast from "react-hot-toast"
+import FancyLoader from "@/components/ui/FancyLoader"
+import { buildWorkspaceDisplayTitle } from "@/lib/workspaceDisplay"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -104,6 +106,9 @@ export default function DisputeDetailPage() {
 
   useEffect(() => {
     if (!id || !user) return
+    let cancelled = false
+    let unsubscribeMessages: (() => void) | undefined
+    let unsubscribeEvidence: (() => void) | undefined
 
     const fetchData = async () => {
       try {
@@ -116,6 +121,7 @@ export default function DisputeDetailPage() {
         }
 
         const disputeData = { id: disputeDoc.id, ...disputeDoc.data() } as Dispute
+        if (cancelled) return
         setDispute(disputeData)
 
         const clientUid = disputeData.clientUid || disputeData.clientId || ""
@@ -133,7 +139,7 @@ export default function DisputeDetailPage() {
 
         // Fetch workspace
         const workspaceDoc = await getDoc(doc(db, "workspaces", disputeData.workspaceId))
-        if (workspaceDoc.exists()) {
+        if (!cancelled && workspaceDoc.exists()) {
           setWorkspace({ id: workspaceDoc.id, ...workspaceDoc.data() })
         }
 
@@ -143,65 +149,67 @@ export default function DisputeDetailPage() {
           getDoc(doc(db, "publicProfiles", talentUid))
         ])
 
-        if (clientDoc.exists()) setClient({ id: clientDoc.id, ...clientDoc.data() })
-        if (talentDoc.exists()) setTalent({ id: talentDoc.id, ...talentDoc.data() })
+        if (!cancelled && clientDoc.exists()) setClient({ id: clientDoc.id, ...clientDoc.data() })
+        if (!cancelled && talentDoc.exists()) setTalent({ id: talentDoc.id, ...talentDoc.data() })
 
-        setLoading(false)
+        if (!cancelled) setLoading(false)
+
+        const messagesQuery = query(
+          collection(db, "disputeMessages"),
+          where("disputeId", "==", id),
+          orderBy("createdAt", "asc")
+        )
+
+        unsubscribeMessages = onSnapshot(
+          messagesQuery,
+          (snapshot) => {
+            if (cancelled) return
+            const messagesData = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            })) as DisputeMessage[]
+            setMessages(messagesData)
+          },
+          (error) => {
+            console.error("Error listening to dispute messages:", error)
+            toast.error("You do not have access to dispute messages.")
+          }
+        )
+
+        const evidenceQuery = query(
+          collection(db, "disputeEvidence"),
+          where("disputeId", "==", id),
+          orderBy("createdAt", "asc")
+        )
+
+        unsubscribeEvidence = onSnapshot(
+          evidenceQuery,
+          (snapshot) => {
+            if (cancelled) return
+            const evidenceData = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            })) as DisputeEvidence[]
+            setEvidence(evidenceData)
+          },
+          (error) => {
+            console.error("Error listening to dispute evidence:", error)
+            toast.error("You do not have access to dispute evidence.")
+          }
+        )
       } catch (error) {
         console.error("Error fetching dispute:", error)
         toast.error("Failed to load dispute")
+        if (!cancelled) setLoading(false)
       }
     }
 
     fetchData()
 
-    // Listen for messages
-    const messagesQuery = query(
-      collection(db, "disputeMessages"),
-      where("disputeId", "==", id),
-      orderBy("createdAt", "asc")
-    )
-
-    const unsubscribeMessages = onSnapshot(
-      messagesQuery,
-      (snapshot) => {
-        const messagesData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as DisputeMessage[]
-        setMessages(messagesData)
-      },
-      (error) => {
-        console.error("Error listening to dispute messages:", error)
-        toast.error("You do not have access to dispute messages.")
-      }
-    )
-
-    // Listen for evidence
-    const evidenceQuery = query(
-      collection(db, "disputeEvidence"),
-      where("disputeId", "==", id),
-      orderBy("createdAt", "asc")
-    )
-
-    const unsubscribeEvidence = onSnapshot(
-      evidenceQuery,
-      (snapshot) => {
-        const evidenceData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as DisputeEvidence[]
-        setEvidence(evidenceData)
-      },
-      (error) => {
-        console.error("Error listening to dispute evidence:", error)
-        toast.error("You do not have access to dispute evidence.")
-      }
-    )
-
     return () => {
-      unsubscribeMessages()
-      unsubscribeEvidence()
+      cancelled = true
+      unsubscribeMessages?.()
+      unsubscribeEvidence?.()
     }
   }, [id, user, router])
 
@@ -286,6 +294,21 @@ export default function DisputeDetailPage() {
     return <Badge className={config.color}>{config.label}</Badge>
   }
 
+  const getSettlementBadge = (status?: string) => {
+    const normalized = String(status || "pending")
+    const config =
+      {
+        pending: { color: "bg-gray-100 text-gray-700", label: "Settlement pending" },
+        released: { color: "bg-emerald-100 text-emerald-700", label: "Released to talent" },
+        refunded: { color: "bg-red-100 text-red-700", label: "Refunded to client" },
+        partially_refunded: { color: "bg-violet-100 text-violet-700", label: "Split settlement" },
+        split_settlement: { color: "bg-violet-100 text-violet-700", label: "Split settlement" },
+        closed: { color: "bg-gray-100 text-gray-700", label: "Closed without payout" },
+      }[normalized] || { color: "bg-gray-100 text-gray-700", label: normalized.replace(/_/g, " ") }
+
+    return <Badge className={config.color}>{config.label}</Badge>
+  }
+
   const getStageIcon = (stage: string) => {
     switch (stage) {
       case "discussion": return <MessageSquare className="w-4 h-4" />
@@ -298,12 +321,7 @@ export default function DisputeDetailPage() {
   if (loading) {
     return (
       <RequireAuth>
-        <div className="min-h-screen bg-gray-50">
-          <AuthNavbar />
-          <div className="max-w-6xl mx-auto px-4 py-8">
-            <div className="animate-pulse">Loading dispute...</div>
-          </div>
-        </div>
+        <FancyLoader label="Loading dispute..." />
       </RequireAuth>
     )
   }
@@ -323,7 +341,14 @@ export default function DisputeDetailPage() {
             </Button>
             <div>
               <h1 className="text-2xl font-bold">Dispute #{dispute.id.slice(-8)}</h1>
-              <p className="text-gray-600">Workspace: {workspace?.title || "Unknown"}</p>
+              <p className="text-gray-600">
+                Workspace:{" "}
+                {buildWorkspaceDisplayTitle({
+                  gigTitle: workspace?.gigTitle || workspace?.title || "Untitled gig",
+                  clientName: client?.displayName || client?.fullName || "Client",
+                  talentName: talent?.displayName || talent?.fullName || "Talent",
+                })}
+              </p>
             </div>
           </div>
 
@@ -342,6 +367,10 @@ export default function DisputeDetailPage() {
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Status:</span>
                     {getStatusBadge(dispute.status)}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Settlement:</span>
+                    {getSettlementBadge(workspace?.payment?.settlementStatus)}
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Stage:</span>
@@ -503,6 +532,12 @@ export default function DisputeDetailPage() {
                       {dispute.raisedBy === resolveClientUid(dispute) ? "Client" : "Talent"}
                     </p>
                   </div>
+                  <div>
+                    <p className="font-medium text-sm text-gray-600">Settlement state</p>
+                    <p className="font-medium capitalize">
+                      {String(workspace?.payment?.settlementStatus || "pending").replace(/_/g, " ")}
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -556,6 +591,17 @@ export default function DisputeDetailPage() {
                         </div>
                       </div>
                     )}
+                    {workspace?.payment?.disputeResolution ? (
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
+                        <div>
+                          <p className="font-medium">Settlement recorded</p>
+                          <p className="text-sm text-gray-600">
+                            {String(workspace.payment.disputeResolution.action || "recorded").replace(/_/g, " ")}
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </CardContent>
               </Card>

@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/select"
 
 import Button from "@/components/ui/Button"
-import { Briefcase, MapPin, Sparkles, ArrowRight, X, Paperclip, FileText, Image as ImageIcon, Trash2 } from "lucide-react"
+import { Briefcase, MapPin, ArrowRight, X, Paperclip, FileText, Image as ImageIcon, Trash2, Users, ShieldCheck } from "lucide-react"
 
 type Role = "talent" | "client"
 
@@ -104,6 +104,7 @@ export default function PostGigPage() {
   const [budgetType, setBudgetType] = useState<(typeof BUDGET_TYPE)[number]>("hourly")
   const [hourlyRate, setHourlyRate] = useState<string>("")
   const [fixedBudget, setFixedBudget] = useState<string>("")
+  const [hiresNeeded, setHiresNeeded] = useState("1")
 
   const [duration, setDuration] = useState<(typeof DURATION)[number]>("1–3 months")
   const [experienceLevel, setExperienceLevel] = useState<(typeof EXP_LEVEL)[number]>("Intermediate")
@@ -182,10 +183,19 @@ export default function PostGigPage() {
       setBudgetType(d.budgetType || "hourly")
       setHourlyRate(d.hourlyRate ? String(d.hourlyRate) : "")
       setFixedBudget(d.fixedBudget ? String(d.fixedBudget) : "")
+      setHiresNeeded(String(Math.max(1, Number(d.hiresNeeded || 1))))
       setRequiredSkills(d.requiredSkills || [])
       setSdgTags(d.sdgTags || [])
-      setCategoryGroup(d?.category?.group || "")
-      setCategoryItem(d?.category?.item || "")
+      const savedGroup = d?.category?.group || ""
+      const savedItem = d?.category?.item || ""
+      const groupExists = hireCategories.some((group) => group.title === savedGroup)
+      if (groupExists) {
+        setCategoryGroup(savedGroup)
+        setCategoryItem(savedItem)
+      } else {
+        setCategoryGroup("Others")
+        setCategoryItem("Other")
+      }
       setStatus(d.status || "open")
 
       setExistingAttachments(d.attachments || [])
@@ -207,7 +217,7 @@ export default function PostGigPage() {
   useEffect(() => {
     // when group changes, default to first item
     if (!groupItems.includes(categoryItem)) {
-      setCategoryItem(groupItems[0] || "")
+      setCategoryItem(groupItems[0] || (categoryGroup === "Others" ? "Other" : ""))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryGroup])
@@ -306,6 +316,9 @@ export default function PostGigPage() {
       if (!n || n <= 0) return "Enter a valid fixed budget"
     }
 
+    const hires = Number(hiresNeeded)
+    if (!hires || hires < 1) return "Set how many talents you want to hire"
+
     return null
   }
 
@@ -336,6 +349,7 @@ export default function PostGigPage() {
         budgetType,
         hourlyRate: budgetType === "hourly" ? Number(hourlyRate) : null,
         fixedBudget: budgetType === "fixed" ? Number(fixedBudget) : null,
+        hiresNeeded: Math.max(1, Number(hiresNeeded || 1)),
         duration,
         experienceLevel,
         description: description.trim(),
@@ -416,15 +430,15 @@ export default function PostGigPage() {
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell max-w-5xl mx-auto px-4 py-8">
           <motion.div initial="hidden" animate="show" variants={fadeUp} custom={0}>
             {loadingGig ? (
               <Card className="rounded-2xl">
                 <CardContent className="p-6 text-sm text-gray-600">Loading gig for editing...</CardContent>
               </Card>
             ) : (
-              <div className="flex items-center justify-between gap-3">
+              <div className="dashboard-page-header flex items-center justify-between gap-3 rounded-2xl p-4 md:p-5">
                 <div>
                   <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
                     {editing ? "Edit gig" : "Post a gig"}
@@ -437,17 +451,10 @@ export default function PostGigPage() {
                 {editing && (
                   <Link
                     href={`/dashboard/gigs/${editId}`}
-                    className="text-sm font-extrabold text-gray-700 hover:text-[var(--primary)] transition"
+                    className="dashboard-hero-link text-sm font-extrabold text-gray-700 hover:text-[var(--primary)] transition"
                   >
                     Back to gig →
                   </Link>
-                )}
-
-                {!editing && (
-                  <div className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-full border bg-white">
-                    <Sparkles size={16} className="text-[var(--primary)]" />
-                    <span className="text-gray-700">Upwork-style • SDG-first</span>
-                  </div>
                 )}
               </div>
             )}
@@ -588,6 +595,27 @@ export default function PostGigPage() {
                         />
                       </div>
                     )}
+                  </div>
+
+                  {/* Hires needed */}
+                  <div>
+                    <Label>Number of hires</Label>
+                    <div className="mt-2 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 items-end">
+                      <Input
+                        value={hiresNeeded}
+                        onChange={(e) => setHiresNeeded(e.target.value.replace(/\D/g, "").slice(0, 3) || "1")}
+                        placeholder="e.g. 1"
+                        inputMode="numeric"
+                        className="rounded-2xl"
+                      />
+                      <div className="rounded-2xl border bg-white px-4 py-3 text-xs font-semibold text-gray-500">
+                        <span className="inline-flex items-center gap-2 text-sm font-extrabold text-gray-900">
+                          <Users size={16} className="text-[var(--primary)]" />
+                          Hiring slots
+                        </span>
+                        <div className="mt-1">Set how many talents you want to hire for this gig.</div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Duration + Experience */}
@@ -867,13 +895,10 @@ export default function PostGigPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Sparkles size={16} className="mt-0.5 text-[var(--primary)]" />
+                    <ShieldCheck size={16} className="mt-0.5 text-[var(--primary)]" />
                     <div>
                       Strong SDG tags + clear deliverables get better proposals.
                     </div>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    MVP: proposals + messaging come next.
                   </div>
                 </CardContent>
               </Card>

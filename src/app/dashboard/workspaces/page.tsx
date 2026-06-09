@@ -22,6 +22,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import FancyLoader from "@/components/ui/FancyLoader"
 
 import {
   Briefcase,
@@ -194,13 +195,13 @@ export default function WorkspacesPage() {
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-end justify-between gap-4">
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell max-w-7xl mx-auto px-4 py-6">
+          <div className="dashboard-page-header flex items-end justify-between gap-4 rounded-2xl p-4 md:p-5">
             <div>
               <h1 className="text-2xl md:text-3xl font-extrabold">Workspaces</h1>
               <p className="text-sm text-gray-600 mt-1">
-                Your active hiring workrooms (payment + delivery tracking coming soon).
+                Your active hiring workrooms.
               </p>
             </div>
 
@@ -228,7 +229,7 @@ export default function WorkspacesPage() {
             <div className="lg:col-span-2 space-y-3">
               {loading && items.length === 0 ? (
                 <Card className="rounded-2xl">
-                  <CardContent className="p-6 text-sm text-gray-600">Loading workspaces…</CardContent>
+                  <CardContent className="p-6 text-sm text-gray-600"><FancyLoader label="Loading workspaces..." compact /></CardContent>
                 </Card>
               ) : filtered.length === 0 ? (
                 <Card className="rounded-2xl">
@@ -312,15 +313,6 @@ export default function WorkspacesPage() {
                   A workspace is created after both parties sign the agreement. Payment + delivery tracking will live here.
                 </CardContent>
               </Card>
-
-              <Card className="rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="text-base font-extrabold">Next</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-gray-600">
-                  We’ll add escrow payment, milestones, and file delivery history (with receipts).
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
@@ -328,3 +320,4 @@ export default function WorkspacesPage() {
     </RequireAuth>
   )
 }
+

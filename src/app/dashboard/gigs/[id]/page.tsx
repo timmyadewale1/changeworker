@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import Button from "@/components/ui/Button"
+import FancyLoader from "@/components/ui/FancyLoader"
 
 import {
   Briefcase,
@@ -34,7 +35,6 @@ import {
   ShieldCheck,
   ArrowLeft,
   Download,
-  Sparkles,
   Tag,
   Wallet,
   Pencil,
@@ -213,9 +213,7 @@ export default function GigDetailsPage() {
       <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
         <div className="max-w-7xl mx-auto px-4 py-6">
           {loading ? (
-            <Card className="rounded-2xl">
-              <CardContent className="p-6 text-sm text-gray-600">Loading gig...</CardContent>
-            </Card>
+            <FancyLoader label="Loading gig..." compact />
           ) : !gig ? (
             <Card className="rounded-2xl">
               <CardContent className="p-6 text-sm text-gray-600">Gig not found.</CardContent>
@@ -233,7 +231,7 @@ export default function GigDetailsPage() {
                   </button>
 
                   <div className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-full border bg-white">
-                    <Sparkles size={16} className="text-[var(--primary)]" />
+                    <ShieldCheck size={16} className="text-[var(--primary)]" />
                     <span className="text-gray-700">Gig details</span>
                   </div>
                 </div>
@@ -328,7 +326,7 @@ export default function GigDetailsPage() {
                       <Card className="rounded-2xl">
                         <CardHeader>
                           <CardTitle className="text-base font-extrabold flex items-center gap-2">
-                            <Sparkles size={18} className="text-[var(--primary)]" />
+                            <Users size={18} className="text-[var(--primary)]" />
                             Suggested talent
                           </CardTitle>
                           <div className="text-xs text-gray-500 font-semibold">
@@ -336,18 +334,14 @@ export default function GigDetailsPage() {
                           </div>
                         </CardHeader>
                         <CardContent>
-                          {suggestedLoading ? (
-                            <div className="text-sm text-gray-600">Loading suggestions...</div>
-                          ) : (
+                    {suggestedLoading ? (
+                      <FancyLoader label="Loading suggestions..." compact />
+                    ) : (
                             <div className="overflow-x-auto pb-4">
                               <div className="flex gap-4 min-w-max">
                                 {suggestedTalents.map((t, idx) => (
-                                  <div key={t.uid} className="w-full sm:w-80 flex-shrink-0">
-                                    <Card className="rounded-2xl hover:shadow-md transition bg-white">
-                                      <CardContent className="p-5">
-                                        <TalentCard t={t} idx={idx} />
-                                      </CardContent>
-                                    </Card>
+                                  <div key={t.uid} className="w-[300px] flex-shrink-0">
+                                    <TalentCard t={t} idx={idx} />
                                   </div>
                                 ))}
                               </div>

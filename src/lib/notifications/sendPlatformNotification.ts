@@ -11,6 +11,7 @@ export async function notifyUser({
   link,
   emailSubject,
   emailHtml,
+  sendEmail: shouldSendEmail = true,
 }: any) {
   await sendNotification({
     userId,
@@ -25,7 +26,7 @@ export async function notifyUser({
 
   if (user.exists) {
     const email = user.data()?.email
-    if (email) {
+    if (email && shouldSendEmail) {
       const htmlContent = emailHtml || buildNotificationEmail({ title, message, link })
       try {
         await sendEmail({

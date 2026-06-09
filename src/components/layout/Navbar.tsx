@@ -34,20 +34,21 @@ export default function Navbar() {
     "flex items-center gap-1 font-semibold text-black hover:text-[var(--primary)] cursor-pointer"
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85 relative">
+    <>
+    <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85 overflow-x-clip">
       {/* TOP BAR */}
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="mx-auto flex max-w-7xl min-w-0 items-center justify-between gap-3 px-4 py-3">
         {/* LEFT */}
         <div className="flex items-center gap-6">
           <Link
             href="/"
             className="text-xl font-extrabold text-[var(--primary)]"
           >
-            <img src="/logo.png" alt="Changeworker" className="h-20 w-20" />
+            <img src="/logo.png" alt="Changeworker" className="h-15 w-15" />
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-6 min-w-0">
             {/* Hire */}
             <div className="relative">
               <button
@@ -63,21 +64,21 @@ export default function Navbar() {
               </button>
 
               {desktopMenu === "hire" && (
-                <div className="absolute left-0 top-full mt-3 z-50 w-[min(1080px,calc(100vw-2rem))] rounded-[1.25rem] border bg-white p-6 shadow-xl">
-                  <div className="grid grid-cols-4 gap-x-6 gap-y-7">
+                <div className="absolute left-0 top-full mt-2 z-50 w-[min(900px,calc(100vw-1rem))] max-h-[calc(100vh-110px)] overflow-y-auto rounded-[1.1rem] border bg-white p-4 shadow-xl">
+                  <div className="grid grid-cols-4 gap-x-4 gap-y-5">
                     {hireCategories.map((cat) => (
                       <div key={cat.title}>
-                        <h4 className="mb-3 text-[15px] font-bold leading-snug">
+                        <h4 className="mb-2.5 text-[13px] font-bold leading-snug">
                           {getCategoryDisplayTitle(cat, "nav")}
                         </h4>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-1">
                           {cat.items.map((item) => (
                             <li key={item}>
                               <Link
                                 href={`/hire/${item
                                   .toLowerCase()
                                   .replace(/\s+/g, "-")}`}
-                                className="text-[13px] leading-5 text-gray-600 hover:text-[var(--primary)]"
+                                className="text-[11.5px] leading-5 text-gray-600 hover:text-[var(--primary)]"
                               >
                                 {item}
                               </Link>
@@ -106,21 +107,21 @@ export default function Navbar() {
               </button>
 
               {desktopMenu === "find" && (
-                <div className="absolute left-0 top-full mt-3 z-50 w-[min(1080px,calc(100vw-2rem))] rounded-[1.25rem] border bg-white p-6 shadow-xl">
-                  <div className="grid grid-cols-4 gap-x-6 gap-y-7">
+                <div className="absolute left-0 top-full mt-2 z-50 w-[min(900px,calc(100vw-1rem))] max-h-[calc(100vh-110px)] overflow-y-auto rounded-[1.1rem] border bg-white p-4 shadow-xl">
+                  <div className="grid grid-cols-4 gap-x-4 gap-y-5">
                     {findWorkCategories.map((cat) => (
                       <div key={cat.title}>
-                        <h4 className="mb-3 text-[15px] font-bold leading-snug">
+                        <h4 className="mb-2.5 text-[13px] font-bold leading-snug">
                           {getCategoryDisplayTitle(cat, "nav")}
                         </h4>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-1">
                           {cat.items.map((item) => (
                             <li key={item}>
                               <Link
                                 href={`/jobs/${item
                                   .toLowerCase()
                                   .replace(/\s+/g, "-")}`}
-                                className="text-[13px] leading-5 text-gray-600 hover:text-[var(--primary)]"
+                                className="text-[11.5px] leading-5 text-gray-600 hover:text-[var(--primary)]"
                               >
                                 {item}
                               </Link>
@@ -135,7 +136,7 @@ export default function Navbar() {
             </div>
 
             {/* Why Us */}
-            <div className="relative">
+            {/* <div className="relative">
               <button
                 onClick={() =>
                   setDesktopMenu(
@@ -149,7 +150,7 @@ export default function Navbar() {
               </button>
 
               {desktopMenu === "why" && (
-                <div className="absolute left-0 top-full mt-3 bg-white border shadow-xl w-[520px] p-6 z-50">
+                <div className="absolute left-0 top-full mt-2 z-50 w-[min(520px,calc(100vw-1rem))] rounded-[1.1rem] border bg-white p-4 shadow-xl">
                   <div className="grid grid-cols-2 gap-4">
                     {whyUsLinks.map((item) => (
                       <Link
@@ -157,12 +158,12 @@ export default function Navbar() {
                         href={`/why-us/${item.title
                           .toLowerCase()
                           .replace(/\s+/g, "-")}`}
-                        className="p-4 border rounded-lg hover:border-[var(--primary)] hover:bg-[var(--secondary)] transition"
+                        className="rounded-lg border p-3 hover:border-[var(--primary)] hover:bg-[var(--secondary)] transition"
                       >
-                        <h4 className="font-bold text-sm">
+                        <h4 className="text-[13px] font-bold">
                           {item.title}
                         </h4>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p className="mt-1 text-[11.5px] text-gray-600">
                           {item.description}
                         </p>
                       </Link>
@@ -170,7 +171,7 @@ export default function Navbar() {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
           </nav>
         </div>
 
@@ -183,7 +184,7 @@ export default function Navbar() {
     router.push(`/search?type=${type}&q=${query}`)
     setMobileOpen(false)
   }}
-  className="flex h-12 min-w-[520px] max-w-[620px] flex-1 overflow-hidden rounded-2xl border border-gray-200 bg-white"
+  className="flex h-12 w-[clamp(240px,30vw,560px)] min-w-0 flex-1 overflow-hidden rounded-2xl border border-gray-200 bg-white"
 >
   <select
     value={type}
@@ -198,7 +199,7 @@ export default function Navbar() {
     value={query}
     onChange={(e) => setQuery(e.target.value)}
     placeholder="Search impact talents or jobs"
-    className="w-full bg-transparent px-4 py-2 text-sm outline-none"
+    className="w-full min-w-0 bg-transparent px-4 py-2 text-sm outline-none"
   />
 </form>
 
@@ -218,10 +219,10 @@ export default function Navbar() {
         </div>
 
         {/* MOBILE TOGGLE */}
-        <button
-          className="md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
+          <button
+            className="md:hidden shrink-0"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
           {mobileOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -371,7 +372,7 @@ export default function Navbar() {
 
 
           {/* Why Us */}
-<div>
+{/* <div>
   <button
     onClick={() => {
   setMobileMenu(mobileMenu === "why" ? null : "why")
@@ -404,7 +405,7 @@ export default function Navbar() {
       ))}
     </div>
   )}
-</div>
+</div> */}
 
 
           {/* AUTH */}
@@ -416,5 +417,7 @@ export default function Navbar() {
         </div>
       )}
     </header>
+    <div aria-hidden className="h-[73px]" />
+    </>
   )
 }

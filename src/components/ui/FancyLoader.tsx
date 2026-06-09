@@ -2,13 +2,21 @@
 
 import { motion } from "framer-motion"
 
-export default function FancyLoader({ label = "Loading your workspace..." }: { label?: string }) {
+type FancyLoaderProps = {
+  label?: string
+  compact?: boolean
+}
+
+export default function FancyLoader({
+  label = "Loading your workspace...",
+  compact = false,
+}: FancyLoaderProps) {
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Card */}
-        <div className="rounded-3xl border bg-white shadow-sm p-6 overflow-hidden relative">
-          {/* Animated top glow */}
+    <div
+      className={`flex items-center justify-center px-4 ${compact ? "py-6" : "min-h-[calc(100vh-64px)] bg-[var(--secondary)]"}`}
+    >
+      <div className={`w-full ${compact ? "max-w-sm" : "max-w-md"}`}>
+        <div className="relative overflow-hidden rounded-3xl border bg-white p-6 shadow-sm">
           <motion.div
             aria-hidden
             className="absolute -top-24 -right-24 h-56 w-56 rounded-full bg-orange-200/30 blur-3xl"
@@ -22,15 +30,11 @@ export default function FancyLoader({ label = "Loading your workspace..." }: { l
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Brand */}
           <div className="relative">
-            <div className="text-xl font-extrabold text-[var(--primary)]">
-              Changeworker
-            </div>
-            <div className="text-sm text-gray-600 mt-1">{label}</div>
+            <div className="text-xl font-extrabold text-[var(--primary)]">Changeworker</div>
+            <div className="mt-1 text-sm text-gray-600">{label}</div>
 
-            {/* Animated bar */}
-            <div className="mt-5 h-2 w-full rounded-full bg-gray-100 overflow-hidden">
+            <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-gray-100">
               <motion.div
                 className="h-full rounded-full bg-[var(--primary)]"
                 initial={{ x: "-60%" }}
@@ -40,7 +44,6 @@ export default function FancyLoader({ label = "Loading your workspace..." }: { l
               />
             </div>
 
-            {/* Fancy dots */}
             <div className="mt-6 flex items-center gap-2">
               {[0, 1, 2].map((i) => (
                 <motion.span
@@ -55,15 +58,12 @@ export default function FancyLoader({ label = "Loading your workspace..." }: { l
                   }}
                 />
               ))}
-              <span className="text-xs text-gray-500 ml-2">Almost there…</span>
+              <span className="ml-2 text-xs text-gray-500">Almost there...</span>
             </div>
           </div>
         </div>
 
-        {/* subtle hint */}
-        <div className="text-center text-xs text-gray-500 mt-4">
-          Impact-first marketplace • Nigeria
-        </div>
+        <div className="mt-4 text-center text-xs text-gray-500">Impact-first marketplace · Nigeria</div>
       </div>
     </div>
   )

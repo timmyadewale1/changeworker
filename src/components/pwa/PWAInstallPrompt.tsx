@@ -36,7 +36,9 @@ export default function PWAInstallPrompt() {
 
   const standalone = useMemo(() => isStandaloneMode(), [])
   const isIos = useMemo(() => isIosDevice(), [])
-  const isDashboardScope = Boolean(user) && (pathname?.startsWith("/dashboard") || pathname?.startsWith("/admin"))
+  const isDashboardScope =
+    Boolean(user) &&
+    (pathname?.startsWith("/dashboard") || pathname?.startsWith("/control"))
   const dashboardDismissKey = useMemo(
     () => (isDashboardScope ? getAuthSessionDismissKey("cw_pwa_prompt_dismissed") : null),
     [isDashboardScope]
@@ -134,7 +136,7 @@ export default function PWAInstallPrompt() {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-[70] flex justify-center px-4">
       <div className="pointer-events-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-orange-200 bg-white shadow-[0_24px_60px_rgba(249,115,22,0.18)]">
-        <div className="bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_55%,#ffedd5_100%)] p-5">
+        <div className="bg-white p-5">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 ring-1 ring-orange-200">

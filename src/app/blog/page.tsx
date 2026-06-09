@@ -7,7 +7,6 @@ import {
   FiArrowRight, FiClock, FiSearch, FiX, FiFilter,
   FiBookmark, FiShare2, FiTrendingUp, FiChevronRight
 } from "react-icons/fi"
-import { HiSparkles } from "react-icons/hi"
 import Footer from "@/components/layout/Footer"
 
 function useInView(threshold = 0.08) {
@@ -119,7 +118,7 @@ export default function BlogIndex() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-6 pb-0" ref={heroRef.ref}>
             <div className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8 ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".05s"} as any}>
-              <HiSparkles size={12} className="text-orange-400"/>
+              <FiTrendingUp size={12} className="text-orange-400"/>
               <span className="fm text-white/50 text-xs tracking-[.15em] uppercase">changeworker editorial</span>
             </div>
 

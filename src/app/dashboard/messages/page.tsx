@@ -107,9 +107,9 @@ export default function MessagesPage() {
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-end justify-between gap-4">
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell max-w-7xl mx-auto px-4 py-6">
+          <div className="dashboard-page-header flex items-end justify-between gap-4 rounded-2xl p-4 md:p-5">
             <div>
               <h1 className="text-2xl md:text-3xl font-extrabold">Messages</h1>
               <p className="text-sm text-gray-600 mt-1">

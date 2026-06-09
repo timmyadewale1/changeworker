@@ -1,8 +1,7 @@
 import Link from "next/link"
 import Navbar from "@/components/layout/Navbar"
 import { allWhyUs, findWhyUsBySlug } from "@/lib/navSlug"
-import { FiArrowLeft, FiArrowRight, FiCheckCircle, FiChevronRight, FiExternalLink } from "react-icons/fi"
-import { HiSparkles } from "react-icons/hi"
+import { FiArrowLeft, FiArrowRight, FiCheckCircle, FiChevronRight, FiExternalLink, FiTrendingUp } from "react-icons/fi"
 
 export async function generateStaticParams() {
   return allWhyUs().map((x) => ({ slug: x.slug }))
@@ -369,7 +368,7 @@ export default async function WhyUsPage({
                 {/* highlight / why this matters */}
                 <div className="mt-8 rounded-2xl p-7 border-l-4" style={{background:`${c.tagColor}07`,borderColor:`${c.tagColor}50`}}>
                   <div className="flex items-center gap-2 mb-2">
-                    <HiSparkles size={14} style={{color:c.tagColor}}/>
+                    <FiTrendingUp size={14} style={{color:c.tagColor}}/>
                     <span className="fm text-[10px] font-bold uppercase tracking-wider" style={{color:c.tagColor}}>Why this matters</span>
                   </div>
                   <p className="text-gray-700 text-sm leading-relaxed font-semibold">{c.highlight}</p>

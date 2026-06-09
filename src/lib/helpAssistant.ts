@@ -129,35 +129,35 @@ const ADMIN_INTENTS: HelpIntent[] = [
     keywords: ["verify", "kyc", "talent", "client", "approve"],
     answer:
       "Use Talents and Clients to review profile and KYC details. Open the relevant user profile to verify, reject, enable, disable, or inspect their linked gigs, proposals, and workspaces.",
-    href: "/admin/talents",
+    href: "/control/talents",
   },
   {
     id: "disputes",
     keywords: ["dispute", "resolve", "issue", "refund", "payout"],
     answer:
       "Use Disputes to review workspace-linked escalations, read the case details, and resolve them with the available outcome options. The admin dispute view keeps the conversation, evidence, and workspace context together.",
-    href: "/admin/disputes",
+    href: "/control/disputes",
   },
   {
     id: "support_inbox",
     keywords: ["support", "ticket", "help", "reply", "inbox"],
     answer:
       "Open the support inbox to read user help requests from the dashboard assistant and reply directly. Support messages are separate from normal client-talent message threads.",
-    href: "/admin/support",
+    href: "/control/support",
   },
   {
     id: "transactions",
     keywords: ["transaction", "wallet", "revenue", "earnings", "payment"],
     answer:
       "Use Transactions and Wallets to review funding, payouts, escrow exposure, and platform earnings. Analytics gives you the broader totals and trend view.",
-    href: "/admin/transactions",
+    href: "/control/transactions",
   },
   {
     id: "wellness",
     keywords: ["wellness", "health", "system", "check"],
     answer:
       "The system wellness card on the admin dashboard checks core environment and service readiness, including Firebase admin access, Firestore reads, notifications, and payment configuration.",
-    href: "/admin/dashboard",
+    href: "/control/dashboard",
   },
 ]
 

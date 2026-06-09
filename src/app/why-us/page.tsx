@@ -2,390 +2,293 @@
 
 import Link from "next/link"
 import Navbar from "@/components/layout/Navbar"
-import Footer from "@/components/layout/Footer"
 import { useEffect, useRef, useState } from "react"
 import { whyUsLinks } from "@/data/navCategories"
 import { slugify } from "@/lib/navSlug"
 import {
   FiArrowRight, FiCheckCircle, FiStar, FiZap, FiShield,
-  FiUsers, FiTrendingUp, FiBook, FiAward, FiLayers
+  FiBook, FiTrendingUp, FiRepeat
 } from "react-icons/fi"
-import { HiSparkles } from "react-icons/hi"
-import { TbRocket, TbBuildingCommunity, TbHeartHandshake, TbTargetArrow } from "react-icons/tb"
+import { TbBuildingCommunity, TbHeartHandshake } from "react-icons/tb"
 import { RiTeamLine, RiShieldCheckLine } from "react-icons/ri"
+import Footer from "@/components/layout/Footer"
 
-function useInView(threshold = 0.08) {
+function useInView(t = 0.08) {
   const ref = useRef<HTMLDivElement>(null)
   const [v, setV] = useState(false)
   useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true) }, { threshold })
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true) }, { threshold: t })
     if (ref.current) o.observe(ref.current)
     return () => o.disconnect()
-  }, [threshold])
+  }, [t])
   return { ref, inView: v }
 }
 
-function useScrollY() {
-  const [y, setY] = useState(0)
-  useEffect(() => {
-    const h = () => setY(window.scrollY)
-    window.addEventListener("scroll", h, { passive: true })
-    return () => window.removeEventListener("scroll", h)
-  }, [])
-  return y
+const IMGS = {
+  hero:  "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  mid:   "https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=900",
+  cta:   "https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1200",
 }
 
-// enriched card meta: icons, colors, accent lines per why-us link
 const CARD_META = [
-  {
-    icon: FiStar,
-    color: "#F97316",
-    tag: "Social proof",
-    stat: "200+ orgs",
-    statLabel: "served",
-    bullet: ["Real project outcomes","Verified client stories","Impact metrics included"],
-  },
-  {
-    icon: TbBuildingCommunity,
-    color: "#6366F1",
-    tag: "Client guide",
-    stat: "4 steps",
-    statLabel: "to get started",
-    bullet: ["Role selection guide","Scope & agreement tips","Secure funding flow"],
-  },
-  {
-    icon: FiStar,
-    color: "#10B981",
-    tag: "Community trust",
-    stat: "98%",
-    statLabel: "satisfaction rate",
-    bullet: ["Verified mutual reviews","Outcome-focused feedback","Reputation building"],
-  },
-  {
-    icon: RiTeamLine,
-    color: "#EC4899",
-    tag: "Talent guide",
-    stat: "Instant",
-    statLabel: "matching on post",
-    bullet: ["Profile optimisation tips","Proposal best practices","Secure payout guide"],
-  },
-  {
-    icon: FiBook,
-    color: "#F59E0B",
-    tag: "Resources",
-    stat: "Free",
-    statLabel: "access always",
-    bullet: ["Hiring playbooks","Proposal templates","Escrow & fee guides"],
-  },
+  { icon:FiStar,           color:"#F97316", tag:"Social proof",   stat:"200+ orgs",  statLabel:"served",              bullet:["Real project outcomes","Verified client stories","Impact metrics included"] },
+  { icon:TbBuildingCommunity,color:"#6366F1", tag:"Client guide",  stat:"4 steps",    statLabel:"to get started",      bullet:["Role selection guide","Scope & agreement tips","Secure funding flow"] },
+  { icon:FiStar,           color:"#10B981", tag:"Community trust",stat:"98%",        statLabel:"satisfaction rate",    bullet:["Verified mutual reviews","Outcome-focused feedback","Reputation building"] },
+  { icon:RiTeamLine,       color:"#EC4899", tag:"Talent guide",   stat:"Instant",    statLabel:"matching on post",     bullet:["Profile optimisation tips","Proposal best practices","Secure payout guide"] },
+  { icon:FiBook,           color:"#F59E0B", tag:"Resources",      stat:"Free",       statLabel:"access always",        bullet:["Hiring playbooks","Proposal templates","Escrow & fee guides"] },
 ]
 
 const TRUST_PILLARS = [
-  { icon: FiShield, color: "#F97316", title: "Escrow on every gig", desc: "Funds are secured before work begins. Payment releases only when deliverables are approved." },
-  { icon: RiShieldCheckLine, color: "#6366F1", title: "Verified talent profiles", desc: "Every freelancer is personally vetted - identity, skills, and sector track record confirmed." },
-  { icon: FiZap, color: "#10B981", title: "Instant matching", desc: "The moment a gig is posted, our engine surfaces the most relevant talent automatically." },
-  { icon: TbHeartHandshake, color: "#EC4899", title: "Fair pay enforced", desc: "We set and enforce minimum rate floors. 'For the mission' is never a substitute for fair pay." },
+  { icon:FiShield,         color:"#F97316", title:"Escrow on every gig",        desc:"Funds secured before work begins. Payment releases only when deliverables are approved." },
+  { icon:RiShieldCheckLine,color:"#111111", title:"Verified talent profiles",    desc:"Every freelancer is personally vetted - identity, skills, and sector track record confirmed." },
+  { icon:FiZap,            color:"#F97316", title:"Instant matching",            desc:"The moment a gig is posted, our engine surfaces the most relevant talent automatically." },
+  { icon:TbHeartHandshake, color:"#111111", title:"Fair pay enforced",           desc:"We set minimum rate floors. 'For the mission' is never a substitute for fair professional pay." },
+]
+
+const STATS = [
+  { v:"₦45M+", l:"In gig payments facilitated",    sub:"Across 180+ completed engagements",     color:"#F97316" },
+  { v:"0%",    l:"Unpaid invoices on the platform",sub:"Escrow protects every single gig",        color:"#111111" },
+  { v:"98%",   l:"Project satisfaction rate",       sub:"From verified post-gig reviews",         color:"#F97316" },
 ]
 
 export default function WhyUsLanding() {
-  const heroRef   = useInView(0.05)
-  const trustRef  = useInView(0.07)
-  const cardsRef  = useInView(0.05)
-  const ctaRef    = useInView(0.1)
-  const scrollY   = useScrollY()
+  const heroRef  = useInView(0.05)
+  const trustRef = useInView(0.07)
+  const cardsRef = useInView(0.05)
+  const statsRef = useInView(0.08)
+  const ctaRef   = useInView(0.08)
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
         *,*::before,*::after{box-sizing:border-box}
-        .fd{font-family:'Sora',sans-serif}
-        .fs{font-family:'Instrument Serif',serif}
-        .fm{font-family:'JetBrains Mono',monospace}
-        ::-webkit-scrollbar{width:5px}
-        ::-webkit-scrollbar-thumb{background:#F97316;border-radius:3px}
-
-        @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes fadeLeft{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:translateX(0)}}
-        @keyframes shimTxt{0%{background-position:-600px 0}100%{background-position:600px 0}}
-        @keyframes orb1{0%,100%{transform:translate(0,0)}40%{transform:translate(52px,-52px)scale(1.08)}80%{transform:translate(-28px,28px)scale(.93)}}
-        @keyframes orb2{0%,100%{transform:translate(0,0)}50%{transform:translate(-42px,40px)scale(.91)}}
-        @keyframes dotDrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-        @keyframes borderRot{to{transform:rotate(360deg)}}
-        @keyframes dashDraw{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
-        @keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
-        @keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
-
-        .reveal{opacity:0;animation:fadeUp .75s cubic-bezier(.22,1,.36,1) var(--d,0s) both}
-        .reveal-l{opacity:0;animation:fadeLeft .75s cubic-bezier(.22,1,.36,1) var(--d,0s) both}
-
-        .shimmer{background:linear-gradient(90deg,#F97316,#EA580C,#FB923C,#FCD34D,#FB923C,#EA580C,#F97316);background-size:600px 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimTxt 3s linear infinite}
-        .grid-dark{background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:56px 56px}
-        .dot-bg{background-image:radial-gradient(rgba(249,115,22,.13) 1.5px,transparent 1.5px);background-size:26px 26px}
-        .noise::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
-        .anim-o1{animation:orb1 14s ease-in-out infinite}
-        .anim-o2{animation:orb2 18s ease-in-out infinite}
-        .draw-line{stroke-dasharray:1000;animation:dashDraw 2.2s ease both}
-
-        .why-card{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .2s}
-        .why-card:hover{transform:translateY(-6px);box-shadow:0 20px 56px rgba(0,0,0,.09)}
-        .why-card:hover .card-arrow{animation:arrowBounce .5s ease infinite}
-
-        .trust-card{transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s ease}
-        .trust-card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,.07)}
-
-        strong{font-weight:700;color:#111827}
+        :root{--o:#F97316;--od:#EA580C;--bk:#111111;--off:#F5F5F5;--bd:#E8E8E8;--tx:#6B7280;--fh:'Plus Jakarta Sans',sans-serif;--fb:'DM Sans',sans-serif}
+        body{font-family:var(--fb);background:white;color:var(--bk)}
+        ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-thumb{background:var(--o);border-radius:4px}
+        @keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes si{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+        @keyframes ab{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+        .up{opacity:0;animation:up .7s cubic-bezier(.22,1,.36,1) var(--d,0s) both}
+        .si{opacity:0;animation:si .7s cubic-bezier(.22,1,.36,1) var(--d,0s) both}
+        .lbl{font-family:var(--fh);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--o)}
+        .hd{font-family:var(--fh);font-weight:900;line-height:1.08;color:var(--bk)}
+        .bd{font-family:var(--fb);color:var(--tx);line-height:1.75}
+        .btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--o);color:white;font-family:var(--fh);font-weight:700;font-size:.875rem;padding:.875rem 1.875rem;border-radius:10px;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;text-decoration:none}
+        .btn-p:hover{background:var(--od);transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.28)}
+        .btn-o{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--bk);font-family:var(--fh);font-weight:700;font-size:.875rem;padding:.875rem 1.875rem;border-radius:10px;border:1.5px solid var(--bd);cursor:pointer;transition:border-color .2s,transform .15s;text-decoration:none}
+        .btn-o:hover{border-color:#999;transform:translateY(-1px)}
+        .btn-od{display:inline-flex;align-items:center;gap:8px;background:transparent;color:rgba(255,255,255,.6);font-family:var(--fh);font-weight:700;font-size:.875rem;padding:.875rem 1.875rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.18);cursor:pointer;transition:border-color .2s,color .2s;text-decoration:none}
+        .btn-od:hover{border-color:rgba(255,255,255,.5);color:white}
+        .card{background:#F3F4F6;border:1.5px solid transparent;border-radius:18px;transition:border-color .25s,box-shadow .25s,transform .3s}
+        .card:hover{border-color:var(--bd);box-shadow:0 8px 28px rgba(0,0,0,.08);transform:translateY(-4px)}
+        .card-w{background:white;border:1.5px solid var(--bd);border-radius:18px;transition:border-color .25s,box-shadow .25s,transform .3s}
+        .card-w:hover{border-color:#ccc;box-shadow:0 8px 28px rgba(0,0,0,.07);transform:translateY(-4px)}
+        .why-card{background:#F3F4F6;border:1.5px solid transparent;border-radius:18px;transition:border-color .25s,box-shadow .3s,transform .35s cubic-bezier(.22,1,.36,1)}
+        .why-card:hover{border-color:var(--bd);box-shadow:0 16px 44px rgba(0,0,0,.09);transform:translateY(-5px)}
+        .why-card:hover .card-arrow{animation:ab .5s ease infinite}
+        .ic{object-fit:cover;width:100%;height:100%}
+        strong{font-weight:700;color:#111}
       `}</style>
 
-      <div className="fd bg-white text-gray-900 min-h-screen overflow-x-hidden selection:bg-orange-100 selection:text-orange-900">
-        <Navbar />
+      <Navbar />
 
-        {/* ── HERO ── */}
-        <section className="relative overflow-hidden bg-[#060912] pt-28 pb-0">
-          <div className="absolute inset-0 grid-dark"/>
-          <div className="absolute inset-0" style={{background:"radial-gradient(ellipse 80% 70% at 50% 38%,rgba(249,115,22,.12) 0%,transparent 68%)"}}/>
-          <div className="absolute inset-0" style={{background:"radial-gradient(ellipse 35% 45% at 90% 80%,rgba(99,102,241,.08) 0%,transparent 55%)"}}/>
-          <div className="anim-o1 absolute w-[700px] h-[700px] rounded-full bg-orange-500/8 blur-3xl -top-60 right-0 pointer-events-none"/>
-          <div className="anim-o2 absolute w-[400px] h-[400px] rounded-full bg-indigo-500/8 blur-3xl -left-20 bottom-0 pointer-events-none"/>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] rounded-full border border-orange-500/6 pointer-events-none" style={{animation:"borderRot 32s linear infinite"}}/>
+      {/* ── HERO - full-bleed image ── */}
+      <section ref={heroRef.ref} className="relative overflow-hidden min-h-[80svh] flex items-end pb-0">
+        <img src={IMGS.hero} alt="" aria-hidden className="absolute inset-0 ic" style={{ objectPosition:"center 30%" }}/>
+        <div className="absolute inset-0" style={{ background:"linear-gradient(170deg,rgba(10,10,10,.1) 0%,rgba(10,10,10,.65) 55%,rgba(10,10,10,.92) 100%)" }}/>
 
-          <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-            {[[8,18],[92,12],[95,66],[5,72],[50,86],[28,40],[80,46],[62,22]].map(([x,y],i)=>(
-              <circle key={i} cx={x} cy={y} r=".5" fill="#F97316" style={{animation:`dotDrift ${4+i}s ease-in-out ${i*.3}s infinite`}}/>
-            ))}
-            {([[8,18,28,40],[28,40,62,22],[62,22,92,12],[28,40,50,86],[5,72,50,86]] as [number,number,number,number][]).map(([x1,y1,x2,y2],i)=>(
-              <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={i>2?"#6366F1":i>1?"#10B981":"#F97316"} strokeWidth=".1" className="draw-line" style={{animationDelay:`${i*.25}s`}}/>
-            ))}
-          </svg>
-
-          <div className="relative z-10 max-w-5xl mx-auto px-6 pb-0" ref={heroRef.ref}>
-            <div className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8 ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".05s"} as React.CSSProperties}>
-              <HiSparkles size={12} className="text-orange-400"/>
-              <span className="fm text-white/50 text-xs tracking-[.15em] uppercase">Why changeworker</span>
-            </div>
-
-            <h1 className={`font-black text-6xl lg:text-7xl xl:text-[84px] text-white leading-[.92] tracking-tight mb-5 ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".15s"} as React.CSSProperties}>
-              Everything you need<br />to do<br /><span className="shimmer">impact work right.</span>
-            </h1>
-
-            <p className={`fs italic text-2xl lg:text-3xl text-white/38 mb-10 max-w-2xl ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".28s"} as React.CSSProperties}>
-              From finding the right talent to securing payment - we've built the infrastructure that Nigeria's social sector was missing.
-            </p>
-
-            {/* stat chips */}
-            <div className={`flex flex-wrap gap-3 pb-20 ${heroRef.inView?"reveal":"opacity-0"}`} style={{"--d":".4s"} as React.CSSProperties}>
-              {[
-                {v:"200+",l:"Organizations",color:"#F97316"},
-                {v:"500+",l:"Vetted talent",color:"#6366F1"},
-                {v:"98%",l:"Satisfaction",color:"#10B981"},
-                {v:"₦0",l:"Unpaid invoices",color:"#EC4899"},
-              ].map(({v,l,color})=>(
-                <div key={l} className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <span className="fm font-bold text-sm" style={{color}}>{v}</span>
-                  <span className="text-white/40 text-xs">{l}</span>
-                </div>
-              ))}
+        <div className="relative z-10 w-full">
+          <div className="max-w-6xl mx-auto px-6 lg:px-12 pt-32 pb-14">
+            <div className="max-w-2xl">
+              <p className={`lbl text-orange-400 mb-5 ${heroRef.inView?"up":"opacity-0"}`} style={{"--d":".05s"} as React.CSSProperties}>Why changeworker</p>
+              <h1 className={`font-black text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.02] tracking-tight mb-6 ${heroRef.inView?"up":"opacity-0"}`}
+                style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", "--d":".14s" } as React.CSSProperties}>
+                Everything you need<br />to do impact work<br /><span style={{ color:"#F97316" }}>right.</span>
+              </h1>
+              <p className={`text-white/60 text-lg leading-relaxed max-w-lg mb-9 ${heroRef.inView?"up":"opacity-0"}`}
+                style={{ fontFamily:"'DM Sans',sans-serif", "--d":".26s" } as React.CSSProperties}>
+                From finding the right talent to securing payment - we've built the infrastructure that Nigeria's social sector was missing.
+              </p>
+              <div className={`flex flex-wrap gap-4 ${heroRef.inView?"up":"opacity-0"}`} style={{"--d":".36s"} as React.CSSProperties}>
+                {[{v:"200+",l:"Organizations"},{v:"500+",l:"Vetted talent"},{v:"98%",l:"Satisfaction"},{v:"₦0",l:"Unpaid invoices"}].map(({ v, l }) => (
+                  <div key={l} className="flex items-center gap-2 px-4 py-2.5 rounded-full"
+                    style={{ background:"rgba(255,255,255,.1)", border:"1px solid rgba(255,255,255,.18)" }}>
+                    <span className="font-black text-sm text-white" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{v}</span>
+                    <span className="text-white/45 text-xs" style={{ fontFamily:"'DM Sans',sans-serif" }}>{l}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div style={{height:"72px"}} className="pointer-events-none">
+          <div className="pointer-events-none" style={{ height:"72px" }}>
             <svg viewBox="0 0 1440 72" preserveAspectRatio="none" className="w-full h-full">
               <path d="M0,36 C360,72 1080,0 1440,36 L1440,72 L0,72 Z" fill="white"/>
             </svg>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── TRUST PILLARS (4-up, light) ── */}
-        <section ref={trustRef.ref} className="py-16 bg-white">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className={`fm text-xs text-orange-500 uppercase tracking-[.25em] mb-8 ${trustRef.inView?"reveal":"opacity-0"}`} style={{"--d":"0s"} as React.CSSProperties}>
-              Our foundation
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {TRUST_PILLARS.map(({icon:Icon,color,title,desc},i)=>(
-                <div
-                  key={i}
-                  className={`trust-card rounded-2xl border border-gray-100 bg-white p-6 flex flex-col gap-4 ${trustRef.inView?"reveal":"opacity-0"}`}
-                  style={{"--d":`${.05+i*.08}s`} as React.CSSProperties}
-                >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background:`${color}12`}}>
-                    <Icon size={18} style={{color}}/>
-                  </div>
-                  <div>
-                    <p className="font-black text-gray-900 text-sm mb-1.5">{title}</p>
-                    <p className="text-gray-500 text-xs leading-relaxed">{desc}</p>
-                  </div>
-                  <div className="mt-auto h-0.5 rounded-full" style={{background:`${color}40`}}/>
+      {/* ── TRUST PILLARS - white ── */}
+      <section ref={trustRef.ref} className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className={`lbl mb-7 ${trustRef.inView?"up":"opacity-0"}`} style={{"--d":"0s"} as React.CSSProperties}>Our foundation</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {TRUST_PILLARS.map(({ icon:Icon, color, title, desc }, i) => (
+              <div key={i} className={`card p-6 flex flex-col gap-4 ${trustRef.inView?"up":"opacity-0"}`}
+                style={{"--d":`${.06+i*.08}s`} as React.CSSProperties}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background:`${color}12` }}>
+                  <Icon size={18} style={{ color }}/>
                 </div>
-              ))}
-            </div>
+                <div>
+                  <p className="font-bold text-[#111] text-sm mb-1.5" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{title}</p>
+                  <p className="bd text-xs">{desc}</p>
+                </div>
+                <div className="mt-auto h-0.5 rounded-full" style={{ background:`${color}35` }}/>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── MAIN CARDS GRID ── */}
-        <section ref={cardsRef.ref} className="py-16 pb-28 bg-[#FAFAF9] relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-80 h-80 opacity-20 dot-bg pointer-events-none"/>
-          <div className="anim-o2 absolute w-80 h-80 rounded-full bg-orange-50 blur-3xl -left-20 bottom-0 pointer-events-none"/>
+      {/* ── MAIN CARDS - five why-us links ── */}
+      <section ref={cardsRef.ref} className="py-16 pb-24 bg-[#F5F5F5] border-y border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12">
+          <div className={`text-center mb-12 ${cardsRef.inView?"up":"opacity-0"}`}>
+            <p className="lbl mb-3">Explore further</p>
+            <h2 className="hd text-4xl lg:text-5xl">Five reasons to <span style={{ color:"#F97316" }}>choose us.</span></h2>
+          </div>
 
-          <div className="max-w-6xl mx-auto px-6 lg:px-12">
-            <div className={`text-center mb-14 ${cardsRef.inView?"reveal":"opacity-0"}`} style={{"--d":"0s"} as React.CSSProperties}>
-              <span className="fm text-xs text-orange-500 uppercase tracking-[.25em] mb-4 block">Explore further</span>
-              <h2 className="font-black text-4xl lg:text-5xl text-gray-900 leading-tight">
-                Five reasons to<br /><span className="shimmer">choose us.</span>
-              </h2>
-            </div>
-
-            {/* FEATURED CARD (success stories) - full width */}
-            <div className={`mb-5 ${cardsRef.inView?"reveal":"opacity-0"}`} style={{"--d":".08s"} as React.CSSProperties}>
-              <Link
-                href={`/why-us/${slugify(whyUsLinks[0].title)}`}
-                className="why-card rounded-3xl bg-[#060912] overflow-hidden relative group flex flex-col lg:flex-row block"
-              >
-                <div className="absolute inset-0 grid-dark opacity-60"/>
-                <div className="absolute inset-0" style={{background:"radial-gradient(ellipse 60% 80% at 20% 60%,rgba(249,115,22,.15) 0%,transparent 60%)"}}/>
-                <div className="relative z-10 p-8 lg:p-10 flex flex-col lg:w-2/3">
-                  <div className="flex items-center gap-3 mb-auto">
-                    <span className="fm text-[10px] px-2.5 py-1 rounded-full font-bold bg-orange-500/20 text-orange-400">
-                      {CARD_META[0].tag}
-                    </span>
-                    <span className="fm text-[10px] text-white/30">Featured</span>
+          {/* featured - success stories - dark image card */}
+          <div className={`mb-5 ${cardsRef.inView?"up":"opacity-0"}`} style={{"--d":".08s"} as React.CSSProperties}>
+            <Link href={`/why-us/${slugify(whyUsLinks[0].title)}`}
+              className="why-card rounded-2xl overflow-hidden relative group flex flex-col lg:flex-row block" style={{ background:"#111" }}>
+              {/* left: text */}
+              <div className="relative z-10 p-8 lg:p-10 flex flex-col lg:w-[60%]">
+                <div className="flex items-center gap-3 mb-auto">
+                  <span className="text-[10px] px-2.5 py-1 rounded-full font-bold" style={{ background:"rgba(249,115,22,.2)", color:"#FB923C", fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                    {CARD_META[0].tag}
+                  </span>
+                  <span className="text-white/25 text-[10px]" style={{ fontFamily:"'DM Sans',sans-serif" }}>Featured</span>
+                </div>
+                <div className="mt-10">
+                  <p className="text-white/25 text-[10px] uppercase tracking-wider mb-1" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{CARD_META[0].statLabel}</p>
+                  <p className="font-black text-4xl mb-4" style={{ color:"#F97316", fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{CARD_META[0].stat}</p>
+                  <h3 className="font-black text-2xl lg:text-3xl text-white leading-tight mb-3 group-hover:text-orange-100 transition-colors" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{whyUsLinks[0].title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-md" style={{ fontFamily:"'DM Sans',sans-serif" }}>{whyUsLinks[0].description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {CARD_META[0].bullet.map(b => (
+                      <span key={b} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs" style={{ background:"rgba(255,255,255,.06)", border:"1px solid rgba(255,255,255,.1)", color:"rgba(255,255,255,.5)", fontFamily:"'DM Sans',sans-serif" }}>
+                        <FiCheckCircle size={9} style={{ color:"#F97316" }}/>{b}
+                      </span>
+                    ))}
                   </div>
-                  <div className="mt-12">
-                    <p className="fm text-[10px] text-white/30 uppercase tracking-[.18em] mb-2">{CARD_META[0].statLabel}</p>
-                    <p className="font-black text-4xl text-orange-400 mb-4">{CARD_META[0].stat}</p>
-                    <h3 className="font-black text-2xl lg:text-3xl text-white leading-tight mb-3 group-hover:text-orange-100 transition-colors">{whyUsLinks[0].title}</h3>
-                    <p className="text-white/45 text-sm leading-relaxed mb-6 max-w-md">{whyUsLinks[0].description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {CARD_META[0].bullet.map(b=>(
-                        <span key={b} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/6 border border-white/8 text-white/50 text-xs">
-                          <FiCheckCircle size={9} className="text-orange-400"/>{b}
-                        </span>
+                </div>
+              </div>
+              {/* right: image */}
+              <div className="relative lg:w-[40%] min-h-[200px] overflow-hidden">
+                <img src={IMGS.mid} alt="" className="ic" style={{ objectPosition:"center 25%" }}/>
+                <div className="absolute inset-0" style={{ background:"linear-gradient(to left,transparent 30%,#111 100%)" }}/>
+                <div className="absolute bottom-5 right-5">
+                  <span className="flex items-center gap-2 text-white/50 text-sm font-bold card-arrow group-hover:text-orange-300 transition-colors" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                    Read stories <FiArrowRight size={13}/>
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* 2×2 grid */}
+          <div className="grid sm:grid-cols-2 gap-5">
+            {whyUsLinks.slice(1).map((link, i) => {
+              const meta = CARD_META[i+1]
+              const Icon = meta.icon
+              return (
+                <Link key={link.title} href={`/why-us/${slugify(link.title)}`}
+                  className={`why-card overflow-hidden group block ${cardsRef.inView?"up":"opacity-0"}`}
+                  style={{"--d":`${.16+i*.09}s`} as React.CSSProperties}>
+                  <div className="h-1" style={{ background:`linear-gradient(90deg,${meta.color},${meta.color}00)` }}/>
+                  <div className="p-7 flex flex-col h-full">
+                    <div className="flex items-start justify-between mb-5">
+                      <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background:`${meta.color}12` }}>
+                        <Icon size={20} style={{ color:meta.color }}/>
+                      </div>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full font-bold" style={{ background:`${meta.color}10`, color:meta.color, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{meta.tag}</span>
+                    </div>
+                    <div className="mb-4">
+                      <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{meta.statLabel}</p>
+                      <p className="font-black text-2xl" style={{ color:meta.color, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{meta.stat}</p>
+                    </div>
+                    <h3 className="font-black text-[#111] text-xl mb-2 group-hover:text-gray-700 transition-colors leading-tight" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{link.title}</h3>
+                    <p className="bd text-sm mb-5 flex-1">{link.description}</p>
+                    <div className="space-y-1.5 mb-5">
+                      {meta.bullet.map(b => (
+                        <div key={b} className="flex items-center gap-2 text-xs text-gray-500" style={{ fontFamily:"'DM Sans',sans-serif" }}>
+                          <FiCheckCircle size={10} style={{ color:meta.color, flexShrink:0 }}/>{b}
+                        </div>
                       ))}
                     </div>
-                  </div>
-                </div>
-                {/* right accent column */}
-                <div className="relative z-10 lg:w-1/3 flex items-end justify-end p-8">
-                  <div className="w-full h-full flex flex-col justify-between items-end">
-                    <div className="w-20 h-20 rounded-3xl bg-orange-500/15 border border-orange-500/20 flex items-center justify-center">
-                      <FiStar size={32} className="text-orange-400"/>
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200/60">
+                      <span className="font-bold text-xs" style={{ color:meta.color, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>Read more</span>
+                      <span className="w-7 h-7 rounded-full border flex items-center justify-center transition-all card-arrow" style={{ borderColor:`${meta.color}30` }}>
+                        <FiArrowRight size={11} style={{ color:meta.color }}/>
+                      </span>
                     </div>
-                    <span className="flex items-center gap-2 text-white/45 text-sm font-bold card-arrow group-hover:text-orange-300 transition-colors">
-                      Read stories <FiArrowRight size={14}/>
-                    </span>
                   </div>
-                </div>
-              </Link>
-            </div>
-
-            {/* 2×2 grid for remaining 4 */}
-            <div className="grid sm:grid-cols-2 gap-5">
-              {whyUsLinks.slice(1).map((link, i) => {
-                const meta = CARD_META[i + 1]
-                const Icon = meta.icon
-                return (
-                  <Link
-                    key={link.title}
-                    href={`/why-us/${slugify(link.title)}`}
-                    className={`why-card rounded-2xl border border-gray-100 bg-white overflow-hidden group block ${cardsRef.inView?"reveal":"opacity-0"}`}
-                    style={{"--d":`${.16+i*.08}s`} as React.CSSProperties}
-                  >
-                    <div className="h-1" style={{background:`linear-gradient(90deg,${meta.color},${meta.color}00)`}}/>
-                    <div className="p-7 flex flex-col h-full">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{background:`${meta.color}12`}}>
-                          <Icon size={20} style={{color:meta.color}}/>
-                        </div>
-                        <span className="fm text-[10px] px-2.5 py-1 rounded-full font-bold" style={{background:`${meta.color}10`,color:meta.color}}>
-                          {meta.tag}
-                        </span>
-                      </div>
-
-                      <div className="mb-4">
-                        <p className="fm text-[10px] text-gray-400 uppercase tracking-wider mb-1">{meta.statLabel}</p>
-                        <p className="font-black text-2xl" style={{color:meta.color}}>{meta.stat}</p>
-                      </div>
-
-                      <h3 className="font-black text-gray-900 text-xl mb-2 group-hover:text-gray-700 transition-colors leading-tight">{link.title}</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed mb-5 flex-1">{link.description}</p>
-
-                      <div className="space-y-1.5 mb-5">
-                        {meta.bullet.map(b=>(
-                          <div key={b} className="flex items-center gap-2 text-gray-500 text-xs">
-                            <FiCheckCircle size={10} style={{color:meta.color, flexShrink:0}}/>{b}
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                        <span className="font-black text-xs" style={{color:meta.color}}>Read more</span>
-                        <span className="w-7 h-7 rounded-full border flex items-center justify-center transition-all group-hover:border-current card-arrow" style={{borderColor:`${meta.color}30`}}>
-                          <FiArrowRight size={12} style={{color:meta.color}}/>
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
+                </Link>
+              )
+            })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── SOCIAL PROOF STRIP ── */}
-        <section className="py-16 bg-white border-t border-gray-100">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="grid sm:grid-cols-3 gap-6 text-center">
-              {[
-                {v:"₦45M+",l:"In gig payments facilitated",sub:"Across 180+ completed engagements",color:"#F97316"},
-                {v:"0%",l:"Unpaid invoices on platform",sub:"Escrow protects every single gig",color:"#10B981"},
-                {v:"48hr",l:"Faster than word-of-mouth",sub:"Instant matching on every gig post",color:"#6366F1"},
-              ].map(({v,l,sub,color})=>(
-                <div key={l}>
-                  <p className="font-black text-4xl mb-1" style={{color}}>{v}</p>
-                  <p className="font-black text-sm text-gray-800 mb-1">{l}</p>
-                  <p className="fm text-[11px] text-gray-400">{sub}</p>
-                </div>
-              ))}
-            </div>
+      {/* ── STATS - dark ── */}
+      <section ref={statsRef.ref} className="py-20 bg-[#111] relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] pointer-events-none"
+          style={{ background:"radial-gradient(ellipse,rgba(249,115,22,.09) 0%,transparent 70%)" }}/>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-12">
+          <div className={`grid sm:grid-cols-3 gap-10 ${statsRef.inView?"up":"opacity-0"}`} style={{"--d":"0s"} as React.CSSProperties}>
+            {STATS.map(({ v, l, sub, color }) => (
+              <div key={l} className="text-center">
+                <p className="font-black text-4xl lg:text-5xl mb-2" style={{ color, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{v}</p>
+                <p className="font-bold text-white text-sm mb-1" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{l}</p>
+                <p className="text-white/35 text-xs" style={{ fontFamily:"'DM Sans',sans-serif" }}>{sub}</p>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── DARK CTA ── */}
-        <section ref={ctaRef.ref} className="relative overflow-hidden bg-[#060912] py-28 noise">
-          <div className="absolute inset-0 grid-dark"/>
-          <div className="absolute inset-0" style={{background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(249,115,22,.12) 0%,transparent 65%)"}}/>
-          <div className="anim-o1 absolute w-[700px] h-[700px] rounded-full bg-orange-500/7 blur-3xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"/>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full border border-orange-500/8 pointer-events-none" style={{animation:"borderRot 28s linear infinite"}}/>
+      {/* ── CTA - image bg ── */}
+      <section ref={ctaRef.ref} className="relative overflow-hidden py-32">
+        <img src={IMGS.cta} alt="" aria-hidden className="absolute inset-0 ic" style={{ objectPosition:"center 40%" }}/>
+        <div className="absolute inset-0" style={{ background:"rgba(10,10,10,.82)" }}/>
+        <div className="absolute inset-0 pointer-events-none" style={{ background:"radial-gradient(ellipse 80% 60% at 50% 80%,rgba(249,115,22,.1) 0%,transparent 70%)" }}/>
 
-          <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-            <div className={`${ctaRef.inView?"reveal":"opacity-0"}`} style={{"--d":"0s"} as React.CSSProperties}>
-              <p className="fm text-xs text-orange-400 uppercase tracking-[.3em] mb-6">Convinced?</p>
-            </div>
-            <h2 className={`font-black text-5xl lg:text-6xl text-white leading-[.95] mb-4 ${ctaRef.inView?"reveal":"opacity-0"}`} style={{"--d":".1s"} as React.CSSProperties}>
-              Ready to work<br /><span className="shimmer">with purpose?</span>
-            </h2>
-            <p className={`fs italic text-3xl text-white/35 mb-10 ${ctaRef.inView?"reveal":"opacity-0"}`} style={{"--d":".22s"} as React.CSSProperties}>
-              Flexible talents. Meaningful work.
-            </p>
-            <div className={`flex flex-wrap gap-4 justify-center ${ctaRef.inView?"reveal":"opacity-0"}`} style={{"--d":".34s"} as React.CSSProperties}>
-              <Link href="/hire"
-                className="inline-flex items-center gap-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black px-10 py-4 rounded-2xl shadow-[0_0_50px_rgba(249,115,22,.35)] transition-all duration-200 group relative overflow-hidden"
-                style={{padding:"1.1rem 2.5rem"}}>
-                Hire talent <FiArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform"/>
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"/>
-              </Link>
-              <Link href="/jobs"
-                className="inline-flex items-center gap-2 border border-white/12 hover:border-orange-400 text-white/60 hover:text-white font-black rounded-2xl transition-all duration-200"
-                style={{padding:"1.1rem 2rem"}}>
-                Find work
-              </Link>
-            </div>
+        <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
+          <p className={`lbl text-orange-400 mb-5 ${ctaRef.inView?"up":"opacity-0"}`} style={{"--d":"0s"} as React.CSSProperties}>Convinced?</p>
+          <h2 className={`font-black text-5xl lg:text-6xl text-white leading-[1.04] mb-5 ${ctaRef.inView?"up":"opacity-0"}`}
+            style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", "--d":".1s" } as React.CSSProperties}>
+            Ready to work<br /><span style={{ color:"#F97316" }}>with purpose?</span>
+          </h2>
+          <p className={`text-white/45 text-lg mb-10 max-w-md mx-auto ${ctaRef.inView?"up":"opacity-0"}`}
+            style={{ fontFamily:"'DM Sans',sans-serif", "--d":".2s" } as React.CSSProperties}>
+            Flexible talents. Meaningful work.
+          </p>
+          <div className={`flex flex-wrap gap-4 justify-center ${ctaRef.inView?"up":"opacity-0"}`} style={{"--d":".3s"} as React.CSSProperties}>
+            <Link href="/hire" className="btn-p" style={{ padding:"1rem 2.5rem", fontSize:"1rem" }}>Hire talent <FiArrowRight size={16}/></Link>
+            <Link href="/jobs" className="btn-od" style={{ padding:"1rem 2.5rem", fontSize:"1rem" }}>Find work</Link>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Footer */}
-        <Footer />
-      </div>
+     <Footer />
     </>
   )
 }
+
+
+
+
+

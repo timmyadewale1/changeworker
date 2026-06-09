@@ -16,8 +16,10 @@ import { doc, getDoc } from "firebase/firestore"
 import { Eye, EyeOff } from "lucide-react"
 import {
   ensureBrowserSessionPersistence,
+  cacheAuthProfile,
   markAuthSession,
 } from "@/lib/authSession"
+import { makeAttemptGuard } from "@/lib/attemptThrottle"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -25,12 +27,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const loginGuard = makeAttemptGuard("cw_login_attempt_at", 15000)
 
   const nextUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("next") : null
 
   const postLoginRedirect = async (uid: string) => {
     try {
       const snap = await getDoc(doc(db, "users", uid))
+      if (snap.exists()) {
+        const data = snap.data() as any
+        cacheAuthProfile({
+          fullName: String(data?.fullName || data?.client?.orgName || ""),
+          photoUrl: String(data?.photoUrl || ""),
+        })
+      }
       const onboardingComplete = snap.exists() && Boolean(snap.data()?.onboardingComplete)
 
       if (!onboardingComplete) {
@@ -52,6 +62,11 @@ export default function LoginPage() {
 
   const handleEmailLogin = async () => {
     if (!email || !password) return toast.error("Enter email and password")
+    const attempt = loginGuard.canAttempt()
+    if (!attempt.ok) {
+      toast.error(`Please wait ${attempt.seconds}s before trying again.`)
+      return
+    }
 
     setLoading(true)
     try {
@@ -69,12 +84,18 @@ export default function LoginPage() {
       await postLoginRedirect(res.user.uid)
     } catch (err: any) {
       toast.error("Invalid email or password")
+      loginGuard.markAttempt()
     } finally {
       setLoading(false)
     }
   }
 
   const handleGoogleLogin = async () => {
+    const attempt = loginGuard.canAttempt()
+    if (!attempt.ok) {
+      toast.error(`Please wait ${attempt.seconds}s before trying again.`)
+      return
+    }
     setLoading(true)
     try {
       await ensureBrowserSessionPersistence()
@@ -86,6 +107,7 @@ export default function LoginPage() {
       await postLoginRedirect(res.user.uid)
     } catch {
       toast.error("Google sign-in failed")
+      loginGuard.markAttempt()
     } finally {
       setLoading(false)
     }

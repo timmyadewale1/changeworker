@@ -24,6 +24,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import FancyLoader from "@/components/ui/FancyLoader"
 import {
   Select,
   SelectContent,
@@ -40,7 +41,7 @@ import {
   ChevronDown,
   ChevronRight,
   Users,
-  Sparkles,
+  ShieldCheck,
 } from "lucide-react"
 import { fetchPublicGigs } from "@/lib/publicGigs"
 import { matchGigsToTalent, Gig as MatchingGig } from "@/lib/matching"
@@ -559,10 +560,10 @@ return [g.id, snap.size] as const
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell max-w-7xl mx-auto px-4 py-6">
           {/* Header */}
-          <div className="flex flex-col gap-4">
+          <div className="dashboard-page-header flex flex-col gap-4 rounded-2xl p-4 md:p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-extrabold">Find work</h1>
@@ -672,7 +673,7 @@ return [g.id, snap.size] as const
               <Card className="rounded-2xl">
                 <CardHeader>
                   <CardTitle className="text-base font-extrabold flex items-center gap-2">
-                    <Sparkles size={18} className="text-[var(--primary)]" />
+                    <ShieldCheck size={18} className="text-[var(--primary)]" />
                     Suggested gigs
                   </CardTitle>
                   <div className="text-xs text-gray-500 font-semibold">
@@ -681,7 +682,7 @@ return [g.id, snap.size] as const
                 </CardHeader>
                 <CardContent>
                   {suggestedGigsLoading ? (
-                    <div className="text-sm text-gray-600">Loading suggestions...</div>
+                    <FancyLoader label="Loading suggestions..." compact />
                   ) : (
                     <div className="overflow-x-auto pb-4">
                       <div className="flex gap-4 min-w-max">
@@ -748,7 +749,7 @@ return [g.id, snap.size] as const
             <div className="lg:col-span-2 space-y-3">
               {loading && items.length === 0 ? (
                 <Card className="rounded-2xl">
-                  <CardContent className="p-6 text-sm text-gray-600">Loading gigs...</CardContent>
+                  <CardContent className="p-6 text-sm text-gray-600"><FancyLoader label="Loading gigs..." compact /></CardContent>
                 </Card>
               ) : filtered.length === 0 ? (
                 <Card className="rounded-2xl">

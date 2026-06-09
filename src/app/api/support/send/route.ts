@@ -48,6 +48,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Message text or attachments are required." }, { status: 400 })
     }
 
+    if (text.length > 2000) {
+      return NextResponse.json({ error: "Message is too long." }, { status: 400 })
+    }
+
     if (role === "admin") {
       if (!threadIdFromRequest) {
         return NextResponse.json({ error: "Support thread ID is required." }, { status: 400 })

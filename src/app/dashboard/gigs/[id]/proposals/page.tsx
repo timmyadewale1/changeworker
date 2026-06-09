@@ -27,10 +27,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import FancyLoader from "@/components/ui/FancyLoader"
 
 import {
   ArrowLeft,
-  Sparkles,
   Users,
   Search,
   CheckCircle2,
@@ -364,13 +364,7 @@ export default function GigProposalsPage() {
     return (
       <RequireAuth>
         <AuthNavbar />
-        <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            <Card className="rounded-2xl">
-              <CardContent className="p-6 text-sm text-gray-600">Loading proposals...</CardContent>
-            </Card>
-          </div>
-        </div>
+        <FancyLoader label="Loading proposals..." />
       </RequireAuth>
     )
   }
@@ -437,7 +431,7 @@ export default function GigProposalsPage() {
               </button>
 
               <div className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-full border bg-white">
-                <Sparkles size={16} className="text-[var(--primary)]" />
+                <CheckCircle2 size={16} className="text-[var(--primary)]" />
                 <span className="text-gray-700">Proposals</span>
               </div>
             </div>
@@ -472,15 +466,9 @@ export default function GigProposalsPage() {
 
               <div className="flex flex-col md:flex-row md:items-center gap-2">
                 <div className="rounded-2xl border bg-white px-3 py-2 flex items-center gap-2">
-                  <span className="text-xs font-extrabold text-gray-600">Hires</span>
-                  <input
-                    type="number"
-                    min={1}
-                    defaultValue={hiresNeeded}
-                    onBlur={(e) => saveHiresNeeded(Number(e.target.value))}
-                    className="w-20 rounded-xl border bg-white px-3 py-2 text-sm font-extrabold outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                  />
-                  <span className="text-xs text-gray-500 font-semibold">set and blur</span>
+                  <Users size={16} className="text-[var(--primary)]" />
+                  <span className="text-xs font-extrabold text-gray-600">Hiring slots</span>
+                  <span className="text-sm font-extrabold text-gray-900">{hiresNeeded}</span>
                 </div>
 
                 <div className="relative w-full md:w-[320px]">

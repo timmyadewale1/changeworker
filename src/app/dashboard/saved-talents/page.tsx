@@ -168,8 +168,8 @@ export default function SavedTalentsPage() {
   return (
     <RequireAuth>
       <AuthNavbar />
-      <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="dashboard-page min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
+        <div className="dashboard-page-shell max-w-7xl mx-auto px-4 py-8">
           {/* header / mobile filter button */}
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-extrabold">Saved Talent</h1>

@@ -58,8 +58,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const timer = window.setInterval(() => {
       if (!isAuthSessionExpired()) return
       void logoutExpiredSession().finally(() => {
-        const nextPath = window.location.pathname.startsWith("/admin")
-          ? "/admin/login"
+        const nextPath = window.location.pathname.startsWith("/control")
+          ? "/control/login"
           : "/login"
         window.location.href = nextPath
       })

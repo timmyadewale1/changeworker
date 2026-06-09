@@ -1252,6 +1252,33 @@ const unsubSession = onSnapshot(
     }
   }
 
+  const startWalletFunding = async () => {
+    if (!id || !user?.uid || !ws || !isClient) return
+    try {
+      const { auth: firebaseAuth } = await import("@/lib/firebase")
+      const currentUser = firebaseAuth.currentUser
+      if (!currentUser) throw new Error("Not signed in")
+      const token = await currentUser.getIdToken()
+      const resp = await fetch("/api/wallets/fund-workspace", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ wsId: id }),
+      })
+      const json = await resp.json()
+      if (!resp.ok) {
+        if (json?.error === "Insufficient wallet balance") {
+          throw new Error(`Insufficient wallet balance. Top up at least NGN ${Number(json?.required || 0).toLocaleString()}.`)
+        }
+        throw new Error(json?.error || "Failed to fund workspace from wallet")
+      }
+      toast.success("Workspace funded from wallet balance")
+      window.location.reload()
+    } catch (e: any) {
+      console.error(e)
+      toast.error(e?.message || "Payment failed")
+    }
+  }
+
   // ---------- Milestones ----------
   const submitMilestone = async () => {
     if (!id || !user?.uid || !ws || !isTalent) return
@@ -2030,6 +2057,15 @@ const unsubSession = onSnapshot(
                           >
                             <Wallet size={16} />
                             {isFunded ? "Workspace funded" : "Fund workspace on Paystack"}
+                          </button>
+
+                          <button
+                            onClick={startWalletFunding}
+                            className="mt-2 w-full rounded-2xl border border-orange-200 bg-orange-50 text-[var(--primary)] font-extrabold py-2 hover:bg-orange-100 transition inline-flex items-center justify-center gap-2"
+                            disabled={isFunded}
+                          >
+                            <Wallet size={16} />
+                            {isFunded ? "Wallet funding complete" : "Fund from wallet balance"}
                           </button>
 
                           <div className="mt-3 pt-3 border-t space-y-2 text-xs">

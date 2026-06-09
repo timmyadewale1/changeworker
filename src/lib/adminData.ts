@@ -1,4 +1,5 @@
 import { getAdminDb } from "@/lib/firebaseAdmin"
+import { buildWorkspaceDisplayTitle as buildWorkspaceDisplayTitlePure } from "@/lib/workspaceDisplay"
 
 type DocData = Record<string, any>
 
@@ -47,13 +48,11 @@ export function initials(name?: string | null) {
 }
 
 export function buildWorkspaceDisplayTitle(workspace: DocData) {
-  const gigTitle = workspace.gigTitle || workspace.title || "Untitled gig"
-  const client = workspace.clientName || workspace.clientUid
-  const talent = workspace.talentName || workspace.talentUid
-  if (client && talent) {
-    return `Workspace for "${gigTitle}" between ${client} and ${talent}`
-  }
-  return `Workspace for "${gigTitle}"`
+  return buildWorkspaceDisplayTitlePure({
+    gigTitle: workspace.gigTitle || workspace.title || "Untitled gig",
+    clientName: workspace.clientName || workspace.clientUid,
+    talentName: workspace.talentName || workspace.talentUid,
+  })
 }
 
 export async function getAdminIndexes() {
@@ -126,10 +125,10 @@ export function getUserSummary(
 
   const adminHref =
     role === "talent"
-      ? `/admin/talents/${uid}`
+      ? `/control/talents/${uid}`
       : role === "client"
-        ? `/admin/clients/${uid}`
-        : `/admin/users`
+        ? `/control/clients/${uid}`
+        : `/control/users`
 
   return {
     uid,

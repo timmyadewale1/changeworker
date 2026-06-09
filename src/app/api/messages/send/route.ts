@@ -38,6 +38,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (trimmedText.length > 4000) {
+      return NextResponse.json({ error: "Message is too long" }, { status: 400 })
+    }
+
     const threadRef = db.collection("threads").doc(threadId)
     const threadSnap = await threadRef.get()
 

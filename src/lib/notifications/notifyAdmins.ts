@@ -11,6 +11,11 @@ interface NotifyOptions {
   meta?: any
 }
 
+function shouldEmailAdmin(type: string) {
+  const value = String(type || "").toLowerCase()
+  return value.includes("dispute") || value.includes("payment") || value.includes("withdraw")
+}
+
 export async function notifyAdmins(opts: NotifyOptions) {
   const adminDb = getAdminDb()
   const adminSnap = await adminDb.collection("users").where("role", "==", "admin").get()
@@ -23,6 +28,7 @@ export async function notifyAdmins(opts: NotifyOptions) {
   })
 
   // send notification/email to each admin
+  const sendEmail = shouldEmailAdmin(opts.type)
   for (const uid of admins) {
     try {
       await notifyUser({
@@ -33,6 +39,7 @@ export async function notifyAdmins(opts: NotifyOptions) {
         link: opts.link,
         emailSubject: opts.emailSubject,
         emailHtml: opts.emailHtml,
+        sendEmail,
         meta: opts.meta || {},
       })
     } catch (err) {

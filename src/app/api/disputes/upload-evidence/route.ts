@@ -23,10 +23,14 @@ export async function POST(req: Request) {
     const disputeId = form.get("disputeId") as string
     const file = form.get("file") as File
     const uploadedBy = form.get("uploadedBy") as string
-    const description = form.get("description") as string || ""
+    const description = (form.get("description") as string || "").trim()
 
     if (!disputeId || !file || !uploadedBy) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    if (description.length > 1000) {
+      return NextResponse.json({ error: "Description is too long" }, { status: 400 })
     }
 
     // Validate user is part of the dispute

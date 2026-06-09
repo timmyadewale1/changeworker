@@ -44,7 +44,7 @@ export default function TalentCard({
       <Link href={href} className="block">
         <Card className="rounded-2xl hover:shadow-md transition bg-white">
           <CardContent className="p-5">
-            <div className="flex items-start gap-4">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start">
               <div className="h-12 w-12 shrink-0 rounded-full bg-orange-50 flex items-center justify-center font-extrabold text-[var(--primary)] overflow-hidden">
                 {t.photoURL ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -118,7 +118,7 @@ export default function TalentCard({
                 </div>
               </div>
 
-              <div className="min-w-[110px] shrink-0 text-right">
+              <div className="min-w-0 shrink-0 md:min-w-[110px] md:text-right">
                 <div className="text-sm text-gray-500 font-semibold">Rate</div>
                 <div className="whitespace-nowrap text-xl font-extrabold">
                   {t.hourlyRate != null ? `₦${Number(t.hourlyRate).toLocaleString()}/hr` : "-"}

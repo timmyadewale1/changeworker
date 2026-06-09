@@ -15,7 +15,7 @@ describe("help assistant", () => {
 
   it("returns admin support inbox guidance", () => {
     const response = answerHelpQuestion("admin", "Where do support chats appear?")
-    expect(response.href).toBe("/admin/support")
+    expect(response.href).toBe("/control/support")
   })
 
   it("exposes prefilled faqs for each role", () => {

@@ -14,7 +14,6 @@ import {
   Users,
   MessageSquare,
   TrendingUp,
-  Sparkles,
   ArrowRight,
   PlusCircle,
   Search,
@@ -28,6 +27,7 @@ import { motion, animate } from "framer-motion"
 import { Wallet } from "lucide-react"
 import TalentCard, { TalentRow } from "@/components/talent/TalentCard"
 import DashboardHelpAssistant from "@/components/help/DashboardHelpAssistant"
+import FancyLoader from "@/components/ui/FancyLoader"
 import { matchTalentsToClient } from "@/lib/matching"
 import { fetchPublicTalents } from "@/lib/publicProfile"
 import { matchGigsToTalent, Gig } from "@/lib/matching"
@@ -494,32 +494,33 @@ export default function DashboardPage() {
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="bg-[var(--secondary)] min-h-[calc(100vh-64px)]">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="dashboard-page bg-transparent min-h-[calc(100vh-64px)]">
+        <div className="section-shell mx-auto max-w-[90rem] px-4 py-8 lg:px-8">
           {/* Header */}
           <motion.div
             initial="hidden"
             animate="show"
             variants={fadeUp}
             custom={0}
-            className="flex items-start justify-between gap-4"
+            className="dashboard-page-header surface-panel flex items-start justify-between gap-4 px-6 py-5 md:px-8 md:py-6"
           >
-            <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            <div className="min-w-0">
+              <div className="section-eyebrow text-xs font-semibold">Dashboard</div>
+              <h1 className="section-title text-3xl md:text-4xl font-extrabold tracking-tight">
                 {headline}
               </h1>
-              <p className="text-gray-600 mt-2">{sub}</p>
+              <p className="muted-copy mt-2 max-w-2xl">{sub}</p>
             </div>
 
             {/* Alive badge (pulse ring) */}
-            <div className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-full border bg-white relative">
+            <div className="dashboard-kicker hidden md:flex items-center gap-2 text-xs font-semibold px-4 py-2.5 rounded-full border bg-white relative shadow-sm">
               <motion.span
                 aria-hidden
                 className="absolute -left-1 -top-1 h-3 w-3 rounded-full bg-[var(--primary)]"
                 animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
               />
-              <Sparkles size={16} className="text-[var(--primary)]" />
+              <ShieldCheck size={16} className="text-[var(--primary)]" />
               <span className="text-gray-700">SDG-first marketplace • Nigeria</span>
             </div>
           </motion.div>
@@ -532,22 +533,18 @@ export default function DashboardPage() {
             custom={1}
             className="mt-4"
           >
-            <div className="bg-white border rounded-2xl px-4 py-3 flex items-center gap-3 text-sm text-gray-700">
+            <div className="dashboard-card surface-panel-soft px-4 py-3 flex items-center gap-3 text-sm text-gray-700">
               <motion.div
-                className="h-9 w-9 rounded-xl bg-orange-50 flex items-center justify-center"
+                className="h-9 w-9 rounded-xl bg-gray-100 flex items-center justify-center"
                 {...floaty}
               >
-                <ShieldCheck className="text-[var(--primary)]" size={18} />
+                <ShieldCheck className="text-gray-500" size={18} />
               </motion.div>
 
               <div className="flex-1">
                 <span className="font-extrabold text-gray-900">Impact-first matching</span>{" "}
-                - gigs and talent are organized by SDGs, location, and budget.
               </div>
 
-              <div className="hidden md:block text-xs font-semibold text-gray-600">
-                MVP mode
-              </div>
             </div>
           </motion.div>
 
@@ -637,7 +634,7 @@ export default function DashboardPage() {
               custom={2}
               className="lg:col-span-2"
             >
-              <Card className="rounded-2xl">
+              <Card className="surface-panel rounded-3xl">
                 <CardHeader>
                   <CardTitle className="text-base font-extrabold">
                     Quick actions
@@ -649,7 +646,7 @@ export default function DashboardPage() {
                     <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 240, damping: 18 }}>
                       <Link
                         href="/dashboard/profile"
-                        className="group block rounded-2xl border bg-white p-4 hover:shadow-md transition"
+                        className="action-tile group block rounded-3xl border bg-white p-5 hover:bg-white transition"
                       >
                         <div className="flex items-start gap-3">
                           <div className="h-10 w-10 rounded-xl bg-orange-50 flex items-center justify-center">
@@ -678,7 +675,7 @@ export default function DashboardPage() {
                       >
                         <Link
                           href={a.href}
-                          className="group block rounded-2xl border bg-white p-4 hover:shadow-md transition"
+                          className="action-tile group block rounded-3xl border bg-white p-5 hover:bg-white transition"
                         >
                           <div className="flex items-start gap-3">
                             <div className="h-10 w-10 rounded-xl bg-orange-50 flex items-center justify-center">
@@ -711,7 +708,7 @@ export default function DashboardPage() {
   whileHover={{ y: -4 }}
   transition={{ type: "spring", stiffness: 240, damping: 18 }}
 >
-  <Card className="rounded-2xl hover:shadow-md transition">
+  <Card className="stat-tile rounded-3xl border-0 hover:shadow-md transition">
     <CardContent className="p-6">
       <div className="flex items-center justify-between">
         <motion.div
@@ -764,7 +761,7 @@ export default function DashboardPage() {
               custom={3}
             >
               <motion.div {...floaty}>
-                <Card className="rounded-2xl">
+                <Card className="surface-panel rounded-3xl">
                   <CardHeader>
                     <CardTitle className="text-base font-extrabold">
                       SDG focus
@@ -798,10 +795,10 @@ export default function DashboardPage() {
                 variants={fadeUp}
                 custom={4}
               >
-                <Card className="rounded-2xl">
+                <Card className="surface-panel rounded-3xl">
                   <CardHeader>
                     <CardTitle className="text-base font-extrabold flex items-center gap-2">
-                      <Sparkles size={18} className="text-[var(--primary)]" />
+                      <Users size={18} className="text-[var(--primary)]" />
                       Suggested talent
                     </CardTitle>
                     <div className="text-xs text-gray-500 font-semibold">
@@ -810,7 +807,7 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     {suggestedLoading ? (
-                      <div className="text-sm text-gray-600">Loading suggestions...</div>
+                      <FancyLoader label="Loading suggestions..." compact />
                     ) : (
                       <div className="overflow-x-auto pb-4">
                         <div className="flex gap-4 min-w-max">
@@ -843,10 +840,10 @@ export default function DashboardPage() {
               variants={fadeUp}
               custom={4}
             >
-              <Card className="rounded-2xl">
+              <Card className="surface-panel rounded-3xl">
                 <CardHeader>
                   <CardTitle className="text-base font-extrabold flex items-center gap-2">
-                    <Sparkles size={18} className="text-[var(--primary)]" />
+                    <Briefcase size={18} className="text-[var(--primary)]" />
                     Suggested gigs
                   </CardTitle>
                   <div className="text-xs text-gray-500 font-semibold">
@@ -855,14 +852,14 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   {suggestedGigsLoading ? (
-                    <div className="text-sm text-gray-600">Loading suggestions...</div>
+                    <FancyLoader label="Loading suggestions..." compact />
                   ) : (
                     <div className="overflow-x-auto pb-4">
                       <div className="flex gap-4 min-w-max">
                         {suggestedGigs.map((gig, idx) => (
                           <div key={gig.id} className="w-80 flex-shrink-0">
                             <Link href={`/dashboard/find-work/${gig.id}`} className="block">
-                              <Card className="rounded-2xl hover:shadow-md transition bg-white">
+                              <Card className="action-tile rounded-3xl hover:shadow-md transition bg-white border">
                                 <CardContent className="p-5">
                                   <div className="flex items-start gap-4">
                                     <div className="h-12 w-12 rounded-full bg-orange-50 flex items-center justify-center font-extrabold text-[var(--primary)]">
@@ -927,7 +924,7 @@ export default function DashboardPage() {
             custom={4}
             className="mt-6"
           >
-            <Card className="rounded-2xl">
+            <Card className="surface-panel rounded-3xl">
               <CardHeader>
                 <CardTitle className="text-base font-extrabold">
                   Recent activity
@@ -1012,7 +1009,7 @@ function StatCard({
 }) {
   return (
     <motion.div variants={fadeUp} custom={i + 1} whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 240, damping: 18 }}>
-      <Card className="h-full rounded-2xl hover:shadow-md transition">
+      <Card className="stat-tile h-full rounded-3xl border-0 hover:shadow-md transition">
         <CardContent className="flex h-full min-h-[176px] flex-col p-6">
           <div className="flex items-center justify-between">
             <motion.div
@@ -1050,7 +1047,7 @@ function RatingsCard({
 
   return (
     <motion.div variants={fadeUp} custom={i + 1} whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 240, damping: 18 }}>
-      <Card className="h-full rounded-2xl hover:shadow-md transition">
+      <Card className="stat-tile h-full rounded-3xl border-0 hover:shadow-md transition">
         <CardContent className="flex h-full min-h-[176px] flex-col p-6">
           <div className="flex items-center justify-between">
             <motion.div

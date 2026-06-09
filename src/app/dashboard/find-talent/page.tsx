@@ -12,6 +12,7 @@ import { collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { matchTalentsToClient } from "@/lib/matching"
 import { fetchPublicTalents } from "@/lib/publicProfile"
+import FancyLoader from "@/components/ui/FancyLoader"
 
 export default function FindTalentPage() {
   const { user } = useAuth()
@@ -68,7 +69,7 @@ export default function FindTalentPage() {
       <div className="space-y-6">
         {/* suggestions */}
         {suggestedLoading ? (
-          <div className="text-sm text-gray-600">Loading suggestions...</div>
+          <FancyLoader label="Loading suggestions..." compact />
         ) : suggestedTalents.length > 0 ? (
           <Card className="rounded-2xl">
             <CardContent className="p-4">

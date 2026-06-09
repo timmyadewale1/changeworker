@@ -65,6 +65,8 @@ service cloud.firestore {
       allow write: if isAdmin()
         || (
           isMe(uid)
+          && (request.resource.data.uid == uid || resource.data.uid == uid)
+          && (!("role" in request.resource.data) || request.resource.data.role == resource.data.role)
           && (
             !("kyc" in request.resource.data)
             || (

@@ -6,19 +6,27 @@ import Button from "@/components/ui/Button"
 import { sendPasswordResetEmail } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import toast from "react-hot-toast"
+import { makeAttemptGuard } from "@/lib/attemptThrottle"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
+  const resetGuard = makeAttemptGuard("cw_reset_attempt_at", 60_000)
 
   const handleReset = async () => {
     if (!email) return toast.error("Enter your email")
+    const attempt = resetGuard.canAttempt()
+    if (!attempt.ok) {
+      toast.error(`Please wait ${attempt.seconds}s before requesting another reset.`)
+      return
+    }
     setLoading(true)
     try {
       await sendPasswordResetEmail(auth, email)
       toast.success("Password reset email sent!")
     } catch (err: any) {
       toast.error("Could not send reset email")
+      resetGuard.markAttempt()
     } finally {
       setLoading(false)
     }

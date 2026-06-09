@@ -15,9 +15,9 @@ import {
   FiBookmark, FiLayers, FiEdit3, FiSend,
   FiFileText, FiBell, FiMessageSquare
 } from "react-icons/fi"
-import { HiSparkles, HiCurrencyDollar } from "react-icons/hi"
 import { RiTeamLine } from "react-icons/ri"
 import { TbBuildingCommunity } from "react-icons/tb"
+import Footer from "@/components/layout/Footer"
 
 function useInView(threshold = 0.08) {
   const ref = useRef<HTMLDivElement>(null)
@@ -990,46 +990,7 @@ Stop being invisible on platforms that weren’t built for the social impact sec
             </div> */}
           </div>
         </section>
-
-        <footer className="bg-[#0A0A0A] border-t border-white/5 pt-16 pb-10">
-          <div className="max-w-6xl mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
-              <div className="col-span-2">
-                <div className="flex items-center gap-2.5 mb-4">
-                  <img src="/logo.png" alt="changeworker" className="h-8 w-8" />
-                  <span className="font-black text-xl text-white" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>changeworker</span>
-                </div>
-                <p className="text-white/30 text-sm leading-relaxed mb-4 max-w-xs" style={{ fontFamily: "'DM Sans',sans-serif" }}>
-                  Flexible talents. Meaningful work.<br />The talent marketplace for social impact in Nigeria.
-                </p>
-                <p className="text-white/15 text-xs mb-5" style={{ fontFamily: "'DM Sans',sans-serif" }}>A product of Impactpal Africa</p>
-                <div className="flex gap-2">
-                  {["𝕏", "in", "ig"].map(s => (
-                    <a key={s} href="#" className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/12 border border-white/8 flex items-center justify-center text-white/30 hover:text-white text-xs font-bold transition-all" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{s}</a>
-                  ))}
-                </div>
-              </div>
-              {[
-                { title: "Platform", links: [["How It Works", "/how-it-works"], ["FAQ", "/faq"]] },
-                { title: "Company", links: [["About Us", "/about"], ["Blog", "/blog"], ["Contact", "/contact"]] },
-                { title: "Legal", links: [["Terms", "/terms"], ["Privacy", "/privacy"]] },
-              ].map(col => (
-                <div key={col.title}>
-                  <p className="text-white/20 text-[10px] uppercase tracking-[.2em] mb-5" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{col.title}</p>
-                  <ul className="space-y-3">
-                    {col.links.map(([l, href]) => (
-                      <li key={l}><Link href={href} className="text-white/35 hover:text-white text-sm transition-colors no-underline" style={{ fontFamily: "'DM Sans',sans-serif" }}>{l}</Link></li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-3">
-              <p className="text-white/15 text-xs" style={{ fontFamily: "'DM Sans',sans-serif" }}>© {new Date().getFullYear()} changeworker · Impactpal Africa</p>
-              <p className="text-white/10 text-xs" style={{ fontFamily: "'DM Sans',sans-serif" }}>Building Africa's workforce for social impact</p>
-            </div>
-          </div>
-        </footer>
+            <Footer />
 
       </div>
       <Toaster position="top-right" />

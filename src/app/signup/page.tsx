@@ -20,6 +20,7 @@ import {
   ensureBrowserSessionPersistence,
   markAuthSession,
 } from "@/lib/authSession"
+import { makeAttemptGuard } from "@/lib/attemptThrottle"
 
 export default function SignupPage() {
   const router = useRouter()
@@ -27,9 +28,15 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const signupGuard = makeAttemptGuard("cw_signup_attempt_at", 20_000)
 
   const handleSignup = async () => {
     if (!email || !password) return toast.error("Enter email and password")
+    const attempt = signupGuard.canAttempt()
+    if (!attempt.ok) {
+      toast.error(`Please wait ${attempt.seconds}s before trying again.`)
+      return
+    }
 
     setLoading(true)
     try {
@@ -72,12 +79,18 @@ export default function SignupPage() {
       router.push("/verify-email")
     } catch (err: any) {
       toast.error(err?.message || "Signup failed")
+      signupGuard.markAttempt()
     } finally {
       setLoading(false)
     }
   }
 
   const handleGoogleSignup = async () => {
+    const attempt = signupGuard.canAttempt()
+    if (!attempt.ok) {
+      toast.error(`Please wait ${attempt.seconds}s before trying again.`)
+      return
+    }
     setLoading(true)
     try {
       await ensureBrowserSessionPersistence()
@@ -120,6 +133,7 @@ export default function SignupPage() {
     } catch (err: any) {
       console.error("Google signup failed:", err)
       toast.error(err?.message || "Google sign-up failed")
+      signupGuard.markAttempt()
     } finally {
       setLoading(false)
     }

@@ -192,22 +192,40 @@ export async function POST(req: Request) {
 
     await walletRef.collection("withdrawals").doc(withdrawalId).set(
       {
-        status: "processing",
+        status: "paid",
         paystack: {
           transferCode: transferJson.data.transfer_code,
           reference: withdrawalId,
         },
+        paidAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true }
     )
 
+    await db.runTransaction(async (tx: Transaction) => {
+      const walletSnap = (await tx.get(walletRef)) as any
+      const walletData = walletSnap.data() as any
+
+      tx.update(walletRef, {
+        pendingBalance: Math.max(0, Number(walletData.pendingBalance || 0) - amountNaira),
+        totalWithdrawn: Number(walletData.totalWithdrawn || 0) + amountNaira,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      })
+
+      tx.update(walletRef.collection("transactions").doc(withdrawalId), {
+        status: "paid",
+        settlementStatus: "paid",
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      })
+    })
+
     // Send notification for withdrawal request
     await notifyUser({
       userId: uid,
       type: "withdrawal",
-      title: "Withdrawal requested",
-      message: `Your withdrawal of ₦${amountNaira.toLocaleString()} has been submitted and is being processed`,
+      title: "Withdrawal paid",
+      message: `Your withdrawal of ₦${amountNaira.toLocaleString()} has been paid to your bank account.`,
       link: `/dashboard/wallet`,
     })
 
@@ -215,8 +233,8 @@ export async function POST(req: Request) {
     try {
       await notifyAdmins({
         type: "admin:withdrawal",
-        title: "Withdrawal requested",
-        message: `Talent ${uid} requested ₦${amountNaira.toLocaleString()}`,
+        title: "Withdrawal paid",
+        message: `Talent ${uid} withdrawal of NGN ${amountNaira.toLocaleString()} was paid successfully.`,
         link: `/admin/wallets`,
       })
     } catch (err) {
@@ -229,3 +247,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: e?.message || "Server error" }, { status: 500 })
   }
 }
+

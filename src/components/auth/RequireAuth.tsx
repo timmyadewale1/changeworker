@@ -26,5 +26,5 @@ export default function RequireAuth({
 
   if (!user) return null
 
-  return <>{children}</>
+  return <div className="auth-shell min-h-screen">{children}</div>
 }

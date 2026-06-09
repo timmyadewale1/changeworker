@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { Inbox, LifeBuoy, MessageCircleQuestion, Sparkles } from "lucide-react"
+import { Inbox, LifeBuoy, MessageCircleQuestion, MessageSquare } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/context/AuthContext"
@@ -63,7 +63,7 @@ export default function AdminSupportAssistant() {
     <Card className="rounded-[1.75rem] border-0 shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base font-extrabold">
-          <Sparkles size={18} className="text-[var(--primary)]" />
+          <MessageSquare size={18} className="text-[var(--primary)]" />
           Admin help assistant
         </CardTitle>
         <p className="text-sm leading-6 text-gray-600">
@@ -132,7 +132,7 @@ export default function AdminSupportAssistant() {
                   <LifeBuoy size={16} className="text-[var(--primary)]" />
                   Dashboard support inbox
                 </div>
-                <Link href="/admin/support" className="text-sm font-bold text-[var(--primary)] hover:underline">
+                <Link href="/control/support" className="text-sm font-bold text-[var(--primary)] hover:underline">
                   View all
                 </Link>
               </div>
@@ -145,7 +145,7 @@ export default function AdminSupportAssistant() {
                   threads.slice(0, 4).map((thread) => (
                     <Link
                       key={thread.id}
-                      href={`/admin/support/${thread.id}`}
+                      href={`/control/support/${thread.id}`}
                       className="block rounded-2xl bg-white px-4 py-4 transition hover:border-orange-200 hover:bg-orange-50/40"
                     >
                       <div className="flex items-start gap-3">

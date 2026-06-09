@@ -21,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
+import FancyLoader from "@/components/ui/FancyLoader"
 
 import {
   Briefcase,
@@ -29,7 +30,6 @@ import {
   ShieldCheck,
   ArrowLeft,
   Download,
-  Sparkles,
   Tag,
   Wallet,
   Bookmark,
@@ -333,9 +333,7 @@ export default function TalentGigDetailsPage() {
       <div className="min-h-[calc(100vh-64px)] bg-[var(--secondary)]">
         <div className="max-w-7xl mx-auto px-4 py-6">
           {loading ? (
-            <Card className="rounded-2xl">
-              <CardContent className="p-6 text-sm text-gray-600">Loading gig...</CardContent>
-            </Card>
+            <FancyLoader label="Loading gig..." compact />
           ) : !gig ? (
             <Card className="rounded-2xl">
               <CardContent className="p-6 text-sm text-gray-600">Gig not found.</CardContent>
@@ -354,7 +352,7 @@ export default function TalentGigDetailsPage() {
                   </button>
 
                   <div className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-full border bg-white">
-                    <Sparkles size={16} className="text-[var(--primary)]" />
+                    <ShieldCheck size={16} className="text-[var(--primary)]" />
                     <span className="text-gray-700">Gig details</span>
                   </div>
                 </div>

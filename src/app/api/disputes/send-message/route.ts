@@ -18,9 +18,26 @@ export async function POST(req: Request) {
     const userId = decoded.uid
 
     const { disputeId, senderId, message, attachments } = await req.json()
+    const trimmedMessage = typeof message === "string" ? message.trim() : ""
+    const normalizedAttachments = Array.isArray(attachments)
+      ? attachments
+          .filter(
+            (attachment) =>
+              attachment &&
+              typeof attachment === "object" &&
+              typeof attachment.name === "string" &&
+              typeof attachment.url === "string" &&
+              typeof attachment.storagePath === "string"
+          )
+          .slice(0, 5)
+      : []
 
-    if (!disputeId || !senderId || !message) {
+    if (!disputeId || !senderId || !trimmedMessage) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    if (trimmedMessage.length > 2000) {
+      return NextResponse.json({ error: "Message is too long" }, { status: 400 })
     }
 
     // Validate user is part of the dispute
@@ -41,8 +58,8 @@ export async function POST(req: Request) {
     await adminDb.collection("disputeMessages").add({
       disputeId,
       senderId: userId,
-      message: String(message).trim(),
-      attachments: attachments || [],
+      message: trimmedMessage,
+      attachments: normalizedAttachments,
       createdAt: FieldValue.serverTimestamp()
     })
 

@@ -105,6 +105,12 @@ export const hireCategories: NavCategoryGroup[] = [
       "CRM data entry",
     ],
   },
+  {
+    title: "Others",
+    items: [
+      "Other",
+    ],
+  },
 ]
 
 export const findWorkCategories = hireCategories

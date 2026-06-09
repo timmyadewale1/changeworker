@@ -79,16 +79,26 @@ export default function ClientProfilePage() {
 
   const savePartial = async (patch: any) => {
     if (!user?.uid) return
+    const currentOrgProfile = (userDoc?.orgProfile || {}) as Record<string, any>
+    const nextOrgProfile = {
+      ...currentOrgProfile,
+      ...(patch.orgProfile || {}),
+      categories:
+        patch?.orgProfile && "categories" in patch.orgProfile
+          ? patch.orgProfile.categories
+          : categories,
+    }
+    const nextSdgs =
+      Array.isArray(patch?.sdgTags) ? patch.sdgTags : selectedSdgs
     const patchWithComplete = {
+      uid: user.uid,
+      role: "client",
       ...patch,
-      orgProfile: {
-        ...patch.orgProfile,
-        categories,
-      },
-      sdgTags: selectedSdgs,
+      orgProfile: nextOrgProfile,
+      sdgTags: nextSdgs,
       profileComplete: computeClientProfileComplete({
-        sdgTags: selectedSdgs,
-        orgProfile: { about, website, contactEmail, contactPhone, portfolio },
+        sdgTags: nextSdgs,
+        orgProfile: nextOrgProfile,
       }),
     }
     await setDoc(doc(db, "users", user.uid), { ...patchWithComplete, updatedAt: serverTimestamp() }, { merge: true })
@@ -111,25 +121,25 @@ export default function ClientProfilePage() {
       fullName: userDoc.fullName,
       slug: slugifyName(userDoc.fullName),
       location: userDoc.location || "",
-      sdgTags: selectedSdgs,
+      sdgTags: nextSdgs,
       profileComplete: !!userDoc.profileComplete,
 
       orgProfile: {
-        about: userDoc?.orgProfile?.about || "",
-        website: userDoc?.orgProfile?.website || "",
-        contactEmail: userDoc?.orgProfile?.contactEmail || "",
-        contactPhone: userDoc?.orgProfile?.contactPhone || "",
-        portfolio: userDoc?.orgProfile?.portfolio || [],
+        about: nextOrgProfile.about || "",
+        website: nextOrgProfile.website || "",
+        contactEmail: nextOrgProfile.contactEmail || "",
+        contactPhone: nextOrgProfile.contactPhone || "",
+        portfolio: nextOrgProfile.portfolio || [],
         socials: socialsFromUser,
-        categories: categories,
-        industries: userDoc?.orgProfile?.industries || [],
+        categories: nextOrgProfile.categories || [],
+        industries: nextOrgProfile.industries || [],
       },
 
       publicProfile: {
         photoURL: photo,
-        portfolio: userDoc?.orgProfile?.portfolio || [],
+        portfolio: nextOrgProfile.portfolio || [],
         socials: socialsFromUser,
-        categories: categories,
+        categories: nextOrgProfile.categories || [],
       },
 
       verification: userDoc?.verification || { status: "not_submitted" },

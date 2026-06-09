@@ -45,10 +45,12 @@ export async function POST(req: Request) {
     const reference = String(event?.data?.reference || "")
     const metadata = event?.data?.metadata || {}
     const wsId = String(metadata?.wsId || "")
+    const walletUid = String(metadata?.walletUid || "")
+    const paymentType = String(metadata?.type || "workspace_funding")
 
     console.log("[Paystack Webhook] charge.success - wsId:", wsId, "reference:", reference)
 
-    if (!reference || !wsId) {
+    if (!reference || (!wsId && !walletUid)) {
       console.warn("[Paystack Webhook] Missing reference or wsId")
       return NextResponse.json({ ok: true })
     }
@@ -73,6 +75,59 @@ export async function POST(req: Request) {
 
     const paidKobo = Number(verifyJson.data.amount || 0)
     const paidNaira = paidKobo / 100
+
+    if (paymentType === "wallet_topup" && walletUid) {
+      const walletRef = db.doc(`wallets/${walletUid}`)
+      const walletTxRef = walletRef.collection("transactions").doc(reference)
+      const topupRef = walletRef.collection("topups").doc(reference)
+
+      await db.runTransaction(async (tx: Transaction) => {
+        const walletSnap: any = await tx.get(walletRef)
+        const walletData = walletSnap.exists() ? (walletSnap.data() as any) : {}
+
+        tx.set(
+          walletRef,
+          {
+            uid: walletUid,
+            role: String(walletData?.role || "client"),
+            availableBalance: Number(walletData.availableBalance || 0) + paidNaira,
+            totalLoaded: Number(walletData.totalLoaded || 0) + paidNaira,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            createdAt: walletData.createdAt || admin.firestore.FieldValue.serverTimestamp(),
+          },
+          { merge: true }
+        )
+
+        tx.set(
+          walletTxRef,
+          {
+            type: "credit",
+            reason: "wallet_topup",
+            amount: paidNaira,
+            currency: "NGN",
+            status: "completed",
+            meta: { reference },
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          },
+          { merge: true }
+        )
+
+        tx.set(
+          topupRef,
+          {
+            amount: paidNaira,
+            currency: "NGN",
+            status: "funded",
+            paidAt: admin.firestore.FieldValue.serverTimestamp(),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          },
+          { merge: true }
+        )
+      })
+
+      return NextResponse.json({ ok: true })
+    }
 
     // Idempotency: if already funded, skip
     const payRef = db.doc(`workspaces/${wsId}/payments/${reference}`)

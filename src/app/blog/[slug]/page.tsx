@@ -8,7 +8,7 @@ import {
   FiArrowLeft, FiArrowRight, FiClock, FiShare2, FiCopy,
   FiCheck, FiTwitter, FiLinkedin, FiBookmark, FiChevronUp
 } from "react-icons/fi"
-import { HiSparkles } from "react-icons/hi"
+import { FiTrendingUp } from "react-icons/fi"
 
 /* props - in Next.js this would come from params */
 interface BlogPostProps { slug?: string }
@@ -109,7 +109,7 @@ function renderSection(s: Section, i: number, accentColor: string) {
         <div key={i} className="my-8 p-6 rounded-2xl border-l-4 relative overflow-hidden"
           style={{ background: `${s.color || accentColor}08`, borderColor: s.color || accentColor }}>
           <div className="absolute top-4 right-4 opacity-10">
-            <HiSparkles size={32} style={{ color: s.color || accentColor }} />
+            <FiTrendingUp size={32} style={{ color: s.color || accentColor }} />
           </div>
           <p className="text-sm leading-relaxed relative z-10" style={{ color: s.color || accentColor, fontFamily: "'Sora', sans-serif", fontWeight: 500 }}>
             {s.content}

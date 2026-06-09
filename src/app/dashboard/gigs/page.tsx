@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import Button from "@/components/ui/Button"
+import FancyLoader from "@/components/ui/FancyLoader"
 import { motion } from "framer-motion"
 import {
   Briefcase,
@@ -261,14 +262,14 @@ export default function MyGigsPage() {
     <RequireAuth>
       <AuthNavbar />
 
-      <div className="bg-[var(--secondary)] min-h-[calc(100vh-64px)]">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="dashboard-page bg-[var(--secondary)] min-h-[calc(100vh-64px)]">
+        <div className="dashboard-page-shell max-w-7xl mx-auto px-4 py-8">
           {/* Header */}
-          <motion.div initial="hidden" animate="show" variants={fadeUp} custom={0} className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <motion.div initial="hidden" animate="show" variants={fadeUp} custom={0} className="dashboard-page-header flex flex-col md:flex-row md:items-end md:justify-between gap-4 rounded-2xl p-4 md:p-5">
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">My gigs</h1>
               <p className="text-gray-600 mt-2">
-                Manage your posted gigs, attachments, and hiring pipeline (coming next).
+                Manage your posted gigs, attachments, and hiring pipeline.
               </p>
             </div>
 
@@ -398,7 +399,7 @@ export default function MyGigsPage() {
           <div className="mt-6">
             {loading ? (
               <Card className="rounded-2xl">
-                <CardContent className="p-6 text-sm text-gray-600">Loading your gigs…</CardContent>
+                <CardContent className="p-6 text-sm text-gray-600"><FancyLoader label="Loading your gigs..." compact /></CardContent>
               </Card>
             ) : empty ? (
               <Card className="rounded-2xl">
@@ -433,10 +434,10 @@ export default function MyGigsPage() {
                 <div className="relative">
                   {/* swipe indicators */}
                   {canScrollLeft && (
-                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-[var(--secondary)] to-transparent" />
+                    <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-10 bg-white/70" />
                   )}
                   {canScrollRight && (
-                    <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[var(--secondary)] to-transparent" />
+                    <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-white/70" />
                   )}
 
                   <div
@@ -583,3 +584,5 @@ export default function MyGigsPage() {
     </RequireAuth>
   )
 }
+
+
