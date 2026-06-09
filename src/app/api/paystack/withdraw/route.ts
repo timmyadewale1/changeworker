@@ -8,6 +8,16 @@ import { notifyAdmins } from "@/lib/notifications/notifyAdmins"
 
 export const runtime = "nodejs"
 
+function setPaymentCookie(response: NextResponse, reference: string, maxAge = 60 * 60 * 2) {
+  response.cookies.set("pstk_withdraw_reference", reference, {
+    path: "/",
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge,
+  })
+}
+
 async function parsePaystackResponse(resp: Response) {
   const text = await resp.text()
   try {
@@ -241,7 +251,9 @@ export async function POST(req: Request) {
       console.error("admin notify withdrawal failed", err)
     }
 
-    return NextResponse.json({ ok: true, withdrawalId })
+    const response = NextResponse.json({ ok: true, withdrawalId })
+    setPaymentCookie(response, withdrawalId)
+    return response
   } catch (e: any) {
     console.error(e)
     return NextResponse.json({ error: e?.message || "Server error" }, { status: 500 })

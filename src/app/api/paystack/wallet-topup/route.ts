@@ -5,6 +5,16 @@ import { getAdminApp, getAdminDb } from "@/lib/firebaseAdmin"
 
 export const runtime = "nodejs"
 
+function setPaymentCookie(response: NextResponse, reference: string, maxAge = 60 * 60 * 2) {
+  response.cookies.set("pstk_wallet_reference", reference, {
+    path: "/",
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge,
+  })
+}
+
 async function parsePaystackResponse(resp: Response) {
   const text = await resp.text()
   try {
@@ -92,11 +102,13 @@ export async function POST(req: Request) {
       { merge: true }
     )
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       authorizationUrl: json.data.authorization_url,
       reference,
       amount: amountNaira,
     })
+    setPaymentCookie(response, reference)
+    return response
   } catch (error: any) {
     console.error("[/api/paystack/wallet-topup]", error)
     return NextResponse.json({ error: error?.message || "Server error" }, { status: 500 })

@@ -59,6 +59,23 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  const csrfExemptPaths = [
+    "/api/auth/session",
+    "/api/paystack/webhook",
+    "/api/test-firebase",
+  ]
+  const unsafeMethod = !["GET", "HEAD"].includes(request.method.toUpperCase())
+  if (unsafeMethod && !csrfExemptPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
+    const csrfCookie = request.cookies.get("cw_csrf")?.value || ""
+    const csrfHeader = request.headers.get("x-csrf-token") || ""
+    if (!csrfCookie || !csrfHeader || csrfCookie !== csrfHeader) {
+      return NextResponse.json(
+        { error: "Invalid CSRF token. Please refresh and try again." },
+        { status: 403 }
+      )
+    }
+  }
+
   const rule = getRule(pathname)
   const clientKey = `${getClientKey(request)}:${rule.prefix}`
   const now = Date.now()

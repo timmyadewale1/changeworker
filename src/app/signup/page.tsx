@@ -19,6 +19,7 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 import {
   ensureBrowserSessionPersistence,
   markAuthSession,
+  syncAuthSessionCookies,
 } from "@/lib/authSession"
 import { makeAttemptGuard } from "@/lib/attemptThrottle"
 
@@ -43,6 +44,7 @@ export default function SignupPage() {
       await ensureBrowserSessionPersistence()
       const res = await createUserWithEmailAndPassword(auth, email, password)
       markAuthSession(res.user.uid)
+      await syncAuthSessionCookies()
       await sendEmailVerification(res.user)
 
       // ✅ Create stub profile doc
@@ -97,6 +99,7 @@ export default function SignupPage() {
       const provider = new GoogleAuthProvider()
       const res = await signInWithPopup(auth, provider)
       markAuthSession(res.user.uid)
+      await syncAuthSessionCookies()
 
       // ✅ Create stub profile doc
       await setDoc(

@@ -9,6 +9,7 @@ import { db, auth } from "@/lib/firebase"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 import toast from "react-hot-toast"
 import { SDGS } from "@/data/sdgs"
+import { COOKIE_NAMES, setCookie, setJsonCookie } from "@/lib/cookies"
 
 // shadcn ui
 import {
@@ -217,6 +218,17 @@ export default function OnboardingPage() {
           createdAt: serverTimestamp(),
         },
         { merge: true }
+      )
+
+      setCookie(COOKIE_NAMES.onboarding, "complete", { maxAge: 60 * 60 * 24 * 30 })
+      setJsonCookie(
+        COOKIE_NAMES.prefs,
+        {
+          searchType: role === "client" ? "talent" : "job",
+          density: "comfortable",
+          updatedAt: Date.now(),
+        },
+        { maxAge: 60 * 60 * 24 * 365 }
       )
 
       // notify admins about onboarding completion

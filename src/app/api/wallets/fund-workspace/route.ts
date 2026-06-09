@@ -8,6 +8,16 @@ import { getWorkspaceNotificationContext } from "@/lib/notifications/context"
 
 export const runtime = "nodejs"
 
+function setPaymentCookie(response: NextResponse, wsId: string, maxAge = 60 * 60 * 2) {
+  response.cookies.set("pstk_reference", `wallet_${wsId}`, {
+    path: "/",
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge,
+  })
+}
+
 function amountFromAgreement(agreement: any) {
   const base = Number(agreement?.terms?.amountAgreed || 0)
   const billingType = String(agreement?.terms?.billingType || agreement?.terms?.payType || "fixed")
@@ -162,7 +172,9 @@ export async function POST(req: Request) {
       console.error("admin notify wallet funding failed", error)
     }
 
-    return NextResponse.json({ ok: true, amount: totalAmount })
+    const response = NextResponse.json({ ok: true, amount: totalAmount })
+    setPaymentCookie(response, wsId)
+    return response
   } catch (error: any) {
     console.error("[/api/wallets/fund-workspace]", error)
     return NextResponse.json({ error: error?.message || "Server error" }, { status: 500 })

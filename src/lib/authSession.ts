@@ -1,6 +1,7 @@
 "use client"
 
 import { auth } from "@/lib/firebase"
+import { deleteCookie, getCookie, COOKIE_NAMES } from "@/lib/cookies"
 import {
   browserSessionPersistence,
   setPersistence,
@@ -21,6 +22,21 @@ export function markAuthSession(uid: string) {
   if (typeof window === "undefined") return
   window.sessionStorage.setItem(AUTH_SESSION_STARTED_AT_KEY, String(Date.now()))
   window.sessionStorage.setItem(AUTH_SESSION_UID_KEY, uid)
+}
+
+export async function syncAuthSessionCookies() {
+  if (typeof window === "undefined") return
+  const current = auth.currentUser
+  if (!current) return
+  const token = await current.getIdToken()
+  await fetch("/api/auth/session", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  })
 }
 
 export function getAuthSessionStartedAt() {
@@ -46,6 +62,9 @@ export function clearAuthSession() {
   window.sessionStorage.removeItem(AUTH_SESSION_UID_KEY)
   window.sessionStorage.removeItem(AUTH_SESSION_PROFILE_NAME_KEY)
   window.sessionStorage.removeItem(AUTH_SESSION_PROFILE_PHOTO_KEY)
+  deleteCookie(COOKIE_NAMES.session)
+  deleteCookie(COOKIE_NAMES.csrf)
+  deleteCookie(COOKIE_NAMES.onboarding)
 }
 
 export function cacheAuthProfile(profile: { fullName?: string; photoUrl?: string }) {
@@ -69,5 +88,14 @@ export function getCachedAuthProfile() {
 export async function logoutExpiredSession() {
   clearAuthSession()
   window.localStorage.removeItem("sm_role")
+  try {
+    await fetch("/api/auth/session", { method: "DELETE" })
+  } catch {
+    // best effort
+  }
   await signOut(auth)
+}
+
+export function getCsrfToken() {
+  return getCookie(COOKIE_NAMES.csrf)
 }

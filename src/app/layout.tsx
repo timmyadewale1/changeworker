@@ -5,6 +5,9 @@ import { SearchProvider } from "@/context/SearchContext"
 import { Toaster } from "react-hot-toast"
 import PWARegistrar from "@/components/pwa/PWARegistrar"
 import PWAInstallPrompt from "@/components/pwa/PWAInstallPrompt"
+import CsrfFetchGuard from "@/components/platform/CsrfFetchGuard"
+import UsageCookieTracker from "@/components/platform/UsageCookieTracker"
+import CookieBootstrap from "@/components/platform/CookieBootstrap"
 
 export const metadata: Metadata = {
   title: "changeworker",
@@ -45,6 +48,9 @@ export default function RootLayout({
           <SearchProvider>
             <PWARegistrar />
             <PWAInstallPrompt />
+            <CookieBootstrap />
+            <CsrfFetchGuard />
+            <UsageCookieTracker />
             <div className="min-h-screen flex flex-col">
               <header className="border-b" style={{ borderColor: "var(--border)" }} />
               <main className="flex-1 overflow-x-hidden bg-transparent">{children}</main>

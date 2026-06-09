@@ -5,6 +5,16 @@ import admin from "firebase-admin"
 
 export const runtime = "nodejs"
 
+function setPaymentCookie(response: NextResponse, reference: string, maxAge = 60 * 60 * 2) {
+  response.cookies.set("pstk_reference", reference, {
+    path: "/",
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge,
+  })
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
@@ -129,7 +139,9 @@ export async function POST(req: Request) {
       { merge: true }
     )
 
-    return NextResponse.json({ authorizationUrl: initJson.data.authorization_url, reference, amount: totalAmountNaira })
+    const response = NextResponse.json({ authorizationUrl: initJson.data.authorization_url, reference, amount: totalAmountNaira })
+    setPaymentCookie(response, reference)
+    return response
   } catch (e: any) {
     console.error("[/api/paystack/initialize]", e)
     return NextResponse.json({ error: e?.message || "Server error" }, { status: 500 })

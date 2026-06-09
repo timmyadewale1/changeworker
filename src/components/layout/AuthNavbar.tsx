@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { signOut } from "firebase/auth"
 import toast from "react-hot-toast"
 import {
   Menu,
@@ -16,14 +15,14 @@ import {
   PlusCircle,
   Wallet,
 } from "lucide-react"
-import { auth, db } from "@/lib/firebase"
+import { db } from "@/lib/firebase"
 import Button from "@/components/ui/Button"
 import { useAuth } from "@/context/AuthContext"
 import { useUserRole } from "@/hooks/useUserRole"
 import { doc, getDoc } from "firebase/firestore"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import NotificationBell from "@/components/NotificationBell"
-import { cacheAuthProfile, clearAuthSession, getCachedAuthProfile } from "@/lib/authSession"
+import { cacheAuthProfile, getCachedAuthProfile, logoutExpiredSession } from "@/lib/authSession"
 
 
 type Role = "talent" | "client" | null
@@ -69,8 +68,7 @@ export default function AuthNavbar() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth)
-      clearAuthSession()
+      await logoutExpiredSession()
       window.localStorage.removeItem("sm_role")
       toast.success("Logged out")
       router.replace("/login")

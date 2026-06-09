@@ -18,6 +18,7 @@ import {
   ensureBrowserSessionPersistence,
   cacheAuthProfile,
   markAuthSession,
+  syncAuthSessionCookies,
 } from "@/lib/authSession"
 import { makeAttemptGuard } from "@/lib/attemptThrottle"
 
@@ -80,6 +81,7 @@ export default function LoginPage() {
       }
 
       markAuthSession(res.user.uid)
+      await syncAuthSessionCookies()
       toast.success("Logged in successfully")
       await postLoginRedirect(res.user.uid)
     } catch (err: any) {
@@ -103,6 +105,7 @@ export default function LoginPage() {
       const res = await signInWithPopup(auth, provider)
 
       markAuthSession(res.user.uid)
+      await syncAuthSessionCookies()
       toast.success("Welcome!")
       await postLoginRedirect(res.user.uid)
     } catch {

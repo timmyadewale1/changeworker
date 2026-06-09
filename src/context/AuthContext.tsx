@@ -9,6 +9,7 @@ import {
   isAuthSessionExpired,
   logoutExpiredSession,
   markAuthSession,
+  syncAuthSessionCookies,
 } from "@/lib/authSession"
 
 type AuthContextType = {
@@ -45,6 +46,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!getAuthSessionStartedAt()) {
         markAuthSession(user.uid)
       }
+
+      void syncAuthSessionCookies().catch((error) => {
+        console.error("Failed to sync auth cookies:", error)
+      })
 
       setUser(user)
       setLoading(false)

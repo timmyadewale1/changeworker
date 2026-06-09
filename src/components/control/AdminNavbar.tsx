@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { signOut } from "firebase/auth"
 import toast from "react-hot-toast"
 import {
   LayoutGrid,
@@ -27,11 +26,11 @@ import {
   LifeBuoy,
 } from "lucide-react"
 import { doc, getDoc } from "firebase/firestore"
-import { auth, db } from "@/lib/firebase"
+import { db } from "@/lib/firebase"
 import { useAuth } from "@/context/AuthContext"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import AdminNotificationBell from "@/components/control/AdminNotificationBell"
-import { clearAuthSession } from "@/lib/authSession"
+import { logoutExpiredSession } from "@/lib/authSession"
 
 type NavItem = {
   href: string
@@ -125,8 +124,7 @@ export default function AdminNavbar() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth)
-      clearAuthSession()
+      await logoutExpiredSession()
       window.localStorage.removeItem("sm_role")
       toast.success("Admin session closed")
       router.push("/control/login")
