@@ -1,6 +1,7 @@
 function resolveLink(link?: string) {
+  const appBase = process.env.NEXT_PUBLIC_APP_URL || "https://changeworker.ng"
   if (!link) return undefined
-  return link.startsWith("http") ? link : `https://changeworker.vercel.app${link}`
+  return link.startsWith("http") ? link : `${appBase}${link}`
 }
 
 export function buildNotificationEmail({
@@ -14,6 +15,7 @@ export function buildNotificationEmail({
   link?: string
   linkText?: string
 }) {
+  const appBase = process.env.NEXT_PUBLIC_APP_URL || "https://changeworker.ng"
   const href = resolveLink(link)
 
   return `
@@ -30,7 +32,7 @@ export function buildNotificationEmail({
           <div style="padding:26px 28px 22px;border-bottom:1px solid #e5e7eb;background:#ffffff;">
             <div style="display:flex;align-items:center;gap:14px;">
               <div style="height:52px;width:52px;border-radius:18px;background:#fff7ed;border:1px solid #fed7aa;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <img src="https://changeworker.vercel.app/logo.png" alt="changeworker" style="height:28px;width:28px;object-fit:contain;display:block;" />
+                <img src="${appBase}/logo.png" alt="changeworker" style="height:28px;width:28px;object-fit:contain;display:block;" />
               </div>
               <div style="min-width:0;">
                 <div style="font-size:21px;line-height:1.15;font-weight:800;color:#111827;margin:0;">changeworker</div>

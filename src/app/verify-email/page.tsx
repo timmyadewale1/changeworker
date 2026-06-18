@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { auth } from "@/lib/firebase"
-import { sendEmailVerification } from "firebase/auth"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import Button from "@/components/ui/Button"
@@ -56,10 +55,18 @@ export default function VerifyEmailPage() {
     const user = auth.currentUser
     if (!user) return toast.error("Please log in again.")
     try {
-      await sendEmailVerification(user)
+      const token = await user.getIdToken()
+      const resp = await fetch("/api/auth/send-verification", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!resp.ok) {
+        const json = await resp.json().catch(() => ({}))
+        throw new Error(json?.error || "Could not resend verification email")
+      }
       toast.success("Verification email resent")
-    } catch {
-      toast.error("Could not resend verification email")
+    } catch (err: any) {
+      toast.error(err?.message || "Could not resend verification email")
     }
   }
 

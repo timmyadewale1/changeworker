@@ -6,7 +6,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  sendEmailVerification,
 } from "firebase/auth"
 import { auth, db } from "@/lib/firebase"
 import toast from "react-hot-toast"
@@ -45,7 +44,15 @@ export default function SignupPage() {
       const res = await createUserWithEmailAndPassword(auth, email, password)
       markAuthSession(res.user.uid)
       await syncAuthSessionCookies()
-      await sendEmailVerification(res.user)
+      const idToken = await res.user.getIdToken()
+      const verifyResp = await fetch("/api/auth/send-verification", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}` },
+      })
+      if (!verifyResp.ok) {
+        const json = await verifyResp.json().catch(() => ({}))
+        throw new Error(json?.error || "Could not send verification email")
+      }
 
       // ✅ Create stub profile doc
       await setDoc(

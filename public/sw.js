@@ -1,12 +1,24 @@
 const CACHE_NAME = "changeworker-static-v2"
-const ASSETS = ["/", "/manifest.webmanifest", "/logo.png", "/favicon.ico"]
+const ASSETS = ["/", "/manifest.webmanifest", "/logo.png"]
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(CACHE_NAME)
+      await Promise.all(
+        ASSETS.map(async (asset) => {
+          try {
+            const response = await fetch(asset, { cache: "no-cache" })
+            if (response.ok) {
+              await cache.put(asset, response.clone())
+            }
+          } catch {
+            // ignore individual asset failures during install
+          }
+        })
+      )
+      await self.skipWaiting()
+    })()
   )
 })
 

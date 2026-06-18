@@ -3,8 +3,6 @@
 import { useState } from "react"
 import Navbar from "@/components/layout/Navbar"
 import Button from "@/components/ui/Button"
-import { sendPasswordResetEmail } from "firebase/auth"
-import { auth } from "@/lib/firebase"
 import toast from "react-hot-toast"
 import { makeAttemptGuard } from "@/lib/attemptThrottle"
 
@@ -22,10 +20,18 @@ export default function ForgotPasswordPage() {
     }
     setLoading(true)
     try {
-      await sendPasswordResetEmail(auth, email)
+      const resp = await fetch("/api/auth/send-password-reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      if (!resp.ok) {
+        const json = await resp.json().catch(() => ({}))
+        throw new Error(json?.error || "Could not send reset email")
+      }
       toast.success("Password reset email sent!")
     } catch (err: any) {
-      toast.error("Could not send reset email")
+      toast.error(err?.message || "Could not send reset email")
       resetGuard.markAttempt()
     } finally {
       setLoading(false)
