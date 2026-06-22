@@ -17,6 +17,7 @@ export type TalentRow = {
   skills?: string[]
   rating?: { avg?: number; count?: number }
   verification?: { status?: string }
+  impactPalBadge?: boolean
   availability?: string
   workMode?: string
   yearsExperience?: number | null
@@ -30,6 +31,7 @@ export default function TalentCard({
   idx: number
 }) {
   const verified = t.verification?.status === "verified"
+  const impactBadge = Boolean(t.impactPalBadge)
   const avg = Number(t.rating?.avg || 0)
   const count = Number(t.rating?.count || 0)
   const href = t.slug ? `/talent/${t.slug}` : `/talent/${t.uid}`
@@ -64,6 +66,11 @@ export default function TalentCard({
                   >
                     {verified ? "Verified" : "Not verified"}
                   </Badge>
+                  {impactBadge && (
+                    <Badge className="rounded-full border border-orange-200 bg-orange-50 text-[var(--primary)]">
+                      Impactpal
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="text-sm text-gray-700 font-semibold mt-1">

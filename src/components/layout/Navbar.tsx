@@ -8,7 +8,6 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react"
-import Button from "@/components/ui/Button"
 import {
   hireCategories,
   findWorkCategories,
@@ -410,9 +409,18 @@ export default function Navbar() {
 
           {/* AUTH */}
           <div className="pt-4 flex flex-col gap-3">
-            <Button><Link href="/login">Login</Link></Button>
-                      <Button><Link href="/signup">Sign Up</Link></Button>
-
+            <Link
+              href="/login"
+              className="inline-flex h-12 w-full items-center justify-center rounded-2xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-900 transition hover:bg-gray-50"
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[var(--primary)] px-4 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(249,115,22,.28)] transition hover:opacity-95"
+            >
+              Sign Up
+            </Link>
           </div>
         </div>
       )}

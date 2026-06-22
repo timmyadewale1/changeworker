@@ -44,6 +44,7 @@ type TalentRow = {
 
   rating?: { avg?: number; count?: number }
   verification?: { status?: string }
+  impactPalBadge?: boolean
 }
 
 // category items provided inside TalentFilters
@@ -100,6 +101,7 @@ export default function TalentBrowsePage() {
 
           rating: d?.rating || { avg: 0, count: 0 },
           verification: d?.verification || { status: "not_submitted" },
+          impactPalBadge: Boolean(d?.impactPalBadge),
         }
       })
 

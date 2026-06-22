@@ -4,6 +4,7 @@ import { useState } from "react"
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
 } from "firebase/auth"
 import { auth, db } from "@/lib/firebase"
@@ -108,8 +109,19 @@ export default function LoginPage() {
       await syncAuthSessionCookies()
       toast.success("Welcome!")
       await postLoginRedirect(res.user.uid)
-    } catch {
-      toast.error("Google sign-in failed")
+    } catch (err: any) {
+      const code = String(err?.code || "")
+      // Fallback to redirect flow when popup flow is blocked/interrupted by browser policies.
+      if (code.includes("popup") || code.includes("cancelled")) {
+        try {
+          const provider = new GoogleAuthProvider()
+          await signInWithRedirect(auth, provider)
+          return
+        } catch {
+          // Continue to normal error toast below.
+        }
+      }
+      toast.error(err?.message || "Google sign-in failed")
       loginGuard.markAttempt()
     } finally {
       setLoading(false)

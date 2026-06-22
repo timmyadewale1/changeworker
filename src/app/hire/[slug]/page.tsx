@@ -26,6 +26,7 @@ type TalentRow = {
   skills?: string[]
   rating?: { avg?: number; count?: number }
   verification?: { status?: string }
+  impactPalBadge?: boolean
   availability?: string
   workMode?: string
   yearsExperience?: number | null
@@ -108,6 +109,7 @@ export default function HireRolePage({ params }: { params: { slug: string } }) {
             yearsExperience: typeof d?.talent?.yearsExperience === "number" ? d.talent.yearsExperience : null,
             rating: d?.rating || { avg: 0, count: 0 },
             verification: d?.verification || { status: "not_submitted" },
+            impactPalBadge: Boolean(d?.impactPalBadge),
           }
         })
         // Filter by category (or roleTitle when categories are empty)

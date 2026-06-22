@@ -61,6 +61,8 @@ export function middleware(request: NextRequest) {
 
   const csrfExemptPaths = [
     "/api/auth/session",
+    "/api/auth/send-password-reset",
+    "/api/auth/send-verification",
     "/api/paystack/webhook",
     "/api/test-firebase",
   ]

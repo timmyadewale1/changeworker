@@ -11,7 +11,7 @@ import CookieBootstrap from "@/components/platform/CookieBootstrap"
 
 export const metadata: Metadata = {
   title: "changeworker",
-  description: "Upwork for changemakers",
+  description: "Freelance Engine for Changemakers",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

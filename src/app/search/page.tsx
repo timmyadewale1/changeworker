@@ -115,6 +115,7 @@ setLoading(false)
 
       rating: d?.rating || { avg: 0, count: 0 },
       verification: d?.verification || { status: "not_submitted" },
+      impactPalBadge: Boolean(d?.impactPalBadge),
     }
   })
 

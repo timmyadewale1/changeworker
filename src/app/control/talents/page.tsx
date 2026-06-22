@@ -40,6 +40,7 @@ type TalentRow = {
   yearsExperience?: number | null
   rating?: { avg?: number; count?: number }
   verification?: { status?: string }
+  impactPalBadge?: boolean
   disabled?: boolean
 }
 
@@ -92,6 +93,7 @@ export default function AdminTalentsPage() {
           yearsExperience: typeof d?.talent?.yearsExperience === "number" ? d.talent.yearsExperience : null,
           rating: d?.rating || { avg: 0, count: 0 },
           verification: d?.verification || { status: "not_submitted" },
+          impactPalBadge: Boolean(d?.impactPalBadge),
           disabled: d?.disabled || false,
         }
       })
@@ -135,6 +137,7 @@ export default function AdminTalentsPage() {
           yearsExperience: typeof d?.talent?.yearsExperience === "number" ? d.talent.yearsExperience : null,
           rating: d?.rating || { avg: 0, count: 0 },
           verification: d?.verification || { status: "not_submitted" },
+          impactPalBadge: Boolean(d?.impactPalBadge),
           disabled: d?.disabled || false,
         }
       })
@@ -438,6 +441,11 @@ export default function AdminTalentsPage() {
                                   Disabled
                                 </span>
                               )}
+                              {t.impactPalBadge && (
+                                <span className="text-xs px-2 py-1 rounded-full border border-orange-200 bg-orange-50 text-[var(--primary)]">
+                                  Impactpal
+                                </span>
+                              )}
                             </div>
 
                             <div className="text-sm text-gray-700 font-semibold mb-1">
@@ -593,3 +601,5 @@ export default function AdminTalentsPage() {
     </>
   )
 }
+
+

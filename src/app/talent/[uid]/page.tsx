@@ -71,6 +71,7 @@ type PublicTalentDoc = {
   sdgTags?: string[]
   rating?: { avg?: number; count?: number }
   verification?: { status?: string }
+  impactPalBadge?: boolean
   talent?: {
     roleTitle?: string
     skills?: string[]
@@ -118,6 +119,7 @@ export default function PublicTalentProfilePage() {
           sdgTags: d.sdgTags || [],
           rating: d.rating || { avg: 0, count: 0 },
           verification: d.verification || { status: "not_submitted" },
+          impactPalBadge: Boolean(d.impactPalBadge),
           talent: {
             roleTitle: d?.talent?.roleTitle || "",
             skills: d?.talent?.skills || [],
@@ -357,6 +359,11 @@ export default function PublicTalentProfilePage() {
                         >
                           {verified ? "Verified" : "Not verified"}
                         </Badge>
+                        {data?.impactPalBadge && (
+                          <Badge className="rounded-full border border-orange-200 bg-orange-50 text-[var(--primary)]">
+                            Impactpal
+                          </Badge>
+                        )}
                       </div>
 
                       <div className="text-sm text-gray-700 font-semibold mt-1">

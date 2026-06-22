@@ -61,6 +61,7 @@ type TalentProfile = {
     notes?: string
     nin?: string
   }
+  impactPalBadge?: boolean
   disabled?: boolean
   createdAt?: any
 }
@@ -130,6 +131,7 @@ export default function AdminTalentDetailPage() {
               nin: kycData?.nin,
               notes: kycData?.adminNotes
             },
+            impactPalBadge: Boolean(profileData?.impactPalBadge || userData?.impactPalBadge),
             disabled: profileData.disabled || false,
             createdAt: profileData.createdAt,
           })
@@ -198,6 +200,14 @@ export default function AdminTalentDetailPage() {
           toast.success("Talent enabled")
           setProfile(prev => prev ? { ...prev, disabled: false } : null)
           break
+        case "toggleImpactpal": {
+          const next = !Boolean(profile.impactPalBadge)
+          await updateDoc(publicProfileRef, { impactPalBadge: next })
+          await updateDoc(userRef, { impactPalBadge: next })
+          toast.success(next ? "Impactpal badge added" : "Impactpal badge removed")
+          setProfile((prev) => (prev ? { ...prev, impactPalBadge: next } : null))
+          break
+        }
         case "delete":
           if (confirm("Are you sure you want to permanently delete this talent account? This action cannot be undone.")) {
             await deleteDoc(publicProfileRef)
@@ -260,6 +270,9 @@ export default function AdminTalentDetailPage() {
                     </Badge>
                     {profile.disabled && (
                       <Badge variant="destructive">Disabled</Badge>
+                    )}
+                    {profile.impactPalBadge && (
+                      <Badge className="border border-orange-200 bg-orange-50 text-[var(--primary)]">Impactpal</Badge>
                     )}
                   </div>
                 </div>
@@ -381,6 +394,14 @@ export default function AdminTalentDetailPage() {
                     Enable Account
                   </Button>
                 )}
+
+                <Button
+                  onClick={() => handleAction("toggleImpactpal")}
+                  variant="outline"
+                  className="border-orange-300 text-orange-700 hover:bg-orange-50 w-full text-sm py-2 px-3"
+                >
+                  {profile.impactPalBadge ? "Remove Impactpal Badge" : "Add Impactpal Badge"}
+                </Button>
 
                 <Button
                   onClick={() => handleAction("delete")}

@@ -636,6 +636,30 @@ Pay for what you need. Get work that counts.                </p>
           </div>
         </section>
 
+        <section ref={splitRef.ref} className="bg-white py-14 border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-6 lg:px-12">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className={`rounded-3xl border border-gray-200 bg-[#F8FAFC] p-6 ${splitRef.inView ? "up" : "opacity-0"}`} style={{ "--d": ".04s" } as React.CSSProperties}>
+                <span className="pill bg-orange-100 text-[#F97316] border border-orange-200 mb-4 text-[11px]">
+                  <FiBriefcase size={10} /> For organizations
+                </span>
+                <h3 className="hd text-2xl mb-2">Hire vetted talent fast</h3>
+                <p className="bd text-sm mb-5">Bring in the right specialist for a project window without long-term overhead.</p>
+                <button onClick={handlePostProject} className="btn-p">Post a gig <FiArrowRight size={14} /></button>
+              </div>
+
+              <div className={`rounded-3xl border border-gray-200 bg-[#111] p-6 ${splitRef.inView ? "up" : "opacity-0"}`} style={{ "--d": ".12s" } as React.CSSProperties}>
+                <span className="pill bg-white/10 text-white border border-white/15 mb-4 text-[11px]">
+                  <FiUsers size={10} /> For freelancers
+                </span>
+                <h3 className="font-black text-2xl text-white mb-2" style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>Get impact gigs that pay fairly</h3>
+                <p className="text-white/65 text-sm mb-5" style={{ fontFamily: "'DM Sans',sans-serif" }}>Show your skills, get matched quickly, and build credibility through real mission-driven work.</p>
+                <button onClick={handleCreateProfile} className="btn-p">Create your profile <FiArrowRight size={14} /></button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* <section ref={statsRef.ref} className="py-16 bg-[#F5F5F5] border-y border-gray-200">
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-10">

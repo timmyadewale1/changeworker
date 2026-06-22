@@ -89,6 +89,7 @@ export default function TalentProfilePage() {
   const [location, setLocation] = useState("")
   const [photoUrl, setPhotoUrl] = useState("")
   const [verified, setVerified] = useState(false)
+  const [impactPalBadge, setImpactPalBadge] = useState(false)
 
   // ratings for talent profile
   const ratingAvg = useMemo(() => Number(userDoc?.rating?.avg || 0), [userDoc])
@@ -289,6 +290,7 @@ const addEmptyEmployment = () => ({
         setLocation(data.location || "")
         setPhotoUrl(data.photoUrl || "")
         setVerified(Boolean(data?.kyc?.status === "verified"))
+        setImpactPalBadge(Boolean(data?.impactPalBadge))
 
         // onboarding / talent
         setRoleTitle(data?.talent?.roleTitle || "-")
@@ -401,6 +403,11 @@ const addEmptyEmployment = () => ({
                   <BadgeCheck size={14} />
                   {verified ? "Verified" : "Not verified"}
                 </span>
+                {impactPalBadge && (
+                  <Badge className="border border-orange-200 bg-orange-50 text-[var(--primary)]">
+                    Impactpal
+                  </Badge>
+                )}
               </div>
 
               <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">

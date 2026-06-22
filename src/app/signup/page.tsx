@@ -5,6 +5,7 @@ import Link from "next/link"
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
 } from "firebase/auth"
 import { auth, db } from "@/lib/firebase"
@@ -141,6 +142,16 @@ export default function SignupPage() {
       toast.success("Welcome!")
       router.push("/onboarding")
     } catch (err: any) {
+      const code = String(err?.code || "")
+      if (code.includes("popup") || code.includes("cancelled")) {
+        try {
+          const provider = new GoogleAuthProvider()
+          await signInWithRedirect(auth, provider)
+          return
+        } catch {
+          // fall through to error toast
+        }
+      }
       console.error("Google signup failed:", err)
       toast.error(err?.message || "Google sign-up failed")
       signupGuard.markAttempt()
