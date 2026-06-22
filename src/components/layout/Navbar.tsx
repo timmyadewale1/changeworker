@@ -228,7 +228,7 @@ export default function Navbar() {
 
       {/* MOBILE PANEL (UNDER NAVBAR) */}
       {mobileOpen && (
-        <div className="md:hidden border-t bg-white px-6 py-6 space-y-6">
+        <div className="md:hidden border-t bg-white px-6 py-6 space-y-6 max-h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden overscroll-contain">
          <form
   onSubmit={(e) => {
     e.preventDefault()

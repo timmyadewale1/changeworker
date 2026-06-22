@@ -218,7 +218,7 @@ export default function AuthNavbar() {
 
       {/* MOBILE PANEL */}
       {mobileOpen && (
-        <div className="md:hidden border-t bg-white px-6 py-6 space-y-6">
+        <div className="md:hidden border-t bg-white px-6 py-6 space-y-6 max-h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden overscroll-contain">
           <form
             onSubmit={(e) => {
               e.preventDefault()
@@ -240,8 +240,40 @@ export default function AuthNavbar() {
             />
           </form>
 
-          <div className="flex justify-between items-center">
-            <NotificationBell />
+          <div className="flex items-center gap-2 overflow-x-auto pb-1">
+            {utilityLinks.map((item) => {
+              const Icon = item.icon
+              return (
+                <Link
+                  key={`mobile-${item.href}`}
+                  href={item.href}
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-transparent text-gray-600 transition hover:border-orange-200 hover:bg-orange-50 hover:text-[var(--primary)]"
+                  aria-label={item.label}
+                  title={item.label}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Icon size={18} />
+                </Link>
+              )
+            })}
+            <div className="shrink-0">
+              <NotificationBell />
+            </div>
+            <Link
+              href="/dashboard/profile"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-transparent transition hover:border-orange-200 hover:bg-orange-50"
+              aria-label="Profile"
+              title="Profile"
+              onClick={() => setMobileOpen(false)}
+            >
+              <Avatar className="h-8 w-8">
+                {photoUrl ? (
+                  <AvatarImage src={photoUrl} alt="Profile" />
+                ) : (
+                  <AvatarFallback>{initials}</AvatarFallback>
+                )}
+              </Avatar>
+            </Link>
           </div>
 
           <Link
