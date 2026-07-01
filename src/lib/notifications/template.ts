@@ -55,7 +55,7 @@ export function buildNotificationEmail({
             }
           </div>
           <div style="padding:18px 28px;background:#0f172a;color:#cbd5e1;font-size:12px;line-height:1.8;">
-            This notification was sent from changeworker. Open your dashboard to view the latest activity and linked records.
+            This notification was sent from changeworker. Open your dashboard to view the latest activity and linked records. For help, contact hello@changeworker.ng or support@changeworker.ng.
           </div>
         </div>
       </div>

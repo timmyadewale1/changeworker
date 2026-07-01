@@ -186,7 +186,7 @@ export default function TermsPage() {
               <FiCheckCircle size={15} style={{ color:"#F97316" }}/>
             </div>
             <p className="text-orange-800 text-sm leading-relaxed" style={{ fontFamily:"'DM Sans',sans-serif" }}>
-              <strong>Plain-English summary:</strong> changeworker connects impact organizations with freelance professionals. We charge a <strong>flat 10% platform fee</strong> on completed gigs (deducted from the talent's payout). Both parties must behave professionally. Nigerian law governs this agreement. Questions? Email <strong>legal@changeworker.ng</strong>.
+              <strong>Plain-English summary:</strong> changeworker connects impact organizations with freelance professionals. We charge a <strong>flat 10% platform fee</strong> on completed gigs (deducted from the talent's payout). Both parties must behave professionally. Nigerian law governs this agreement. Questions? Email <strong>operations@changeworker.ng</strong>.
             </p>
           </div>
         </div>
@@ -260,8 +260,8 @@ export default function TermsPage() {
                   </div>
                 </div>
                 <div className="mt-6 px-2">
-                  <a href="mailto:legal@changeworker.ng" className="flex items-center gap-2 text-xs text-gray-400 hover:text-[#F97316] transition-colors" style={{ fontFamily:"'DM Sans',sans-serif" }}>
-                    <FiMail size={11}/> legal@changeworker.ng
+                  <a href="mailto:operations@changeworker.ng" className="flex items-center gap-2 text-xs text-gray-400 hover:text-[#F97316] transition-colors" style={{ fontFamily:"'DM Sans',sans-serif" }}>
+                    <FiMail size={11}/> operations@changeworker.ng
                   </a>
                 </div>
               </div>
@@ -360,7 +360,7 @@ export default function TermsPage() {
 
               {/* 11 */}
               <SHead id="privacy" num="11" icon={RiShieldCheckLine} title="Privacy & Data Protection"/>
-              <P>Your privacy is governed by our <strong>Privacy Policy</strong>, incorporated into these Terms by reference. We collect only what is necessary to operate the platform, never sell your data, and comply with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong>. Contact our DPO at privacy@changeworker.ng.</P>
+              <P>Your privacy is governed by our <strong>Privacy Policy</strong>, incorporated into these Terms by reference. We collect only what is necessary to operate the platform, never sell your data, and comply with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong>. Contact us at operations@changeworker.ng or support@changeworker.ng for platform requests, and privacy@changeworker.ng for formal data-protection correspondence.</P>
               <Div/>
 
               {/* 12 */}
@@ -384,10 +384,11 @@ export default function TermsPage() {
               <P>For questions, concerns, or feedback about these Terms:</P>
               <div className="grid sm:grid-cols-2 gap-4 my-5">
                 {[
-                  { label:"General",    value:"hello@changeworker.ng",    color:"#F97316", icon:FiMail },
-                  { label:"Legal",      value:"legal@changeworker.ng",    color:"#6366F1", icon:TbScale },
-                  { label:"Privacy",    value:"privacy@changeworker.ng",  color:"#10B981", icon:RiShieldCheckLine },
-                  { label:"Disputes",   value:"disputes@changeworker.ng", color:"#EC4899", icon:MdGavel },
+                  { label:"General",    value:"hello@changeworker.ng",       color:"#F97316", icon:FiMail },
+                  { label:"Operations", value:"operations@changeworker.ng",  color:"#6366F1", icon:TbScale },
+                  { label:"Support",    value:"support@changeworker.ng",     color:"#10B981", icon:RiShieldCheckLine },
+                  { label:"Finance",    value:"finance@changeworker.ng",     color:"#EC4899", icon:FiDollarSign },
+                  { label:"Tech",       value:"tech@changeworker.ng",        color:"#8B5CF6", icon:FiMail },
                 ].map(({ label, value, color, icon:Icon }) => (
                   <div key={label} className="dc flex items-start gap-3 p-4 rounded-xl border border-gray-100 bg-[#F3F4F6]">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background:`${color}12` }}>

@@ -42,7 +42,8 @@ export async function sendEmail({
 
   try {
     await transporter.sendMail({
-      from: `"changeworker" <${process.env.EMAIL_USER}>`,
+      from: `"Changeworker" <hello@changeworker.ng>`,
+      replyTo: process.env.EMAIL_USER || "hello@changeworker.ng",
       to,
       subject,
       html,

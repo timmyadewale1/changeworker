@@ -63,7 +63,7 @@ export function buildAuthEmailTemplate({
             </div>
           </div>
           <div style="padding:18px 28px;background:#0f172a;color:#cbd5e1;font-size:12px;line-height:1.8;">
-            If this was not you, secure your account immediately and contact support.
+            If this was not you, secure your account immediately and contact support@changeworker.ng or operations@changeworker.ng.
           </div>
         </div>
       </div>

@@ -50,14 +50,16 @@ export default function Footer() {
 
             <div className="flex gap-2">
               {[
-                { icon: FaXTwitter, label: "X" },
-                { icon: FaLinkedinIn, label: "LinkedIn" },
-                { icon: FaInstagram, label: "Instagram" },
-                { icon: FaFacebookF, label: "Facebook" },
-              ].map(({ icon: Icon, label }) => (
+                { icon: FaXTwitter, label: "X", href: "https://x.com/changeworkerng" },
+                { icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/company/changeworker" },
+                { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/changeworker.ng?igsh=dGFsdXkwMTkydHps&utm_source=qr&wa_status_inline=true" },
+                { icon: FaFacebookF, label: "Facebook", href: "https://www.facebook.com/changeworkerng" },
+              ].map(({ icon: Icon, label, href }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
                   aria-label={label}
                   className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/5 text-white/35 transition-all hover:bg-white/12 hover:text-white"
                 >

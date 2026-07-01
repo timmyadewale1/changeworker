@@ -221,7 +221,7 @@ export default function PrivacyPage() {
               <FiCheckCircle size={15} style={{ color:"#F97316" }}/>
             </div>
             <p className="text-orange-800 text-sm leading-relaxed" style={{ fontFamily:"'DM Sans',sans-serif" }}>
-              <strong>The short version:</strong> We only collect what we need to run changeworker. We <strong>never sell your data</strong>. You have full rights to access, correct, or delete your information. We comply with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong>. Questions? Email <strong>privacy@changeworker.ng</strong>.
+              <strong>The short version:</strong> We only collect what we need to run changeworker. We <strong>never sell your data</strong>. You have full rights to access, correct, or delete your information. We comply with the <strong>Nigeria Data Protection Act (NDPA) 2023</strong>. Questions? Email <strong>operations@changeworker.ng</strong>.
             </p>
           </div>
         </div>
@@ -295,8 +295,8 @@ export default function PrivacyPage() {
                   </div>
                 </div>
                 <div className="mt-6 px-2 space-y-2">
-                  <a href="mailto:privacy@changeworker.ng" className="flex items-center gap-2 text-xs text-gray-400 hover:text-[#F97316] transition-colors" style={{ fontFamily:"'DM Sans',sans-serif" }}>
-                    <FiMail size={11}/> privacy@changeworker.ng
+                  <a href="mailto:operations@changeworker.ng" className="flex items-center gap-2 text-xs text-gray-400 hover:text-[#F97316] transition-colors" style={{ fontFamily:"'DM Sans',sans-serif" }}>
+                    <FiMail size={11}/> operations@changeworker.ng
                   </a>
                 </div>
               </div>
@@ -430,13 +430,13 @@ export default function PrivacyPage() {
                   </div>
                 ))}
               </div>
-              <P>To exercise your rights, email <strong>privacy@changeworker.ng</strong> with "Data Rights Request" as the subject. We respond within 30 days.</P>
+              <P>To exercise your rights, email <strong>operations@changeworker.ng</strong> with "Data Rights Request" as the subject. We respond within 30 days.</P>
               <Hl color="orange">If we fail to address your request, you may complain to the <strong>Nigeria Data Protection Commission (NDPC)</strong> at ndpb.gov.ng.</Hl>
               <Div/>
 
               {/* 10 */}
               <SHead id="children" num="10" icon={RiUserHeartLine} title="Children's Privacy"/>
-              <P>changeworker is not intended for persons under 18. We do not knowingly collect data from minors. If you believe a child has provided data to us, contact <strong>privacy@changeworker.ng</strong> immediately.</P>
+              <P>changeworker is not intended for persons under 18. We do not knowingly collect data from minors. If you believe a child has provided data to us, contact <strong>support@changeworker.ng</strong> or <strong>operations@changeworker.ng</strong> immediately.</P>
               <Div/>
 
               {/* 11 */}
@@ -454,10 +454,11 @@ export default function PrivacyPage() {
               <P>For any privacy questions, requests, or concerns:</P>
               <div className="grid sm:grid-cols-2 gap-4 my-5">
                 {[
-                  { label:"DPO",      value:"privacy@changeworker.ng",  color:"#F97316", icon:RiShieldCheckLine },
-                  { label:"General",  value:"hello@changeworker.ng",    color:"#6366F1", icon:FiMail },
-                  { label:"Security", value:"security@changeworker.ng", color:"#EC4899", icon:FiLock },
-                  { label:"Legal",    value:"legal@changeworker.ng",    color:"#10B981", icon:FiShield },
+                  { label:"Operations", value:"operations@changeworker.ng", color:"#F97316", icon:RiShieldCheckLine },
+                  { label:"Support",    value:"support@changeworker.ng",    color:"#6366F1", icon:FiMail },
+                  { label:"Tech",       value:"tech@changeworker.ng",       color:"#EC4899", icon:FiLock },
+                  { label:"Finance",    value:"finance@changeworker.ng",    color:"#10B981", icon:FiShield },
+                  { label:"General",    value:"hello@changeworker.ng",      color:"#F59E0B", icon:FiMail },
                 ].map(({ label, value, color, icon:Icon })=>(
                   <div key={label} className="flex items-start gap-3 p-4 rounded-xl border border-gray-100 bg-[#F3F4F6]">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background:`${color}12` }}>
@@ -482,7 +483,7 @@ export default function PrivacyPage() {
                     <Link href="/terms" className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors no-underline" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
                       Terms & Conditions <FiExternalLink size={12}/>
                     </Link>
-                    <a href="mailto:privacy@changeworker.ng" className="inline-flex items-center gap-2 border border-white/12 hover:border-white/30 text-white/55 hover:text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                    <a href="mailto:operations@changeworker.ng" className="inline-flex items-center gap-2 border border-white/12 hover:border-white/30 text-white/55 hover:text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
                       Contact DPO <FiMail size={12}/>
                     </a>
                   </div>

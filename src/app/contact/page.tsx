@@ -127,10 +127,17 @@ export default function ContactPage() {
               {/* contact chips */}
               <div className={`flex flex-col gap-3 ${heroRef.inView?"up":"opacity-0"}`} style={{"--d":".32s"} as React.CSSProperties}>
                 {[
-                  { icon:FiMail,    label:"General",  value:"hello@changeworker.ng",   desc:"Questions, demos, platform enquiries" },
-                  { icon:FiMail,    label:"Support",  value:"support@changeworker.ng", desc:"Account issues needing follow-up" },
-                  { icon:FiMapPin,  label:"Location", value:"Lagos & Abuja, Nigeria",   desc:"Nigeria-focused platform" },
-                ].map(({ icon:Icon, label, value, desc }) => (
+                { icon:FiMail,    label:"General",      value:"hello@changeworker.ng",       desc:"Questions, demos, platform enquiries" },
+                { icon:FiMail,    label:"Support",      value:"support@changeworker.ng",     desc:"Account issues needing follow-up" },
+                { icon:FiMail,    label:"Operations",   value:"operations@changeworker.ng",  desc:"Platform operations and workflow questions" },
+                { icon:FiMail,    label:"Partnerships", value:"partnership@changeworker.ng", desc:"Collaborations, demos, and partnerships" },
+                { icon:FiMail,    label:"Content",      value:"content@changeworker.ng",     desc:"Blog, editorial, and copy requests" },
+                { icon:FiMail,    label:"Events",       value:"events@changeworker.ng",      desc:"Events, community, and activations" },
+                { icon:FiMail,    label:"Tech",         value:"tech@changeworker.ng",        desc:"Bug reports and platform issues" },
+                { icon:FiMail,    label:"Talent",       value:"talent@changeworker.ng",      desc:"Talent onboarding and profile questions" },
+                { icon:FiMail,    label:"Finance",      value:"finance@changeworker.ng",     desc:"Billing, payouts, and payment questions" },
+                { icon:FiMapPin,  label:"Location", value:"Lagos & Abuja, Nigeria",   desc:"Nigeria-focused platform" },
+              ].map(({ icon:Icon, label, value, desc }) => (
                   <div key={label} className="flex items-center gap-3.5 rounded-xl p-4"
                     style={{ background:"rgba(255,255,255,.07)", border:"1px solid rgba(255,255,255,.12)" }}>
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background:"rgba(249,115,22,.2)" }}>
@@ -258,11 +265,16 @@ export default function ContactPage() {
                 </div>
                 <div className="space-y-2.5">
                   {[
-                    { label:"General",    value:"hello@changeworker.ng" },
-                    { label:"Support",    value:"support@changeworker.ng" },
-                    { label:"Legal",      value:"legal@changeworker.ng" },
-                    { label:"Privacy",    value:"privacy@changeworker.ng" },
-                  ].map(({ label, value }) => (
+                    { label:"General",      value:"hello@changeworker.ng" },
+                    { label:"Support",      value:"support@changeworker.ng" },
+                    { label:"Operations",   value:"operations@changeworker.ng" },
+                    { label:"Partnerships", value:"partnership@changeworker.ng" },
+                    { label:"Content",      value:"content@changeworker.ng" },
+                    { label:"Events",       value:"events@changeworker.ng" },
+                    { label:"Tech",         value:"tech@changeworker.ng" },
+                    { label:"Talent",       value:"talent@changeworker.ng" },
+                    { label:"Finance",      value:"finance@changeworker.ng" },
+                ].map(({ label, value }) => (
                     <div key={label} className="flex items-center justify-between rounded-lg bg-white border border-gray-200 px-3.5 py-2.5">
                       <span className="text-gray-400 text-xs font-semibold" style={{ fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{label}</span>
                       <a href={`mailto:${value}`} className="text-xs text-[#111] hover:text-[#F97316] transition-colors font-semibold"
@@ -317,6 +329,8 @@ export default function ContactPage() {
                   { icon:FiMapPin,  t:"Lagos HQ",              sub:"Primary operations" },
                   { icon:FiMapPin,  t:"Abuja",                 sub:"Satellite presence" },
                   { icon:FiMail,    t:"hello@changeworker.ng", sub:"Best first contact" },
+                  { icon:FiMail,    t:"support@changeworker.ng", sub:"Support follow-up" },
+                  { icon:FiMail,    t:"operations@changeworker.ng", sub:"Platform operations" },
                 ].map(({ icon:Icon, t, sub }) => (
                   <div key={t} className="flex items-start gap-3 rounded-xl p-4"
                     style={{ background:"rgba(255,255,255,.05)", border:"1px solid rgba(255,255,255,.08)" }}>
